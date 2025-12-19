@@ -1,158 +1,166 @@
-Return-Path: <linux-arch+bounces-15511-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15512-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E32CCE9D7
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 07:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38F30CCEED4
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 09:14:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1A7FA30185C1
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 06:11:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8C92B3030764
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 08:13:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2AAF2749C5;
-	Fri, 19 Dec 2025 06:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC022EDD6C;
+	Fri, 19 Dec 2025 08:13:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p9uW/ErX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bvV56RgS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CCA1FCFEF;
-	Fri, 19 Dec 2025 06:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8507D2ECD2A;
+	Fri, 19 Dec 2025 08:13:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766124671; cv=none; b=mpa2lvbf/2pnJ02BPdInzwHz0hSuiC0Fq0eqm1eydyzf9RmS4fuFh5P19ooYRoTQjEkQEZSXdbjDKvlB2r2e35zjhgxEMgAi0TJBoC7TJtfNQvcDsi1HR96FWOwaV7ruehG4t8ajXXoYbVq8LkjvDwVkzNg7WwHf0C6KYR4h+9M=
+	t=1766132000; cv=none; b=T2usEQbVEkNk7Gs2HflVXlAmyQkSMAWQa0fC2Zybh1BOflClonfH1EXJdBBoYudFrh/yd+IsiqhGZpC917uooOx42RHyRcVpM7sZwlXgQloujavYVj+ArLTZOBlNDizJpSc40+R1QmRDHP26NIEYAE4f2eYWvEYf9IdBP6TzmMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766124671; c=relaxed/simple;
-	bh=lMx0tZHit8feygPc0c3IX00fMWdf+rQft4YAallTkBQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iVHuXltBhG/pfCc0g5nIUxfLHEjg6RyPeXSO2jFd7Mg0aD9lAbW8BgzT1WM6J5SFRk7Ktrv2AqTA5wEy/dMDzIzT8Vi+UKDKpm1gyMouHoqatrBj2tWshsf3PTsPeOOmy+WrxKBMwilTzPwNvSSLn5nDDHJUcCTjDaFQcMOClHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p9uW/ErX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09355C4CEF1;
-	Fri, 19 Dec 2025 06:11:03 +0000 (UTC)
+	s=arc-20240116; t=1766132000; c=relaxed/simple;
+	bh=c8UdFBb7F8dmejdnU77Se4Vh0A297D7YwvyeUjSzvGs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=GnvKy6UkEc7gJVNe9wJTI2U7d8Wj/RkHX2oweCoF4St5h/IwXw+PusydnnvI6gALE3Iw+ZUJv+e5a3js7wwkau12xH1Litnd/fxiT9+lnU/GytiftCqr8rGTl5zLhoG4PV9ZCFEP8l53jbRzDihnJV+2aAVH6zs0/wGkMnEsReM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bvV56RgS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C38C116B1;
+	Fri, 19 Dec 2025 08:13:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766124671;
-	bh=lMx0tZHit8feygPc0c3IX00fMWdf+rQft4YAallTkBQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=p9uW/ErXy0F6ct3rFLCv4PBWLBoEIWy8uzSJ+hIW3grHckseSAUus0VQIUpGYPXvQ
-	 2lwtlCx5UzczEeLqQXDQa100Wfvwd/q14qVhh1L0b1GalXww8TT63dMNyXmHWqxMv6
-	 q+41ZmwWmwwyre3RaKoRXzlg1gn9l5W/DrGhw0BuM8oW4J6BsCZZGlzf+dsMobg+OR
-	 KCTzt0O6Fcir7Lu+xJk+7vga32wWsNZ4Dy81d+sZ5WnMnn5ryv/XU1cAO1K6ypJn1t
-	 Py1EyuZuY/GLPZkGsGx125qn1YBx/QUWYWKN++Bl/7NupY58pqjQN23Sr8M4zFmFjN
-	 uHZKCXzvE24Lg==
-Message-ID: <506fef86-5c3b-490e-94f9-2eb6c9c47834@kernel.org>
-Date: Fri, 19 Dec 2025 07:11:00 +0100
+	s=k20201202; t=1766131999;
+	bh=c8UdFBb7F8dmejdnU77Se4Vh0A297D7YwvyeUjSzvGs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=bvV56RgSwPdWBOuOtUPVcXSmtsttDdT6myfmjpB+QZDRMIVyr7unLn+z+isWBP0Wy
+	 Ny2hKlhPpLoymTC6JQ0DzSc0lTtu4IdOjoxflDk5ls0qr9rZjX4H6YN/PUpzbnQdAP
+	 YpBOlDFBUmVl0ocWFf3MbPKhlUbei8L4bQwXt0Rf0W+fKMNrpn0yKASpPBE+phUtE+
+	 eS0MjQp6QSCCa4q9q8ZjhuUYyTNuM7t+D6ja4QPtH8eUDpUit5SxogEKu15rseJwgW
+	 mLfXoM8WdWG/4ZWUCIaOk3MfOwvaMmfztq3vshIPQCpKqjoQqXVEii+dxxDbG6AI8Q
+	 Q/PUXYGj8Kqgg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B5B5D380AA50;
+	Fri, 19 Dec 2025 08:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] mm/hugetlb: fix two comments related to
- huge_pmd_unshare()
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
- Laurence Oberman <loberman@redhat.com>,
- Prakash Sangappa <prakash.sangappa@oracle.com>,
- Nadav Amit <nadav.amit@gmail.com>, Liu Shixin <liushixin2@huawei.com>
-References: <20251212071019.471146-1-david@kernel.org>
- <20251212071019.471146-3-david@kernel.org> <aUTYE9fHf5Fq3eHa@hyeyoo>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <aUTYE9fHf5Fq3eHa@hyeyoo>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v7 00/31] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <176613180853.3684357.18339473690014642605.git-patchwork-notify@kernel.org>
+Date: Fri, 19 Dec 2025 08:10:08 +0000
+References: <20251114150133.1056710-1-vschneid@redhat.com>
+In-Reply-To: <20251114150133.1056710-1-vschneid@redhat.com>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, rcu@vger.kernel.org, x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
+ peterz@infradead.org, acme@kernel.org, jpoimboe@kernel.org,
+ pbonzini@redhat.com, arnd@arndb.de, frederic@kernel.org, paulmck@kernel.org,
+ jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
+ samitolvanen@google.com, davem@davemloft.net, neeraj.upadhyay@kernel.org,
+ joelagnelf@nvidia.com, josh@joshtriplett.org, boqun.feng@gmail.com,
+ urezki@gmail.com, mathieu.desnoyers@efficios.com, mgorman@suse.de,
+ akpm@linux-foundation.org, masahiroy@kernel.org, shenhan@google.com,
+ riel@surriel.com, jannh@google.com, dan.carpenter@linaro.org,
+ oleg@redhat.com, juri.lelli@redhat.com, williams@redhat.com,
+ ypodemsk@redhat.com, mtosatti@redhat.com, dwagner@suse.de, ptesarik@suse.com,
+ sshegde@linux.ibm.com
 
-On 12/19/25 05:44, Harry Yoo wrote:
-> On Fri, Dec 12, 2025 at 08:10:17AM +0100, David Hildenbrand (Red Hat) wrote:
->> Ever since we stopped using the page count to detect shared PMD
->> page tables, these comments are outdated.
->>
->> The only reason we have to flush the TLB early is because once we drop
->> the i_mmap_rwsem, the previously shared page table could get freed (to
->> then get reallocated and used for other purpose). So we really have to
->> flush the TLB before that could happen.
->>
->> So let's simplify the comments a bit.
->>
->> The "If we unshared PMDs, the TLB flush was not recorded in mmu_gather."
->> part introduced as in commit a4a118f2eead ("hugetlbfs: flush TLBs
->> correctly after huge_pmd_unshare") was confusing: sure it is recorded
->> in the mmu_gather, otherwise tlb_flush_mmu_tlbonly() wouldn't do
->> anything. So let's drop that comment while at it as well.
->>
->> We'll centralize these comments in a single helper as we rework the code
->> next.
->>
->> Fixes: 59d9094df3d7 ("mm: hugetlb: independent PMD page table shared count")
->> Reviewed-by: Rik van Riel <riel@surriel.com>
->> Tested-by: Laurence Oberman <loberman@redhat.com>
->> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
->> Acked-by: Oscar Salvador <osalvador@suse.de>
->> Cc: Liu Shixin <liushixin2@huawei.com>
->> Signed-off-by: David Hildenbrand (Red Hat) <david@kernel.org>
->> ---
+Hello:
+
+This series was applied to riscv/linux.git (fixes)
+by Frederic Weisbecker <frederic@kernel.org>:
+
+On Fri, 14 Nov 2025 16:01:02 +0100 you wrote:
+> Context
+> =======
 > 
-> Looks good to me,
-> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+> We've observed within Red Hat that isolated, NOHZ_FULL CPUs running a
+> pure-userspace application get regularly interrupted by IPIs sent from
+> housekeeping CPUs. Those IPIs are caused by activity on the housekeeping CPUs
+> leading to various on_each_cpu() calls, e.g.:
 > 
-> with a question below.
+> [...]
 
-Hi Harry,
+Here is the summary with links:
+  - [v7,01/31] objtool: Make validate_call() recognize indirect calls to pv_ops[]
+    (no matching commit)
+  - [v7,02/31] objtool: Flesh out warning related to pv_ops[] calls
+    (no matching commit)
+  - [v7,03/31] rcu: Add a small-width RCU watching counter debug option
+    https://git.kernel.org/riscv/c/d1e6d2773898
+  - [v7,04/31] rcutorture: Make TREE04 use CONFIG_RCU_DYNTICKS_TORTURE
+    https://git.kernel.org/riscv/c/82a224498005
+  - [v7,05/31] jump_label: Add annotations for validating noinstr usage
+    (no matching commit)
+  - [v7,06/31] static_call: Add read-only-after-init static calls
+    (no matching commit)
+  - [v7,07/31] x86/paravirt: Mark pv_sched_clock static call as __ro_after_init
+    (no matching commit)
+  - [v7,08/31] x86/idle: Mark x86_idle static call as __ro_after_init
+    (no matching commit)
+  - [v7,09/31] x86/paravirt: Mark pv_steal_clock static call as __ro_after_init
+    (no matching commit)
+  - [v7,10/31] riscv/paravirt: Mark pv_steal_clock static call as __ro_after_init
+    (no matching commit)
+  - [v7,11/31] loongarch/paravirt: Mark pv_steal_clock static call as __ro_after_init
+    (no matching commit)
+  - [v7,12/31] arm64/paravirt: Mark pv_steal_clock static call as __ro_after_init
+    (no matching commit)
+  - [v7,13/31] arm/paravirt: Mark pv_steal_clock static call as __ro_after_init
+    (no matching commit)
+  - [v7,14/31] perf/x86/amd: Mark perf_lopwr_cb static call as __ro_after_init
+    (no matching commit)
+  - [v7,15/31] sched/clock: Mark sched_clock_running key as __ro_after_init
+    (no matching commit)
+  - [v7,16/31] KVM: VMX: Mark __kvm_is_using_evmcs static key as __ro_after_init
+    (no matching commit)
+  - [v7,17/31] x86/bugs: Mark cpu_buf_vm_clear key as allowed in .noinstr
+    (no matching commit)
+  - [v7,18/31] x86/speculation/mds: Mark cpu_buf_idle_clear key as allowed in .noinstr
+    (no matching commit)
+  - [v7,19/31] sched/clock, x86: Mark __sched_clock_stable key as allowed in .noinstr
+    (no matching commit)
+  - [v7,20/31] KVM: VMX: Mark vmx_l1d_should flush and vmx_l1d_flush_cond keys as allowed in .noinstr
+    (no matching commit)
+  - [v7,21/31] stackleack: Mark stack_erasing_bypass key as allowed in .noinstr
+    (no matching commit)
+  - [v7,22/31] objtool: Add noinstr validation for static branches/calls
+    (no matching commit)
+  - [v7,23/31] module: Add MOD_NOINSTR_TEXT mem_type
+    (no matching commit)
+  - [v7,24/31] context-tracking: Introduce work deferral infrastructure
+    (no matching commit)
+  - [v7,25/31] context_tracking,x86: Defer kernel text patching IPIs
+    (no matching commit)
+  - [v7,26/31] x86/jump_label: Add ASM support for static_branch_likely()
+    (no matching commit)
+  - [v7,27/31] x86/mm: Make INVPCID type macros available to assembly
+    (no matching commit)
+  - [RFC,v7,28/31] x86/mm/pti: Introduce a kernel/user CR3 software signal
+    (no matching commit)
+  - [RFC,v7,29/31] x86/mm/pti: Implement a TLB flush immediately after a switch to kernel CR3
+    (no matching commit)
+  - [RFC,v7,30/31] x86/mm, mm/vmalloc: Defer kernel TLB flush IPIs under CONFIG_COALESCE_TLBI=y
+    (no matching commit)
+  - [RFC,v7,31/31] x86/entry: Add an option to coalesce TLB flushes
+    (no matching commit)
 
-thanks for the review!
-
-> 
->>   mm/hugetlb.c | 24 ++++++++----------------
->>   1 file changed, 8 insertions(+), 16 deletions(-)
->>
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index 51273baec9e5d..3c77cdef12a32 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -5304,17 +5304,10 @@ void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct *vma,
->>   	tlb_end_vma(tlb, vma);
->>   
->>   	/*
->> -	 * If we unshared PMDs, the TLB flush was not recorded in mmu_gather. We
->> -	 * could defer the flush until now, since by holding i_mmap_rwsem we
->> -	 * guaranteed that the last reference would not be dropped. But we must
->> -	 * do the flushing before we return, as otherwise i_mmap_rwsem will be
->> -	 * dropped and the last reference to the shared PMDs page might be
->> -	 * dropped as well.
->> -	 *
->> -	 * In theory we could defer the freeing of the PMD pages as well, but
->> -	 * huge_pmd_unshare() relies on the exact page_count for the PMD page to
->> -	 * detect sharing, so we cannot defer the release of the page either.
->> -	 * Instead, do flush now.
-> 
-> Does this mean we can now try defer-freeing of these page tables,
-> and if so, would it be worth it?
-
-There is one very tricky thing:
-
-Whoever is the last owner of a (previously) shared page table must unmap 
-any contained pages (adjust mapcount/ref, sync a/d bit, ...). So it's 
-not just a matter of deferring the freeing, because these page tables 
-will still contain content.
-
-I first tried to never allow for reuse of shared page tables, but 
-precisely that resulted in most headakes.
-
-So I don't see an easy way to achieve that (and I'm also not sure if we 
-want to add any further complexity to this).
-
+You are awesome, thank you!
 -- 
-Cheers
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-David
+
 
