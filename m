@@ -1,226 +1,159 @@
-Return-Path: <linux-arch+bounces-15525-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15526-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B809CD3EBE
-	for <lists+linux-arch@lfdr.de>; Sun, 21 Dec 2025 11:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1980FCD3F4A
+	for <lists+linux-arch@lfdr.de>; Sun, 21 Dec 2025 12:22:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D107A300982D
-	for <lists+linux-arch@lfdr.de>; Sun, 21 Dec 2025 10:44:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DA69D300B831
+	for <lists+linux-arch@lfdr.de>; Sun, 21 Dec 2025 11:22:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6DA28853E;
-	Sun, 21 Dec 2025 10:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761DD27C842;
+	Sun, 21 Dec 2025 11:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CWhqflV4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LuUYon/i"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE3D27FD71
-	for <linux-arch@vger.kernel.org>; Sun, 21 Dec 2025 10:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AC62309AB;
+	Sun, 21 Dec 2025 11:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766313842; cv=none; b=XK2yaZk1zeLdgzCuYleMuUWTIKtacFJ6yU57D1bT5FKNdYv+xwutmnf+UC1hQ43TKzJxoPbDYETcGkwd6U4xISvjkQnpl+VjFJskgjwhJVmJp8Z/iXvn+ggKp/XyblMRa9taoH1V2S++gc8hGCm1Unjk+fRREjkBqd099BCm14o=
+	t=1766316136; cv=none; b=bxDFJeN0HD1rlXOq7PqNtgqVbpy7PFW6hsqWqKWI33sn198Z3FoV6Lv3ZplUxooBguMNQPhZb4gbTjA/26O3bTsWOvRuIQgGH98uiOiCpWGM5iQZdeQvRfBavJTTZoMLUcQqWm4sFiz2mRdTEhA8r5fPUo5UnF99D8fRU9+ICzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766313842; c=relaxed/simple;
-	bh=NawelembbC8+pUY9APpcquoZcw9U/+Q6GH3DhVuuGvQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aV2miVZalePaMSORSyJSKTDKZrlKXROY0yrfJygW1h/aWrOYaMtffE9BvkR/zsVgHseZjhCGY7t9GUgoDNjkyaTZncSqYzKSUISv/L7od8T8d/e5Sip55kg/mgXXsQUFAl64y86BGHDg0sNq/EnX9W550qx0gapjhmvPOI9dLSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CWhqflV4; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <90c1ff67-46fb-4ddd-9bdd-43633f89dda2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766313826;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d/nJw25aoa6JK8nypoTwLkmJKFtsfe7JaJlTBhslbOk=;
-	b=CWhqflV4t5sakvP8LVfvQLFJPUtApAiiqmvV0P8zoWeb8DX7MR5Iv59vb1r8AvOQvLi+dk
-	d6wSA9+/L49daP6cNHmR3BWi7PRdBT1dNfmGLkiimtSAJNAgd7gRUFe+4IleLoukOg9bEm
-	gA3HS59ZiYQcyO8QMu/kdTosDXgdahA=
-Date: Sun, 21 Dec 2025 18:43:32 +0800
+	s=arc-20240116; t=1766316136; c=relaxed/simple;
+	bh=eKcsE2VJnI/4lSfqhwMzJl/DukDh/7mH6GBUXDAbjv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mHHIINYBux7aCzgBSTHUkry5WGuhT08S4KevkFD8DMECnCcyR4KW+0EncEMfCiVgRWowLckoFZCAv7dAj7NRqGgMEPzOqOeKMM9M3ucVmYlruq/PTwmT4eyiv7m1z/zCmS+5X3SlmR8f4Xiej18mdFMVE51gy2yGOLTazULernQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LuUYon/i; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766316134; x=1797852134;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eKcsE2VJnI/4lSfqhwMzJl/DukDh/7mH6GBUXDAbjv0=;
+  b=LuUYon/il4JL7BMiKLVhDeWwOtWaMZlVdO7KcCjVjI661l2GebzklzFI
+   Li6e5C80WruLK3hT3aOnYwtbOP6bH+zbCNyT+n8PbUVA/qVoog0FBT7rJ
+   kAmilq7R9kFdC/nofRA+Rf9U0F27kW7jWD9bCv9TGd/kz4AXlF48p9vrZ
+   P/EqMd5m1+fokKiT5GLO2pvEtByhBNQ0dJUiQCvJ8EXn3KpTJSezDguG1
+   5BC8UuO+FCKf+zyW72JTd7DuIP9b+AEhh454NvwBk17+2q1iJxUlEvWb4
+   Oid6E88g1/jc7tSNcsL/yNGh7OqVo11QjmmejWX23lVfN4PVZ64+YNq5O
+   Q==;
+X-CSE-ConnectionGUID: Gy93nRYLQM+zeo7OaYFGdA==
+X-CSE-MsgGUID: x//p9D3LQzCAFBaqdEmiQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="67399305"
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="67399305"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 03:22:13 -0800
+X-CSE-ConnectionGUID: etHw95yLTB+B+7dyQ9t8Lg==
+X-CSE-MsgGUID: i2dI9tmSS4+zB5KsAJCk6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="199253512"
+Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 21 Dec 2025 03:22:10 -0800
+Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vXHVn-000000005bB-2OgN;
+	Sun, 21 Dec 2025 11:22:07 +0000
+Date: Sun, 21 Dec 2025 19:21:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH-v3 1/3] genirq: Fixed Global Software Interrupt
+ Moderation (GSIM)
+Message-ID: <202512211933.p2Yg8Zzq-lkp@intel.com>
+References: <20251217112128.1401896-2-lrizzo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RFC 3/3] mm/khugepaged: skip redundant IPI in
- collapse_huge_page()
-Content-Language: en-US
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
- peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
- lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
- shy828301@gmail.com, riel@surriel.com, jannh@google.com,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-References: <20251213080038.10917-1-lance.yang@linux.dev>
- <20251213080038.10917-4-lance.yang@linux.dev>
- <948d425a-2d6e-4439-a280-0ca9e7521b13@kernel.org>
- <6fdf89ee-3f6a-420f-b4d6-b03e3e2c8c9b@linux.dev>
- <6dcfeb2a-dba6-4de9-ac1b-39312c6bbcb6@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <6dcfeb2a-dba6-4de9-ac1b-39312c6bbcb6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251217112128.1401896-2-lrizzo@google.com>
+
+Hi Luigi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on linus/master v6.19-rc1]
+[cannot apply to next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-Fixed-Global-Software-Interrupt-Moderation-GSIM/20251217-193249
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20251217112128.1401896-2-lrizzo%40google.com
+patch subject: [PATCH-v3 1/3] genirq: Fixed Global Software Interrupt Moderation (GSIM)
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20251221/202512211933.p2Yg8Zzq-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251221/202512211933.p2Yg8Zzq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512211933.p2Yg8Zzq-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   kernel/irq/irq_moderation.c:141: warning: ignoring '#pragma clang diagnostic' [-Wunknown-pragmas]
+     141 | #pragma clang diagnostic error "-Wformat"
+   In file included from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:13,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/mm.h:36,
+                    from include/linux/kallsyms.h:13,
+                    from kernel/irq/irq_moderation.c:7:
+   In function 'check_copy_size',
+       inlined from 'copy_from_user' at include/linux/uaccess.h:218:7,
+       inlined from 'mode_write' at kernel/irq/irq_moderation.c:259:6:
+>> include/linux/ucopysize.h:54:25: error: call to '__bad_copy_to' declared with attribute error: copy destination size is too small
+      54 |                         __bad_copy_to();
+         |                         ^~~~~~~~~~~~~~~
 
 
+vim +/__bad_copy_to +54 include/linux/ucopysize.h
 
-On 2025/12/19 16:25, David Hildenbrand (Red Hat) wrote:
-> On 12/18/25 15:35, Lance Yang wrote:
->>
->>
->> On 2025/12/18 21:13, David Hildenbrand (Red Hat) wrote:
->>> On 12/13/25 09:00, Lance Yang wrote:
->>>> From: Lance Yang <lance.yang@linux.dev>
->>>>
->>>> Similar to the hugetlb PMD unsharing optimization, skip the second IPI
->>>> in collapse_huge_page() when the TLB flush already provides necessary
->>>> synchronization.
->>>>
->>>> Before commit a37259732a7d ("x86/mm: Make MMU_GATHER_RCU_TABLE_FREE
->>>> unconditional"), bare metal x86 didn't enable 
->>>> MMU_GATHER_RCU_TABLE_FREE.
->>>> In that configuration, tlb_remove_table_sync_one() was a NOP. GUP-fast
->>>> synchronization relied on IRQ disabling, which blocks TLB flush IPIs.
->>>>
->>>> When Rik made MMU_GATHER_RCU_TABLE_FREE unconditional to support AMD's
->>>> INVLPGB, all x86 systems started sending the second IPI. However, on
->>>> native x86 this is redundant:
->>>>
->>>>     - pmdp_collapse_flush() calls flush_tlb_range(), sending IPIs to 
->>>> all
->>>>       CPUs to invalidate TLB entries
->>>>
->>>>     - GUP-fast runs with IRQs disabled, so when the flush IPI 
->>>> completes,
->>>>       any concurrent GUP-fast must have finished
->>>>
->>>>     - tlb_remove_table_sync_one() provides no additional 
->>>> synchronization
->>>>
->>>> On x86, skip the second IPI when running native (without paravirt) and
->>>> without INVLPGB. For paravirt with non-native flush_tlb_multi and for
->>>> INVLPGB, conservatively keep both IPIs.
->>>>
->>>> Use tlb_table_flush_implies_ipi_broadcast(), consistent with the 
->>>> hugetlb
->>>> optimization.
->>>>
->>>> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
->>>> Signed-off-by: Lance Yang <lance.yang@linux.dev>
->>>> ---
->>>>    mm/khugepaged.c | 7 ++++++-
->>>>    1 file changed, 6 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->>>> index 97d1b2824386..06ea793a8190 100644
->>>> --- a/mm/khugepaged.c
->>>> +++ b/mm/khugepaged.c
->>>> @@ -1178,7 +1178,12 @@ static int collapse_huge_page(struct mm_struct
->>>> *mm, unsigned long address,
->>>>        _pmd = pmdp_collapse_flush(vma, address, pmd);
->>>>        spin_unlock(pmd_ptl);
->>>>        mmu_notifier_invalidate_range_end(&range);
->>>> -    tlb_remove_table_sync_one();
->>>> +    /*
->>>> +     * Skip the second IPI if the TLB flush above already synchronized
->>>> +     * with concurrent GUP-fast via broadcast IPIs.
->>>> +     */
->>>> +    if (!tlb_table_flush_implies_ipi_broadcast())
->>>> +        tlb_remove_table_sync_one();
->>>
->>> We end up calling
->>>
->>>       flush_tlb_range(vma, address, address + HPAGE_PMD_SIZE);
->>>
->>>       -> flush_tlb_mm_range(freed_tables = true)
->>>
->>>       -> flush_tlb_multi(mm_cpumask(mm), info);
->>>
->>> So freed_tables=true and we should be doing the right thing.
->>
->> Yep ;)
->>
->>> BTW, I was wondering whether we should embed that
->>> tlb_table_flush_implies_ipi_broadcast() check in
->>> tlb_remove_table_sync_one() instead.
->>> It then relies on the caller to do the right thing (flush with
->>> freed_tables=true or unshared_tables = true).
->>>
->>> Thoughts?
->>
->> Good point! Let me check the other callers to ensure they
->> are all preceded by a flush with freed_tables=true (or unshared_tables).
->>
->> Will get back to you with what I find :)
-> 
-> The use case in tlb_table_flush() is a bit confusing. But I would assume 
-> that we have a TLB flush with remove_tables=true beforehand. Otherwise 
-> we cannot possibly free the page table.
+808aac63e2bdf9 Kees Cook 2025-02-28  43  
+808aac63e2bdf9 Kees Cook 2025-02-28  44  static __always_inline __must_check bool
+808aac63e2bdf9 Kees Cook 2025-02-28  45  check_copy_size(const void *addr, size_t bytes, bool is_source)
+808aac63e2bdf9 Kees Cook 2025-02-28  46  {
+808aac63e2bdf9 Kees Cook 2025-02-28  47  	int sz = __builtin_object_size(addr, 0);
+808aac63e2bdf9 Kees Cook 2025-02-28  48  	if (unlikely(sz >= 0 && sz < bytes)) {
+808aac63e2bdf9 Kees Cook 2025-02-28  49  		if (!__builtin_constant_p(bytes))
+808aac63e2bdf9 Kees Cook 2025-02-28  50  			copy_overflow(sz, bytes);
+808aac63e2bdf9 Kees Cook 2025-02-28  51  		else if (is_source)
+808aac63e2bdf9 Kees Cook 2025-02-28  52  			__bad_copy_from();
+808aac63e2bdf9 Kees Cook 2025-02-28  53  		else
+808aac63e2bdf9 Kees Cook 2025-02-28 @54  			__bad_copy_to();
+808aac63e2bdf9 Kees Cook 2025-02-28  55  		return false;
+808aac63e2bdf9 Kees Cook 2025-02-28  56  	}
+808aac63e2bdf9 Kees Cook 2025-02-28  57  	if (WARN_ON_ONCE(bytes > INT_MAX))
+808aac63e2bdf9 Kees Cook 2025-02-28  58  		return false;
+808aac63e2bdf9 Kees Cook 2025-02-28  59  	check_object_size(addr, bytes, is_source);
+808aac63e2bdf9 Kees Cook 2025-02-28  60  	return true;
+808aac63e2bdf9 Kees Cook 2025-02-28  61  }
+808aac63e2bdf9 Kees Cook 2025-02-28  62  
 
-Right! I assume you meant freed_tables=true (not remove_tables) ;)
-
-Verified all callers have proper TLB flushes *beforehand*:
-
--> 1. mm/khugepaged.c:1188 (collapse_huge_page)
-
-	pmdp_collapse_flush(vma, address, pmd)
-	-> flush_tlb_range(vma, address, address + HPAGE_PMD_SIZE)
-		-> flush_tlb_mm_range(mm, ..., freed_tables = true)
-			-> flush_tlb_multi(mm_cpumask(mm), info)
-
-So freed_tables=true and we should be doing the right thing :)
-
--> 2. include/asm-generic/tlb.h:861 (tlb_flush_unshared_tables)
-
-	tlb_flush_mmu_tlbonly(tlb)
-	-> tlb_flush(tlb)
-		-> flush_tlb_mm_range(mm, ..., unshared_tables = true)
-			-> flush_tlb_multi(mm_cpumask(mm), info)
-
-unshared_tables=true (equivalent to freed_tables for sending IPIs).
-
--> 3. mm/mmu_gather.c:341 (__tlb_remove_table_one)
-
-When we can't allocate a batch page in tlb_remove_table(), we do:
-
-	tlb_table_invalidate(tlb)
-	-> tlb_flush_mmu_tlbonly(tlb)
-		-> flush_tlb_mm_range(mm, ..., freed_tables = true)
-			-> flush_tlb_multi(mm_cpumask(mm), info)
-
-	Then:
-	tlb_remove_table_one(table)
-	-> __tlb_remove_table_one(table) // if !CONFIG_PT_RECLAIM
-		-> tlb_remove_table_sync_one()
-
-freed_tables=true, and this should work too.
-
-Why is tlb->freed_tables guaranteed? Because callers like pte_free_tlb()
-(via free_pte_range) set freed_tables=true before calling __pte_free_tlb(),
-which then calls tlb_remove_table(). As you mentioned, we cannot free page
-tables without freed_tables=true.
-
-Note that tlb_remove_table_sync_one() was a NOP on bare metal x86
-(CONFIG_MMU_GATHER_RCU_TABLE_FREE=n) before commit a37259732a7d.
-
--> 4-5. mm/khugepaged.c:1683,1819 (pmdp_get_lockless_sync macro)
-
-Same as #1.
-
-So all callers satisfy the requirement! Will embed the check in v2.
-
-Hopefully I didn't miss any callers ;)
-
-Cheers,
-Lance
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
