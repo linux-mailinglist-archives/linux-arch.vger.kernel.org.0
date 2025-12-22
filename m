@@ -1,225 +1,221 @@
-Return-Path: <linux-arch+bounces-15531-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15532-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DE5ECD578C
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Dec 2025 11:10:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E053CCD7644
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Dec 2025 23:58:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BAD7C300F96D
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Dec 2025 10:10:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AA6FA3022D39
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Dec 2025 22:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E245312830;
-	Mon, 22 Dec 2025 10:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5E0347FC8;
+	Mon, 22 Dec 2025 22:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glwFxBeJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EwWP75d0"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60691301002;
-	Mon, 22 Dec 2025 10:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D03B2BEC43;
+	Mon, 22 Dec 2025 22:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766398239; cv=none; b=HOt8+uQev/ea0TAbv4SZqyYswKPGoKzy+xcrgBKqHnLAzQHARqOeDUUsrFE9mnl9B1mLCMxKTi6SQMEG5IJj3eSkboXeBDf4Z80N+NNFUFcyR5xYfgQQzmSSbrUPCr+0xs5k1SUFwwfvrsVTfNMePdjaih++rOTMgcOLcdH1vaU=
+	t=1766444246; cv=none; b=pzcRghlhhsqp5KdCk5WjcGxpehFD/T/1Glzpc8lD7BgEKfi81/1dn37oBij+xeHIQCko9VbfyXWqMW4fNnCy162PvMMQv70vJsAvdrPrFHplYdMnU8kde1u/O5PJ9iQFK1oMo+ebgElzHcG4YDTqiK5XwOkVDWFfy7vr/F2wbG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766398239; c=relaxed/simple;
-	bh=oqvDU7EcxPgLIt7kqJ6tUYvc7fh9oOd7r5g2Qh/KjTU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vew6eDv1QeH+ja+dHmmWPwW7yX/LCZ7q5bt1twNionCwJxD/puB96q9znmO1fdJV4UEHaqH/lG2jTLxyKjlZhZEm32EXe+bIR9IbD64pi5Mc5UwMFaqr4xxL+0mFXcC3v+XXgAaJUjirDKOGwGCNG7zR6eaz/yzhSDBIYqfhwqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=glwFxBeJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1F7C116D0;
-	Mon, 22 Dec 2025 10:10:34 +0000 (UTC)
+	s=arc-20240116; t=1766444246; c=relaxed/simple;
+	bh=7E5Dybc75IESRAl+k3QA51khMYlSIHC9JyGLQOU/HYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ofnl228MnkZ0VqGER0BThhXKgWN/0Rf+Rc4VhcttlaFYso/woNQUh3j/1vCQEeUW/i2vnIpfkmwonbbRiWYV6MZOGg4/3bzXV7vpc3HOwzcJJksUDmezI9aHuHIIFcryKJU5OpAQM1vf1Vcr6I8j0lmKGYujjhlIobL5rpY+MgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EwWP75d0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1A9C19421;
+	Mon, 22 Dec 2025 22:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766398238;
-	bh=oqvDU7EcxPgLIt7kqJ6tUYvc7fh9oOd7r5g2Qh/KjTU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=glwFxBeJHfy/Hxw8E0IhkNQF2D75sUaWPBU97dBGqQz6RmNddi4AuNDGVRXl11MW5
-	 /2XRcRjtcuW+PNO3XYgXDly/+1nqW71Z8wNkiivCJ3Jg7vi/qaEUg8J4toGx7nqkkz
-	 RC2z+fWsSeanfTQwGH23Y6Vf5tNpm4TWdbplzUT0YtbQ8eTMrchSyhXYxYhA/YeQFZ
-	 OPRiIuCw/OtPCmBpFpOqhk6zayMlQB8WgR7rXpsqEZFJyUY/Z+c80MqXHtj/CR8vcF
-	 w1ay/Q/COiczt1kmwNYCUFJSSQcNJyIAUj3oSuM1C7TYwA6NT4ooYHb4wIaUUIsZFD
-	 XSI866D9bbWPg==
-Message-ID: <c66cb4e4-820e-419a-ae9f-efd2c15aa570@kernel.org>
-Date: Mon, 22 Dec 2025 11:10:32 +0100
+	s=k20201202; t=1766444245;
+	bh=7E5Dybc75IESRAl+k3QA51khMYlSIHC9JyGLQOU/HYA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EwWP75d0yMaok+rW7kDqDKrllYdg3hFOZVJdkOJXB9XiLWf7BeUY45hOWOg7En3/T
+	 FCM3HzlXTEhGTP5e8s3RVFxWqbNgnN7DKtbh3/Jca1hMH3jQOCD+Bo0k7ATEpVn52x
+	 9ec10vtMK9+IajQ2K0aNCgCoHPfHAWgfdtcWDFu5PNxY8GxKctWD1FiCIxTSiN9p7U
+	 +nqqn+gH95M3HD0yDqbqvruENlaYzKnVXynplpaMUFMQbpFrDzot+w0HYjiBl/6goW
+	 1hXLvWBxY/d3WxcFNi9rYVrLAEzwKZ2PWbTfacpTzH+h7o8T+N+W/4UFKs1IB6YZaL
+	 EI10QvhW/6d1Q==
+From: Namhyung Kim <namhyung@kernel.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Ian Rogers <irogers@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-perf-users@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: [PATCH 11/11] tools headers: Sync syscall table with kernel sources
+Date: Mon, 22 Dec 2025 14:57:16 -0800
+Message-ID: <20251222225716.3565649-11-namhyung@kernel.org>
+X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
+In-Reply-To: <20251222225716.3565649-1-namhyung@kernel.org>
+References: <20251222225716.3565649-1-namhyung@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] mm/hugetlb: fix excessive IPI broadcasts when
- unsharing PMD tables using mmu_gather
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
- Laurence Oberman <loberman@redhat.com>,
- Prakash Sangappa <prakash.sangappa@oracle.com>,
- Nadav Amit <nadav.amit@gmail.com>, stable@vger.kernel.org,
- Ryan Roberts <ryan.roberts@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20251212071019.471146-1-david@kernel.org>
- <20251212071019.471146-5-david@kernel.org> <aUVHAD9G5_HKlYsR@hyeyoo>
- <d5bf88d9-aedf-4e6d-b5a0-e860bf0ed2e4@kernel.org>
- <3d9ce821-a39d-4164-a225-fcbe790ea951@kernel.org>
- <e78f5457-43fb-4656-ad53-bfda72936ef5@kernel.org> <aUioS4dkTrKgsHGP@hyeyoo>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <aUioS4dkTrKgsHGP@hyeyoo>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
->> Okay, the existing hugetlb mmu_gather integration is hell on earth.
->>
->> I *think* to get everything right (work around all the hacks we have) we might have to do a
->>
->> 	tlb_change_page_size(tlb, sz);
->> 	tlb_start_vma(tlb, vma);
->>
->> before adding something to the tlb and a tlb_end_vma(tlb, vma) if we
->> don't immediately call tlb_finish_mmu() already.
-> 
-> Good point, indeed!
-> 
->> tlb_change_page_size() will set page_size accordingly (as required for
->> ppc IIUC).
-> 
-> Right. PPC wants to flush TLB when the page size changes.
-> 
->> tlb_start_vma()->tlb_update_vma_flags() will set tlb->vma_huge for ...
->> some very good reason I am sure.
-> 
-> :)
-> 
->> So something like the following might do the trick:
->>
->>  From b0b854c2f91ce0931e1462774c92015183fb5b52 Mon Sep 17 00:00:00 2001
->> From: "David Hildenbrand (Red Hat)" <david@kernel.org>
->> Date: Sun, 21 Dec 2025 12:57:43 +0100
->> Subject: [PATCH] tmp
->>
->> Signed-off-by: David Hildenbrand (Red Hat) <david@kernel.org>
->> ---
->>   mm/hugetlb.c | 12 +++++++++++-
->>   mm/rmap.c    |  4 ++++
->>   2 files changed, 15 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index 7fef0b94b5d1e..14521210181c9 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -5113,6 +5113,9 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
->>   	/* Prevent race with file truncation */
->>   	hugetlb_vma_lock_write(vma);
->>   	i_mmap_lock_write(mapping);
->> +
->> +	tlb_change_page_size(&tlb, sz);
->> +	tlb_start_vma(&tlb, vma);
->>   	for (; old_addr < old_end; old_addr += sz, new_addr += sz) {
->>   		src_pte = hugetlb_walk(vma, old_addr, sz);
->>   		if (!src_pte) {
->> @@ -5128,13 +5131,13 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
->>   			new_addr |= last_addr_mask;
->>   			continue;
->>   		}
->> -		tlb_remove_huge_tlb_entry(h, &tlb, src_pte, old_addr);
->>   		dst_pte = huge_pte_alloc(mm, new_vma, new_addr, sz);
->>   		if (!dst_pte)
->>   			break;
->>   		move_huge_pte(vma, old_addr, new_addr, src_pte, dst_pte, sz);
->> +		tlb_remove_huge_tlb_entry(h, &tlb, src_pte, old_addr);
->>   	}
->>   	tlb_flush_mmu_tlbonly(&tlb);
->> @@ -6416,6 +6419,8 @@ long hugetlb_change_protection(struct mmu_gather *tlb, struct vm_area_struct *vm
->>   	BUG_ON(address >= end);
->>   	flush_cache_range(vma, range.start, range.end);
->> +	tlb_change_page_size(tlb, psize);
->> +	tlb_start_vma(tlb, vma);
->>   	mmu_notifier_invalidate_range_start(&range);
->>   	hugetlb_vma_lock_write(vma);
->> @@ -6532,6 +6537,8 @@ long hugetlb_change_protection(struct mmu_gather *tlb, struct vm_area_struct *vm
->>   	hugetlb_vma_unlock_write(vma);
->>   	mmu_notifier_invalidate_range_end(&range);
->> +	tlb_end_vma(tlb, vma);
->> +
->>   	return pages > 0 ? (pages << h->order) : pages;
->>   }
->> @@ -7259,6 +7266,9 @@ static void hugetlb_unshare_pmds(struct vm_area_struct *vma,
->>   	} else {
->>   		i_mmap_assert_write_locked(vma->vm_file->f_mapping);
->>   	}
->> +
->> +	tlb_change_page_size(&tlb, sz);
->> +	tlb_start_vma(&tlb, vma);
->>   	for (address = start; address < end; address += PUD_SIZE) {
->>   		ptep = hugetlb_walk(vma, address, sz);
->>   		if (!ptep)
->> diff --git a/mm/rmap.c b/mm/rmap.c
->> index d6799afe11147..27210bc6fb489 100644
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -2015,6 +2015,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->>   					goto walk_abort;
->>   				tlb_gather_mmu(&tlb, mm);
->> +				tlb_change_page_size(&tlb, huge_page_size(hstate_vma(vma)));
->> +				tlb_start_vma(&tlb, vma);
->>   				if (huge_pmd_unshare(&tlb, vma, address, pvmw.pte)) {
->>   					hugetlb_vma_unlock_write(vma);
->>   					huge_pmd_unshare_flush(&tlb, vma);
->> @@ -2413,6 +2415,8 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->>   				}
->>   				tlb_gather_mmu(&tlb, mm);
->> +				tlb_change_page_size(&tlb, huge_page_size(hstate_vma(vma)));
->> +				tlb_start_vma(&tlb, vma);
->>   				if (huge_pmd_unshare(&tlb, vma, address, pvmw.pte)) {
->>   					hugetlb_vma_unlock_write(vma);
->>   					huge_pmd_unshare_flush(&tlb, vma);
->> -- 
->> 2.52.0
->>
->>
->>
->> But now I'm staring at it and wonder whether we should just defer the TLB flushing changes
->> to a later point and only focus on the IPI flushes.
-> 
-> You mean defer TLB flushing to which point? For unmapping or
-> changing permission of VMAs, flushing at VMA boundary already makes sense?
+To pick up changes from:
 
-Defer converting to mmu_gather to a later patch set :)
+  b36d4b6aa88ef039 ("arch: hookup listns() system call")
 
-I gave it a try yesterday, but it's also a bit ugly.
+This should be used to beautify the syscall arguments and it addresses
+these tools/perf build warnings:
 
-In the code above, primarily the rmap change is nasty.
+  Warning: Kernel ABI header differences:
+    diff -u tools/include/uapi/asm-generic/unistd.h include/uapi/asm-generic/unistd.h
+    diff -u tools/scripts/syscall.tbl scripts/syscall.tbl
+    diff -u tools/perf/arch/x86/entry/syscalls/syscall_32.tbl arch/x86/entry/syscalls/syscall_32.tbl
+    diff -u tools/perf/arch/x86/entry/syscalls/syscall_64.tbl arch/x86/entry/syscalls/syscall_64.tbl
+    diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
+    diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
+    diff -u tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
+    diff -u tools/perf/arch/arm/entry/syscalls/syscall.tbl arch/arm/tools/syscall.tbl
+    diff -u tools/perf/arch/sh/entry/syscalls/syscall.tbl arch/sh/kernel/syscalls/syscall.tbl
+    diff -u tools/perf/arch/sparc/entry/syscalls/syscall.tbl arch/sparc/kernel/syscalls/syscall.tbl
+    diff -u tools/perf/arch/xtensa/entry/syscalls/syscall.tbl arch/xtensa/kernel/syscalls/syscall.tbl
 
-> 
-> Or if you meant batching TLB flushes in try_to_{migrate,unmap}_one()...
-> 
-> /me starts wondering...
-> 
-> "Hmm... for RMAP, we already have TLB flush batching
->   via struct tlbflush_unmap_batch. Why not use this framework
->   when unmapping shared hugetlb pages as well?"
+Please see tools/include/README.kernel-copies.
 
-Hm, also not what we really want in most cases. I don't think we should 
-be using that outside of rmap.c (and I have the gut feeling that we 
-should maybe make use of mmu_gather in there instead at some point).
+Note that s390 syscall table is still out of sync as it switches to use the
+generic table.  But I'd like to minimize the change in this commit.
 
-Let me try a bit to see if I can clean the code here up, or if I just 
-add a temporary custom batching data structure.
+Cc: linux-arch@vger.kernel.org
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/include/uapi/asm-generic/unistd.h             | 4 +++-
+ tools/perf/arch/arm/entry/syscalls/syscall.tbl      | 1 +
+ tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 1 +
+ tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 1 +
+ tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 1 +
+ tools/perf/arch/sh/entry/syscalls/syscall.tbl       | 1 +
+ tools/perf/arch/sparc/entry/syscalls/syscall.tbl    | 1 +
+ tools/perf/arch/x86/entry/syscalls/syscall_32.tbl   | 1 +
+ tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 1 +
+ tools/perf/arch/xtensa/entry/syscalls/syscall.tbl   | 1 +
+ tools/scripts/syscall.tbl                           | 1 +
+ 11 files changed, 13 insertions(+), 1 deletion(-)
 
-Thanks for bringing this up!
-
+diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
+index 04e0077fb4c97a4d..942370b3f5d25230 100644
+--- a/tools/include/uapi/asm-generic/unistd.h
++++ b/tools/include/uapi/asm-generic/unistd.h
+@@ -857,9 +857,11 @@ __SYSCALL(__NR_open_tree_attr, sys_open_tree_attr)
+ __SYSCALL(__NR_file_getattr, sys_file_getattr)
+ #define __NR_file_setattr 469
+ __SYSCALL(__NR_file_setattr, sys_file_setattr)
++#define __NR_listns 470
++__SYSCALL(__NR_listns, sys_listns)
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 470
++#define __NR_syscalls 471
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/tools/perf/arch/arm/entry/syscalls/syscall.tbl b/tools/perf/arch/arm/entry/syscalls/syscall.tbl
+index b07e699aaa3c2840..fd09afae72a24255 100644
+--- a/tools/perf/arch/arm/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/arm/entry/syscalls/syscall.tbl
+@@ -484,3 +484,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	listns				sys_listns
+diff --git a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+index 7a7049c2c307885f..9b92bddf06b572d0 100644
+--- a/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
++++ b/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+@@ -384,3 +384,4 @@
+ 467	n64	open_tree_attr			sys_open_tree_attr
+ 468	n64	file_getattr			sys_file_getattr
+ 469	n64	file_setattr			sys_file_setattr
++470	n64	listns				sys_listns
+diff --git a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+index b453e80dfc003796..ec4458cdb97b69a6 100644
+--- a/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/powerpc/entry/syscalls/syscall.tbl
+@@ -560,3 +560,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	listns				sys_listns
+diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+index 8a6744d658db3986..5863787ab03633a4 100644
+--- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
+@@ -472,3 +472,4 @@
+ 467  common	open_tree_attr		sys_open_tree_attr		sys_open_tree_attr
+ 468  common	file_getattr		sys_file_getattr		sys_file_getattr
+ 469  common	file_setattr		sys_file_setattr		sys_file_setattr
++470  common	listns			sys_listns			sys_listns
+diff --git a/tools/perf/arch/sh/entry/syscalls/syscall.tbl b/tools/perf/arch/sh/entry/syscalls/syscall.tbl
+index 5e9c9eff5539e241..969c11325adeb24e 100644
+--- a/tools/perf/arch/sh/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/sh/entry/syscalls/syscall.tbl
+@@ -473,3 +473,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	listns				sys_listns
+diff --git a/tools/perf/arch/sparc/entry/syscalls/syscall.tbl b/tools/perf/arch/sparc/entry/syscalls/syscall.tbl
+index ebb7d06d1044fa9b..39aa26b6a50be7e0 100644
+--- a/tools/perf/arch/sparc/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/sparc/entry/syscalls/syscall.tbl
+@@ -515,3 +515,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	listns				sys_listns
+diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_32.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_32.tbl
+index 4877e16da69a50f2..e979a3eac7a355de 100644
+--- a/tools/perf/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/tools/perf/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -475,3 +475,4 @@
+ 467	i386	open_tree_attr		sys_open_tree_attr
+ 468	i386	file_getattr		sys_file_getattr
+ 469	i386	file_setattr		sys_file_setattr
++470	i386	listns			sys_listns
+diff --git a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+index ced2a1deecd7ce08..8a4ac4841be6e542 100644
+--- a/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -394,6 +394,7 @@
+ 467	common	open_tree_attr		sys_open_tree_attr
+ 468	common	file_getattr		sys_file_getattr
+ 469	common	file_setattr		sys_file_setattr
++470	common	listns			sys_listns
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/tools/perf/arch/xtensa/entry/syscalls/syscall.tbl b/tools/perf/arch/xtensa/entry/syscalls/syscall.tbl
+index 374e4cb788d8a6d4..438a3b1704022b39 100644
+--- a/tools/perf/arch/xtensa/entry/syscalls/syscall.tbl
++++ b/tools/perf/arch/xtensa/entry/syscalls/syscall.tbl
+@@ -440,3 +440,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	listns				sys_listns
+diff --git a/tools/scripts/syscall.tbl b/tools/scripts/syscall.tbl
+index d1ae5e92c615b58e..e74868be513cfb04 100644
+--- a/tools/scripts/syscall.tbl
++++ b/tools/scripts/syscall.tbl
+@@ -410,3 +410,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	listns				sys_listns
 -- 
-Cheers
+2.52.0.351.gbe84eed79e-goog
 
-David
 
