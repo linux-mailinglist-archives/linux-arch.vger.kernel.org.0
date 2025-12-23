@@ -1,43 +1,44 @@
-Return-Path: <linux-arch+bounces-15541-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15542-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06F26CDA9CB
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 21:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 97CB2CDA9D1
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 21:54:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0AD5A30421AA
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 20:50:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED0B63070CB5
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 20:51:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CCE3090F7;
-	Tue, 23 Dec 2025 20:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FEA30C616;
+	Tue, 23 Dec 2025 20:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/yCeJNk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PjfvPDRI"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2006F2F1FD5;
-	Tue, 23 Dec 2025 20:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187562F1FD5;
+	Tue, 23 Dec 2025 20:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766523055; cv=none; b=fktWdPw3NhSAPUDg/hLC0wRvcwB+Fn12UE5xVjQz93/5ZRbyDgj63hBy/xc3qzYiu4k2QLLp54V4jBG9svWQENvXx81BQ9KxpU6ja/Z/YwKIPsTS+Dih1GVpoVGzsiBkWWgNawG3DiPqPmXTfFodOM1NeOKQwvXiukZxYk9irus=
+	t=1766523062; cv=none; b=sxzEtChH492YsoP8tgFeB/55kfj/Y6L6jAbY3Q1lWJphRzPPondKnru2+Qsz5o0pNO42DSdNwm6qtOK4Pu2tQXUXLxiCNrv8PAmDXWMwRepAN0lUXz+1PufWoMVnxqyM7zS4Z0LIuFCC+3a0r6Y7/LpILXnAwDydJyN4UooXOqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766523055; c=relaxed/simple;
-	bh=trDSBTaA6WTrHmc9KKJcMvZl6ePTGpic7B6VeAAp59I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aFl7XNnowFgEsKRsBT/1eli6bn+bMDwp0qJQztVxUet2WMNxbiHNBHjAXWmxE3iGqkKITaKGum/p7VKtzfwTGreeS6ecd0H3NU/zREsYWlvCJ171FsumOrVOGIztfF7awhhkpLPYgFds3Q05iPbheZV8XJWhPdWHzi8lVe7Jnkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/yCeJNk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F60DC113D0;
-	Tue, 23 Dec 2025 20:50:48 +0000 (UTC)
+	s=arc-20240116; t=1766523062; c=relaxed/simple;
+	bh=33B1NjB8q+KbqoS4RdUZuJYWp5unOxxMAqt5/OJnfDE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=j+vQ5jZO4W9JImjQjJ43/PHlj2aS0cfvitayVg2yPS2SI2ufMoMjhqUhpbo8t/wDnu0frRfaG8jGpk3AhDHutLlzC6vTk+qrcri/GgmxxHqkMtPWFb/8bZZut5UersPbsC2JiRpSgdxRD0b3g0iahLHuCeTOmCgxxCz/yZx5CpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PjfvPDRI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42660C19421;
+	Tue, 23 Dec 2025 20:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766523054;
-	bh=trDSBTaA6WTrHmc9KKJcMvZl6ePTGpic7B6VeAAp59I=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Q/yCeJNkMbsOr6ih8Ct52pGmKB3UNVAXspjyUHpkYkQYhmv/wN/vQqUO8B4aSVb43
-	 lt4I+mitTdqcYGg20h5Pip1pBa04LihhstYsrW1UM4yUmJQJ9CnwEyADdkPOJ2/V3H
-	 my76A0uDLn9HTkHIU/TX900oHCMUfofNYOF0E25WSqCOGrSR6CuTJgR9bhG8l1ETNU
-	 hRJD1PIKka/M/a065jPYoCDNzUBcGVNPt7bji9JeljOrdPC8okMOZdVyARn9zRN4zV
-	 xqv4o6EIaUaTqr2QODVqnH37YcRYFYC5YDMfa7OGzR41w/ax/vCctSIJD9XCIcjy7T
-	 W/jfF7R/I59Ag==
+	s=k20201202; t=1766523061;
+	bh=33B1NjB8q+KbqoS4RdUZuJYWp5unOxxMAqt5/OJnfDE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=PjfvPDRImiMgFeQe9p3bFipqiUqrAjW6sutXjuz2zNhrfPEpI5TLkODucQ88WaKE8
+	 bHVuN6eJjC/SXxEz9tBF7sqU+wYeQ+RjtbUZu5Odu1D6EqO8FUjA2O4FSZmGLLLxWV
+	 1B4/uEgFaY30VYa1rjS7BcMJY0JPDBpuGudUL9TlBOUvTTYGZlZ7LMlVzwgBVcbRC4
+	 RAqk/7kaZLjdX6QsCOOKeyDb2e8osl185MxFCMAnbcteS9oX/8ZgUIxlam3VC7Qr6H
+	 UHEFvyYOa3pgCAeeYtCvOiCE/xaL9QL1yImbm4wVkPNw+/m/FkW7g64RyUCTDqQnWR
+	 5ylRmIKoqAXNA==
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -60,11 +61,14 @@ Cc: linux-arch@vger.kernel.org,
 	Harry Yoo <harry.yoo@oracle.com>,
 	Laurence Oberman <loberman@redhat.com>,
 	Prakash Sangappa <prakash.sangappa@oracle.com>,
-	Nadav Amit <nadav.amit@gmail.com>
-Subject: [PATCH v3 0/3] mm/hugetlb: fixes for PMD table sharing (incl. using mmu_gather)
-Date: Tue, 23 Dec 2025 21:50:43 +0100
-Message-ID: <20251223205046.565162-1-david@kernel.org>
+	Nadav Amit <nadav.amit@gmail.com>,
+	Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH v3 1/3] mm/hugetlb: fix two comments related to huge_pmd_unshare()
+Date: Tue, 23 Dec 2025 21:50:44 +0100
+Message-ID: <20251223205046.565162-2-david@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251223205046.565162-1-david@kernel.org>
+References: <20251223205046.565162-1-david@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -73,94 +77,79 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-One functional fix, one performance regression fix, and two related
-comment fixes.
+Ever since we stopped using the page count to detect shared PMD
+page tables, these comments are outdated.
 
-I cleaned up my prototype I recently shared [1] for the performance fix,
-deferring most of the cleanups I had in the prototype to a later point.
-While doing that I identified the other things.
+The only reason we have to flush the TLB early is because once we drop
+the i_mmap_rwsem, the previously shared page table could get freed (to
+then get reallocated and used for other purpose). So we really have to
+flush the TLB before that could happen.
 
-The goal of this patch set is to be backported to stable trees "fairly"
-easily. At least patch #1 and #4.
+So let's simplify the comments a bit.
 
-Patch #1 fixes hugetlb_pmd_shared() not detecting any sharing
-Patch #2 + #3 are simple comment fixes that patch #4 interacts with.
-Patch #4 is a fix for the reported performance regression due to excessive
-IPI broadcasts during fork()+exit().
+The "If we unshared PMDs, the TLB flush was not recorded in mmu_gather."
+part introduced as in commit a4a118f2eead ("hugetlbfs: flush TLBs
+correctly after huge_pmd_unshare") was confusing: sure it is recorded
+in the mmu_gather, otherwise tlb_flush_mmu_tlbonly() wouldn't do
+anything. So let's drop that comment while at it as well.
 
-The last patch is all about TLB flushes, IPIs and mmu_gather.
-Read: complicated
+We'll centralize these comments in a single helper as we rework the code
+next.
 
-I added as much comments + description that I possibly could, and I am
-hoping for review from Jann.
+Fixes: 59d9094df3d7 ("mm: hugetlb: independent PMD page table shared count")
+Reviewed-by: Rik van Riel <riel@surriel.com>
+Tested-by: Laurence Oberman <loberman@redhat.com>
+Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Acked-by: Oscar Salvador <osalvador@suse.de>
+Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+Cc: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: David Hildenbrand (Red Hat) <david@kernel.org>
+---
+ mm/hugetlb.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
-There are plenty of cleanups in the future to be had + one reasonable
-optimization on x86. But that's all out of scope for this series.
-
-Compile tested on plenty of architectures.
-
-Runtime tested, with a focus on fixing the performance regression using
-the original reproducer [2] on x86.
-
-[1] https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
-[2] https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
-
---
-
-v2 -> v3:
-* Rebased to 6.19-rc2 and retested on x86
-* Changes on last patch:
- * Introduce and use tlb_gather_mmu_vma() for properly setting up mmu_gather
-   for hugetlb -- thanks to Harry for pointing me once again at the nasty
-   hugetlb integration in mmu_gather
- * Move tlb_remove_huge_tlb_entry() after move_huge_pte()
- * For consistency, always call tlb_gather_mmu_vma() after
-   flush_cache_range()
- * Don't pass mmu_gather to hugetlb_change_protection(), simply use
-   a local one for now. (avoids messing with tlb_start_vma() /
-   tlb_start_end())
- * Dropped Lorenzo's RB due to the changes
-
-v1 -> v2:
-* Picked RB's/ACK's, hopefully I didn't miss any
-* Added the initialization of fully_unshared_tables in __tlb_gather_mmu()
-  (Thanks Nadav!)
-* Refined some comments based on Lorenzo's feedback.
-
-Cc: Will Deacon <will@kernel.org>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Piggin <npiggin@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Muchun Song <muchun.song@linux.dev>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Jann Horn <jannh@google.com>
-Cc: Pedro Falcato <pfalcato@suse.de>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Harry Yoo <harry.yoo@oracle.com>
-Cc: Uschakow, Stanislav" <suschako@amazon.de>
-Cc: Laurence Oberman <loberman@redhat.com>
-Cc: Prakash Sangappa <prakash.sangappa@oracle.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-
-David Hildenbrand (Red Hat) (3):
-  mm/hugetlb: fix two comments related to huge_pmd_unshare()
-  mm/rmap: fix two comments related to huge_pmd_unshare()
-  mm/hugetlb: fix excessive IPI broadcasts when unsharing PMD tables
-    using mmu_gather
-
- include/asm-generic/tlb.h |  77 +++++++++++++++++++++-
- include/linux/hugetlb.h   |  15 +++--
- include/linux/mm_types.h  |   1 +
- mm/hugetlb.c              | 131 +++++++++++++++++++++-----------------
- mm/mmu_gather.c           |  33 ++++++++++
- mm/rmap.c                 |  45 ++++++-------
- 6 files changed, 212 insertions(+), 90 deletions(-)
-
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 51273baec9e5d..3c77cdef12a32 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5304,17 +5304,10 @@ void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 	tlb_end_vma(tlb, vma);
+ 
+ 	/*
+-	 * If we unshared PMDs, the TLB flush was not recorded in mmu_gather. We
+-	 * could defer the flush until now, since by holding i_mmap_rwsem we
+-	 * guaranteed that the last reference would not be dropped. But we must
+-	 * do the flushing before we return, as otherwise i_mmap_rwsem will be
+-	 * dropped and the last reference to the shared PMDs page might be
+-	 * dropped as well.
+-	 *
+-	 * In theory we could defer the freeing of the PMD pages as well, but
+-	 * huge_pmd_unshare() relies on the exact page_count for the PMD page to
+-	 * detect sharing, so we cannot defer the release of the page either.
+-	 * Instead, do flush now.
++	 * There is nothing protecting a previously-shared page table that we
++	 * unshared through huge_pmd_unshare() from getting freed after we
++	 * release i_mmap_rwsem, so flush the TLB now. If huge_pmd_unshare()
++	 * succeeded, flush the range corresponding to the pud.
+ 	 */
+ 	if (force_flush)
+ 		tlb_flush_mmu_tlbonly(tlb);
+@@ -6536,11 +6529,10 @@ long hugetlb_change_protection(struct vm_area_struct *vma,
+ 		cond_resched();
+ 	}
+ 	/*
+-	 * Must flush TLB before releasing i_mmap_rwsem: x86's huge_pmd_unshare
+-	 * may have cleared our pud entry and done put_page on the page table:
+-	 * once we release i_mmap_rwsem, another task can do the final put_page
+-	 * and that page table be reused and filled with junk.  If we actually
+-	 * did unshare a page of pmds, flush the range corresponding to the pud.
++	 * There is nothing protecting a previously-shared page table that we
++	 * unshared through huge_pmd_unshare() from getting freed after we
++	 * release i_mmap_rwsem, so flush the TLB now. If huge_pmd_unshare()
++	 * succeeded, flush the range corresponding to the pud.
+ 	 */
+ 	if (shared_pmd)
+ 		flush_hugetlb_tlb_range(vma, range.start, range.end);
 -- 
 2.52.0
 
