@@ -1,137 +1,191 @@
-Return-Path: <linux-arch+bounces-15537-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15538-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53F47CD83F0
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 07:23:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9563CCD8A0E
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 10:46:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A53AE301462B
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 06:22:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 31F823023555
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Dec 2025 09:44:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161AB2D12EB;
-	Tue, 23 Dec 2025 06:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56CA931BC95;
+	Tue, 23 Dec 2025 09:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ESdJ31ml"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AwA5kqsw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B0A2D3A60
-	for <linux-arch@vger.kernel.org>; Tue, 23 Dec 2025 06:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3F730AACF;
+	Tue, 23 Dec 2025 09:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766470949; cv=none; b=N6tZZjQECMZPnxphrZfs2/AYJVXmDhZXO6+mOPfScI4xJz/lGvVeuq15+aUHFK0KdJxC50dw+0pqt07YIBhHKrIZ/RzweBZTavDy0kGAb6GhuYUPHRMHwsaGBsWP/ytcUcLimQ9NGpgzcSoht9h6fuopb+sCS+NHxenkDHVtbhY=
+	t=1766483098; cv=none; b=eP9XP740OElZh1Q1nlZ2IMxDJyWxuGyTQZyKH80hQCBROmuSc7zDQiYcFdmNQwVHVgXD39dWo8zVSeItmyU9aqtjRnt4Pxen+VFIUnhYeuTqPT11nrMsrPt9ofuRi0hSdfthhvsX4SCnJHNAmFKxFXlG3rDnZRuXmFc15nm57mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766470949; c=relaxed/simple;
-	bh=CAzqIn1NxWbBnmsyzqSrr/LhlLLbLy8JxidNUttic+I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eHh/vYuaRCLnOFgt9d8/Z9NIuYO125gbWXxSFR4lhGSlwkEreEkAwFZEPnj050XvAJ9n1TEuIhMQ1J3RqQcTtV4whXZeJh58aVo3MNXap12QDsB8gojScEyZOqOaWpyOtqyGs0iSAVMVOJ+Ayf0OxfAzn5YJUFH8LBPx/mVabQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ESdJ31ml; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7f0db5700b2so4221173b3a.0
-        for <linux-arch@vger.kernel.org>; Mon, 22 Dec 2025 22:22:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766470947; x=1767075747; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QwIMmpL7HRi3JDgDXRqtgrbht8A5w6aG4m2Qtk/qxLc=;
-        b=ESdJ31mlXxakeopw5PLJVswl8qxENHJJ/owvnF7qc0HMHp5IcW+nOEmaCYY13V/yJF
-         0UwyI5vXFs87zinwo8LrWL0ZSTbHBIbHYkb3/e8Zv9ViIMP+loQZQmfHSKZNm0qFFGbI
-         cFVhVFJVm8G/iAgb2p7/Wwo8Wxtfmb5Muk8QhehZ3NjDAciL90uyucTMFV/0HOzvohPq
-         5W7pYrfaerub7/Wmw5w/vTXUdN40EJbQWoTeL8n3NnhnbAW7ZRbmXxIGBZ1JSxTAVm9x
-         H/sYlh/X9agxIpYZXovKuk6zsjVt2kGlvwXSMsnZQzpHhajM3UtuvkNvUbu+q4kOmD+O
-         Vfcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766470947; x=1767075747;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QwIMmpL7HRi3JDgDXRqtgrbht8A5w6aG4m2Qtk/qxLc=;
-        b=N424LeuwL6utEHu4TFrOVVFQsM3OMbAWC5GK189afblsMyN+c8tDkVl0mnJREqrHNZ
-         Gt9GmDTIsp/ej8Y2n7D3NOq1nSCDb757/dDC0rNf3/kLKx3gXvxU4Loi+mpoVlBRylIH
-         KbuWvmldSVmWYQGEK4ZvfsUO7DFYdELFcRCm8Yp/5DBRLUht9CnDOT2fM0GOzW1uy7Tz
-         zIbZtxSYGcmhHCxLgrRCJu52GL1UwfIJ/n3lwbCP7KLdDUEsImX7m/QHqrdKbDoMVNei
-         2Bhkafpri+DJ7UAVG8eoicKQqdHiqCdNbDGEjKAN7DQR4x8o7gc/1xQ4wIzE/+1G2uuR
-         N+Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCUF/rYT9Tt6hkLuJuoUp40zx+e34nE0HA1VPm6WsO83ih9AioCMSiapjYg7aa0tNnvo+ldkmxIytZfu@vger.kernel.org
-X-Gm-Message-State: AOJu0YysM2m93XKGlktIqe7QfhmmE5IS/I0d3rujHUHCj3QdnZ5FNHmt
-	62GUUCiTc5mowT+ZACzHHIrNo7A6TrO3ipfkDf64hbMfSCLaocMe6DXj
-X-Gm-Gg: AY/fxX4qpG1gjHoVzOPylYA99SkiZ5txIxXlwCYSzaCbVKDEHF4qyOvOIrYC/elF8Qn
-	MdJ6Vpv3maQPuXrKVz1sGZ3xNLVnAAUq66mBW4Fr7tx4vXmvME/lhIVhgbZwsWDozxoYp3kqOtv
-	P9Tm7EUrzXLNV8/1hyVbfPx36wzTQNzNaNfW3wQhfKwDKyPQg7IL78RVd1Eg59E6AzcQcwV4lHk
-	k+zUTunS8bP4XTru0NIMnApG6965x/neJdKbHYadtGyU7svr5D8WqfhCWolBrxCeuSbRermKAQB
-	eR7I23S29Vr0E7PdTFhuMppsSow9kS7YHWdyX4BBo9GVgeiWA0zYWVCTtqrAIri4GmgRV646g8b
-	PKL3vLTpPUTQ8/upOLsZSXBIXO5a0k5vrY6zEfpjl0Of4rboHpTbZYksrdtEXcmlyPzH8gs8uu0
-	ZbN2JTzwcm1dSeEAqCgDhiOWsx46hX27/CxDreMAux91VD+8tdetBhN1tyxoeJuw==
-X-Google-Smtp-Source: AGHT+IHPU+0SQ+q0XOYb/8CVg8fHZEnjX9/sJMBQ6gXaryp0fDKm7joEP0BYIYZXLRSjCH3RsQpDeg==
-X-Received: by 2002:a05:6a21:99a7:b0:2cd:a43f:78fb with SMTP id adf61e73a8af0-376aa1efc33mr13239340637.48.1766470946893;
-        Mon, 22 Dec 2025 22:22:26 -0800 (PST)
-Received: from bee.. (p5342157-ipxg23901hodogaya.kanagawa.ocn.ne.jp. [180.39.242.157])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7dfab841sm12395362b3a.35.2025.12.22.22.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Dec 2025 22:22:26 -0800 (PST)
-From: FUJITA Tomonori <fujita.tomonori@gmail.com>
-To: boqun.feng@gmail.com,
-	ojeda@kernel.org
-Cc: a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	bjorn3_gh@protonmail.com,
-	dakr@kernel.org,
-	gary@garyguo.net,
-	lossin@kernel.org,
-	tmgross@umich.edu,
-	acourbot@nvidia.com,
-	rust-for-linux@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v2 4/4] rust: helpers: Add i8/i16 atomic xchg_relaxed helpers
-Date: Tue, 23 Dec 2025 15:21:40 +0900
-Message-ID: <20251223062140.938325-5-fujita.tomonori@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251223062140.938325-1-fujita.tomonori@gmail.com>
-References: <20251223062140.938325-1-fujita.tomonori@gmail.com>
+	s=arc-20240116; t=1766483098; c=relaxed/simple;
+	bh=DCGhrQ/izT9mabKQhH7gNwx60UXdw1uGRsNl/jg6EzY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UtkS/I574L3rcoQG32nYp1CtTIbF+8CaKAmoZviZagCrXsnsDtextQ6vd6bT6joCa8j9yZfd5e0qnrQauh85c55xmh0lJ5A4cM6X7q9VOA3U33cZTj0g9aumOEWRGTVkFXC8D6xe4JhHnDDNTNBYg1Z6iRk1VrJ3LO4pV01WHxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AwA5kqsw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C9FC113D0;
+	Tue, 23 Dec 2025 09:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766483097;
+	bh=DCGhrQ/izT9mabKQhH7gNwx60UXdw1uGRsNl/jg6EzY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AwA5kqswS1v5X8LqqfpFgKT8CCyS3xLHd7JBBoyPxe53ML3idLKJLlwJG1ayGtw8K
+	 hwJ9G0GuLM4yAzdCLZB2S9PWTDoI+U5ka4QpmzFt80rh+alnf9mzG46Yyvul7qUjEf
+	 KeyxXhWKlvWp8aQPE+dfe05Meh16/DOPQM6SPsnDuQuJimb+g0Wx0RCMEtNvM5AAdx
+	 BQ3Duc28hOSoCqkqtcsso8M8r4X7BgUL2C6uhaqpBqqXIH0gqX188uQp1NUFc/ZOo+
+	 ZJqX0e2N97kFmNhUcVVhDBhPuqiU9jsXs4KX3WauHVYfjVB1b4VpMR7uOvOPSm5FJi
+	 y5WI/x9oKINjA==
+Message-ID: <ad5563b6-95d9-4f3a-9f6f-ad7afe72c846@kernel.org>
+Date: Tue, 23 Dec 2025 10:44:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/3] x86/mm: implement redundant IPI elimination for
+To: Lance Yang <ioworker0@gmail.com>
+Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+ aneesh.kumar@kernel.org, arnd@arndb.de, baohua@kernel.org,
+ baolin.wang@linux.alibaba.com, bp@alien8.de, dave.hansen@linux.intel.com,
+ dev.jain@arm.com, hpa@zytor.com, jannh@google.com, lance.yang@linux.dev,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, lorenzo.stoakes@oracle.com, mingo@redhat.com,
+ npache@redhat.com, npiggin@gmail.com, peterz@infradead.org,
+ riel@surriel.com, ryan.roberts@arm.com, shy828301@gmail.com,
+ tglx@linutronix.de, will@kernel.org, x86@kernel.org, ziy@nvidia.com
+References: <c36501bc-2690-4ed2-b85e-13e64c41baaf@kernel.org>
+ <20251222031919.41964-1-ioworker0@gmail.com>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251222031919.41964-1-ioworker0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Add i8/i16 atomic xchg_relaxed helpers that call raw_xchg_relaxed()
-macro implementing atomic xchg_relaxed using architecture-specific
-instructions.
+On 12/22/25 04:19, Lance Yang wrote:
+> From: Lance Yang <lance.yang@linux.dev>
+> 
+> 
+> On Thu, 18 Dec 2025 14:08:07 +0100, David Hildenbrand (Red Hat) wrote:
+>> On 12/13/25 09:00, Lance Yang wrote:
+>>> From: Lance Yang <lance.yang@linux.dev>
+>>>
+>>> Pass both freed_tables and unshared_tables to flush_tlb_mm_range() to
+>>> ensure lazy-TLB CPUs receive IPIs and flush their paging-structure caches:
+>>>
+>>> 	flush_tlb_mm_range(..., freed_tables || unshared_tables);
+>>>
+>>> Implement tlb_table_flush_implies_ipi_broadcast() for x86: on native x86
+>>> without paravirt or INVLPGB, the TLB flush IPI already provides necessary
+>>> synchronization, allowing the second IPI to be skipped. For paravirt with
+>>> non-native flush_tlb_multi and for INVLPGB, conservatively keep both IPIs.
+>>>
+>>> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+>>> Signed-off-by: Lance Yang <lance.yang@linux.dev>
+>>> ---
+>>>    arch/x86/include/asm/tlb.h | 17 ++++++++++++++++-
+>>>    1 file changed, 16 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/x86/include/asm/tlb.h b/arch/x86/include/asm/tlb.h
+>>> index 866ea78ba156..96602b7b7210 100644
+>>> --- a/arch/x86/include/asm/tlb.h
+>>> +++ b/arch/x86/include/asm/tlb.h
+>>> @@ -5,10 +5,24 @@
+>>>    #define tlb_flush tlb_flush
+>>>    static inline void tlb_flush(struct mmu_gather *tlb);
+>>>    
+>>> +#define tlb_table_flush_implies_ipi_broadcast tlb_table_flush_implies_ipi_broadcast
+>>> +static inline bool tlb_table_flush_implies_ipi_broadcast(void);
+>>> +
+>>>    #include <asm-generic/tlb.h>
+>>>    #include <linux/kernel.h>
+>>>    #include <vdso/bits.h>
+>>>    #include <vdso/page.h>
+>>> +#include <asm/paravirt.h>
+>>> +
+>>> +static inline bool tlb_table_flush_implies_ipi_broadcast(void)
+>>> +{
+>>> +#ifdef CONFIG_PARAVIRT
+>>> +	/* Paravirt may use hypercalls that don't send real IPIs. */
+>>> +	if (pv_ops.mmu.flush_tlb_multi != native_flush_tlb_multi)
+>>> +		return false;
+>>> +#endif
+>>> +	return !cpu_feature_enabled(X86_FEATURE_INVLPGB);
+>>
+>> Right, here I was wondering whether we should have a new pv_ops callback
+>> to indicate that instead.
+>>
+>> pv_ops.mmu.tlb_table_flush_implies_ipi_broadcast()
+>>
+>> Or a simple boolean property that pv init code properly sets.
+> 
+> Cool!
+> 
+>>
+>> Something for x86 folks to give suggestions for. :)
+> 
+> I prefer to use a boolean property instead of comparing function pointers.
+> Something like this:
+> 
+> ----8<----
+> diff --git a/arch/x86/hyperv/mmu.c b/arch/x86/hyperv/mmu.c
+> index cfcb60468b01..90e9da33f2c7 100644
+> --- a/arch/x86/hyperv/mmu.c
+> +++ b/arch/x86/hyperv/mmu.c
+> @@ -243,4 +243,5 @@ void hyperv_setup_mmu_ops(void)
+> 
+>   	pr_info("Using hypercall for remote TLB flush\n");
+>   	pv_ops.mmu.flush_tlb_multi = hyperv_flush_tlb_multi;
+> +	pv_ops.mmu.tlb_flush_implies_ipi_broadcast = false;
+>   }
+> diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+> index 3502939415ad..f9756df6f3f6 100644
+> --- a/arch/x86/include/asm/paravirt_types.h
+> +++ b/arch/x86/include/asm/paravirt_types.h
+> @@ -133,6 +133,19 @@ struct pv_mmu_ops {
+>   	void (*flush_tlb_multi)(const struct cpumask *cpus,
+>   				const struct flush_tlb_info *info);
+> 
+> +	/*
+> +	 * Indicates whether TLB flush IPIs provide sufficient synchronization
+> +	 * for GUP-fast when freeing or unsharing page tables.
+> +	 *
+> +	 * Set to true only when the TLB flush guarantees:
+> +	 * - IPIs reach all CPUs with potentially stale paging-structure caches
+> +	 * - Synchronization with IRQ-disabled code like GUP-fast
+> +	 *
+> +	 * Paravirt implementations that use hypercalls (which may not send
+> +	 * real IPIs) should set this to false.
+> +	 */
+> +	bool tlb_flush_implies_ipi_broadcast;
+> +
+>   	/* Hook for intercepting the destruction of an mm_struct. */
+>   	void (*exit_mmap)(struct mm_struct *mm);
+>   	void (*notify_page_enc_status_changed)(unsigned long pfn, int npages, bool enc);
+> diff --git a/arch/x86/include/asm/tlb.h b/arch/x86/include/asm/tlb.h
+> index 96602b7b7210..9d20ad4786cc 100644
+> --- a/arch/x86/include/asm/tlb.h
+> +++ b/arch/x86/include/asm/tlb.h
+> @@ -18,7 +18,7 @@ static inline bool tlb_table_flush_implies_ipi_broadcast(void)
+>   {
+>   #ifdef CONFIG_PARAVIRT
+>   	/* Paravirt may use hypercalls that don't send real IPIs. */
+> -	if (pv_ops.mmu.flush_tlb_multi != native_flush_tlb_multi)
+> +	if (!pv_ops.mmu.tlb_flush_implies_ipi_broadcast)
+>   		return false;
+>   #endif
+>   	return !cpu_feature_enabled(X86_FEATURE_INVLPGB);
 
-x86_64 and loongarch use full-ordering xchg.
+I'd have thought that the X86_FEATURE_INVLPGB heck should then also be 
+taken care of by whoever sets tlb_flush_implies_ipi_broadcast.
 
-arm64, riscv, and arm v7 implement relaxed-ordering xchg.
-
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
----
- rust/helpers/atomic_ext.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/rust/helpers/atomic_ext.c b/rust/helpers/atomic_ext.c
-index a48bb632dc44..089f31bc8de8 100644
---- a/rust/helpers/atomic_ext.c
-+++ b/rust/helpers/atomic_ext.c
-@@ -80,3 +80,13 @@ __rust_helper s16 rust_helper_atomic_i16_xchg_release(s16 *ptr, s16 new)
- {
- 	return raw_xchg_release(ptr, new);
- }
-+
-+__rust_helper s8 rust_helper_atomic_i8_xchg_relaxed(s8 *ptr, s8 new)
-+{
-+	return raw_xchg_relaxed(ptr, new);
-+}
-+
-+__rust_helper s16 rust_helper_atomic_i16_xchg_relaxed(s16 *ptr, s16 new)
-+{
-+	return raw_xchg_relaxed(ptr, new);
-+}
 -- 
-2.43.0
+Cheers
 
+David
 
