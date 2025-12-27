@@ -1,207 +1,189 @@
-Return-Path: <linux-arch+bounces-15554-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15555-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 768F2CDD9E8
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Dec 2025 10:49:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCB85CDF4FF
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Dec 2025 08:23:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 021413009FA9
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Dec 2025 09:49:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 978523007947
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Dec 2025 07:23:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4CDB248F64;
-	Thu, 25 Dec 2025 09:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8272C241663;
+	Sat, 27 Dec 2025 07:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sdZVzdq/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hody+CQ8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA9E27713;
-	Thu, 25 Dec 2025 09:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8380139579
+	for <linux-arch@vger.kernel.org>; Sat, 27 Dec 2025 07:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766656191; cv=none; b=qWROMsuWR/th7K4b4qns/wHchW00IMfQtPfEIb8Sgi1gNainEy+FsrpaLEGyrVRiNevEThNKXbaaF136JtEvqpghnrVx+tY3VPjtBnUR74hFuhY8kZJKXtUdyBkjhJsKDGQfrwwWnbWvp23pcsEmSmpn5svdZnXl+etdSPJIElA=
+	t=1766820219; cv=none; b=AszrCGWnebiR7FQUuA5TGO3w28/uZNSbWogq+0hyVV++09ifWb4RnktkBM+awk2c5qNI0FM+6KzxpkFPCOHnbLBxbXFqD/313SfZpcXR5nztIqFTHxWrOfCxQcrFDpxLJqEz95Re+/OgHiCqULkhZitOADR5C/ee0+tFwUcuARE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766656191; c=relaxed/simple;
-	bh=3nIYuigXWekDPMa/zo4CI26ZDqoA5RIjVHToKBdAf9w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cUigoiCDSaLp8vktZ8JfmgeYfo3bFIxrZRKxEF0qM4AYmPfCKiDDt4I5X4GRsHq73cXcHL45UPiQScW9F3EXG8P16njZuStO+CBFWRk/LG7D336a56tN4Dz3p5ypnUgm1iha2HmcbIU+NnONQSuH+lt9OmHfB1FK1twcuMPaQLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sdZVzdq/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D7CC4CEF1;
-	Thu, 25 Dec 2025 09:49:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766656190;
-	bh=3nIYuigXWekDPMa/zo4CI26ZDqoA5RIjVHToKBdAf9w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sdZVzdq/stOlui6Ricvxhc/BJbaDZdptSo4jseuRj+KgI2kmb7KBfsajwuPAy4PSj
-	 VKJxG9qvJ75m7svZj0wEjuv+5ZPptS9/op0WlFbDKCCS3okTvVtr0UQIMuQQxa7ig2
-	 VK2eC1wVYbq8Ewn8DO8KzR3qJV6RtN/IxOu5gLOhfvYDla2ysPFW2kqKyjXhs1Ceqn
-	 mTA7KNtJGCk76w/4WIxo7481Qkfes0IQnZD0GfPKTTCIZ+4QvpUIjn1SJ1nTA3swOU
-	 qn0uwRcRs9Q5rB+02Od76vriLXOBGC6PWyhQWcZWOVQ/xRxxE5HHWjgrdBtKeR/Kwe
-	 FoxpoX3sNRznA==
-Message-ID: <520e6f26-4624-4145-b959-ccde466dfda2@kernel.org>
-Date: Thu, 25 Dec 2025 10:49:41 +0100
+	s=arc-20240116; t=1766820219; c=relaxed/simple;
+	bh=g9ldB6O6bVHCvyESM/CQAWSSYcQLbHp0GjU/NyOaOME=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oMSHpHGcmT01yNJ4fiGhVmWmsIKD5nBLv9qHA6zzG/kypkK+3KE49vfvl0c0VMQygGTIHlxxGk+1fezb/EMoWot9RHyPtj+NeM1E8dGqa88E+ZSRcos/5jKahgmmLH4OGG7qN7BS5aOfxwAsivGZVklFHPSgJU/RDggI0qQT8mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hody+CQ8; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4ed75832448so111554981cf.2
+        for <linux-arch@vger.kernel.org>; Fri, 26 Dec 2025 23:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766820217; x=1767425017; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EVDaDyn3dfV/+peO8SiV62+8Z0bhbSec+/MWVYkLLCM=;
+        b=hody+CQ8gr+tECgNyOaZu+/4ohkRtTium+y2aJl8AMXJP4gj923VDCvnvQJrH/yp+b
+         0BiIpAPME/vMNkQUW9SdOJS4bcl60xuAV8SlKK80DxBnImpOzSXu9S/rEkT18NV+/t3u
+         u9GUWpaJUK6RmOv6kOiQ43xyub9IsRh539tKCE/P5VWxRpXFnz5aGj7k5G1un52yKowP
+         YyRAaz7jqd/TzVEQA7PptJQKizNPqyAp1bM1DBrBc05d9NH943pXMJAzL9id9wln6pWC
+         Qnk5mx0Qb8euvw5enBs9hMeVsYgBwzO8dVfNTpxFA8Kgdly5ysAtrO7kN8jD5vIX3llH
+         cb0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766820217; x=1767425017;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=EVDaDyn3dfV/+peO8SiV62+8Z0bhbSec+/MWVYkLLCM=;
+        b=Y4ICYWLRH2X67DCJdKAInHy4YgF/uIiukP9G+A1+bs5IckOOH+CCADIP2TNzDm7uy1
+         x7J9BdvvSGaIgVe9eP1VaWzZQkleKcAuIgfPxQ7yDiOCwoM6NyY+ClnWpAXGrbt7c/qo
+         OLhDQta2rhgU5sIa4EmwqGjK6HsFne63BauWex7z3T6uNbMS1++levab+I3/YoTdJYQH
+         Fvke9bKqbDp5h+af9b2iyMXScO/EyBsIfSd/v1Ag1yh3aC5YmQl/gD6gX2EwD6zOA2oE
+         wjIpxeVH1Jr/3+3XOFwGyzIDkHlYVTlIN6hQahm7rgaHO8x+ru6+pr42y9HBQ5SPaWWo
+         wWeA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJgkWAibNdcN56OkTfMeR95llB5CK4J810iR732oCKq5bQ6eLfvKVmO7uWedJhPURgpp9OprDp6zpY@vger.kernel.org
+X-Gm-Message-State: AOJu0YzodbuCaPMeWIiCitJeHognqlTeUUSSuBt/1ZqylPaPscYUjqm0
+	guARAilOut4p7GNC5fP/8ZtSeZZqiqNcUGFUcNx/gef2L70HD7stTceL
+X-Gm-Gg: AY/fxX616d6PuvBNaGYxV3pfTiedo7+WZkR51m+JlN6cG8k2aRdlMROYwxHkmXb6WJx
+	+wpms9M+1GSL3y/2saFSbLOL5j5i7RO9fK2sOqm/JeikaiQOWugrZpgo/2xYAkXalGw6xdjTsoe
+	hZBz7CS3rqlqxNOPZDI5b/gWY2NZAmAgkiSkbs6pHVyJ6BAfqRJx73yis4s1e0xrauw/aOxS27C
+	QkTFuNv4DLF45WlFWHShvyH7CrkDYX4Psq6Wl8AZ8RDPcPZQuQ9xDP/Lq4HbAItzEWf5embfs6h
+	7i9ZOCQ+Og7/mIngQ/UhSV/djOoas43SRFsVBZDf0OyyqkfHiDgbuJHnh6T+PtOxUiJLqM3yh2v
+	vqPt+hQHHQZxQOSFtnuhqvAE85EWMV4vTiW/E7j7OMIDDPJtpl3Mbk2M7t2sMIZpMh7YKDGUHjm
+	ukKHInnr015AKmEVfXQLMdpsIIuz8aVeVtZ9HJCXmtPqnS3h+bjNFZ1+NRbmiYTNTOeIrk2tTZM
+	vaCpL16Nt12Urs=
+X-Google-Smtp-Source: AGHT+IH5YlDNuhdqgZkcT8Q71X+gLy2cngnRcFn5/w5BdkiLdny1m5eUvNOpk7WIIjn5j+XzqyYYug==
+X-Received: by 2002:a05:622a:6982:b0:4f1:b3cc:2d04 with SMTP id d75a77b69052e-4f4b45ddc56mr219167781cf.44.1766820216709;
+        Fri, 26 Dec 2025 23:23:36 -0800 (PST)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f4ac62fa56sm190298711cf.17.2025.12.26.23.23.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Dec 2025 23:23:36 -0800 (PST)
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 78603F40068;
+	Sat, 27 Dec 2025 02:23:35 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Sat, 27 Dec 2025 02:23:35 -0500
+X-ME-Sender: <xms:d4lPafEDY_u5y7hHXuwGc-2o0BgJEtOd3bLGWVbHoAgRXNQ_nc2_kw>
+    <xme:d4lPaWY-yTeJKhh-7pja5od6A9KNieBzqvi5p0KOh-ZdF42oSAmwIOJAolscDjdPy
+    cE3ca_aFWa232mkjnwsPsRvmtvpAjuewRRGzSCowBr_zAJKyu2jSPU>
+X-ME-Received: <xmr:d4lPaWGBcZawmQZ9rAZRmkDf8lf3WeDIBi5dAPcqS1L5Al0WSNpOaWFwz5K->
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdejtdejhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeegvddvhedt
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
+    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
+    udefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehfuhhjihhtrgdrthhomhhonh
+    horhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhn
+    vghtpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprg
+    drhhhinhgusghorhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhhitggvrhih
+    hhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhoth
+    honhhmrghilhdrtghomhdprhgtphhtthhopegurghkrheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheplhhoshhsihhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtmhhgrh
+    hoshhssehumhhitghhrdgvughu
+X-ME-Proxy: <xmx:d4lPaU0f6-Uhk8wilVjJ5tRp9woN4EZmKo9GqhAJzpXRKCd9iIDMBQ>
+    <xmx:d4lPaSx1_WGNrP3itiwka3T2yqFv48u6cmF-iJqvZvaYTGDxXQ9p9w>
+    <xmx:d4lPaVi5N2R6yQRX48YXIgwBdKSsLRRhR0kNTH3GGvYaCFCpNN8xIw>
+    <xmx:d4lPafNB3xlVqmlK9s2D4Y3rKuEttggQLNCiKa5vQveJgMUnBT4Iew>
+    <xmx:d4lPaYfuvT7UrMWtL8Nao27_pr1DY28w2KFeyneWsFVgSG-x5BSQ6Jvz>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 27 Dec 2025 02:23:34 -0500 (EST)
+Date: Sat, 27 Dec 2025 15:23:30 +0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: FUJITA Tomonori <fujita.tomonori@gmail.com>
+Cc: gary@garyguo.net, ojeda@kernel.org, a.hindborg@kernel.org,
+	aliceryhl@google.com, bjorn3_gh@protonmail.com, dakr@kernel.org,
+	lossin@kernel.org, tmgross@umich.edu, acourbot@nvidia.com,
+	rust-for-linux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] rust: Add i8/i16 atomic xchg helpers
+Message-ID: <aU-JcvYaOYznqD-M@tardis-2.local>
+References: <20251223062140.938325-1-fujita.tomonori@gmail.com>
+ <20251223124639.7771082d.gary@garyguo.net>
+ <20251225.095655.275822477142372376.fujita.tomonori@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 0/4] mm/hugetlb: fixes for PMD table sharing
- (incl. using mmu_gather)
-To: Laurence Oberman <loberman@redhat.com>, linux-kernel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org, linux-mm@kvack.org,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
- Harry Yoo <harry.yoo@oracle.com>,
- Prakash Sangappa <prakash.sangappa@oracle.com>,
- Nadav Amit <nadav.amit@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20251223214037.580860-1-david@kernel.org>
- <11ab64528debf3b3515e863610fc8b679a39189c.camel@redhat.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <11ab64528debf3b3515e863610fc8b679a39189c.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251225.095655.275822477142372376.fujita.tomonori@gmail.com>
 
-On 12/24/25 00:23, Laurence Oberman wrote:
-> On Tue, 2025-12-23 at 22:40 +0100, David Hildenbrand (Red Hat) wrote:
->> One functional fix, one performance regression fix, and two related
->> comment fixes.
->>
->> I cleaned up my prototype I recently shared [1] for the performance
->> fix,
->> deferring most of the cleanups I had in the prototype to a later
->> point.
->> While doing that I identified the other things.
->>
->> The goal of this patch set is to be backported to stable trees
->> "fairly"
->> easily. At least patch #1 and #4.
->>
->> Patch #1 fixes hugetlb_pmd_shared() not detecting any sharing
->> Patch #2 + #3 are simple comment fixes that patch #4 interacts with.
->> Patch #4 is a fix for the reported performance regression due to
->> excessive
->> IPI broadcasts during fork()+exit().
->>
->> The last patch is all about TLB flushes, IPIs and mmu_gather.
->> Read: complicated
->>
->> I added as much comments + description that I possibly could, and I
->> am
->> hoping for review from Jann.
->>
->> There are plenty of cleanups in the future to be had + one reasonable
->> optimization on x86. But that's all out of scope for this series.
->>
->> Compile tested on plenty of architectures.
->>
->> Runtime tested, with a focus on fixing the performance regression
->> using
->> the original reproducer [2] on x86.
->>
->> [1]
->> https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
->> [2]
->> https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
->>
->> --
->>
->> v2 -> v3:
->> * Rebased to 6.19-rc2 and retested on x86
->> * Changes on last patch:
->>   * Introduce and use tlb_gather_mmu_vma() for properly setting up
->> mmu_gather
->>     for hugetlb -- thanks to Harry for pointing me once again at the
->> nasty
->>     hugetlb integration in mmu_gather
->>   * Move tlb_remove_huge_tlb_entry() after move_huge_pte()
->>   * For consistency, always call tlb_gather_mmu_vma() after
->>     flush_cache_range()
->>   * Don't pass mmu_gather to hugetlb_change_protection(), simply use
->>     a local one for now. (avoids messing with tlb_start_vma() /
->>     tlb_start_end())
->>   * Dropped Lorenzo's RB due to the changes
->>
->> v1 -> v2:
->> * Picked RB's/ACK's, hopefully I didn't miss any
->> * Added the initialization of fully_unshared_tables in
->> __tlb_gather_mmu()
->>    (Thanks Nadav!)
->> * Refined some comments based on Lorenzo's feedback.
->>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Nick Piggin <npiggin@gmail.com>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Muchun Song <muchun.song@linux.dev>
->> Cc: Oscar Salvador <osalvador@suse.de>
->> Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
->> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
->> Cc: Vlastimil Babka <vbabka@suse.cz>
->> Cc: Jann Horn <jannh@google.com>
->> Cc: Pedro Falcato <pfalcato@suse.de>
->> Cc: Rik van Riel <riel@surriel.com>
->> Cc: Harry Yoo <harry.yoo@oracle.com>
->> Cc: Uschakow, Stanislav" <suschako@amazon.de>
->> Cc: Laurence Oberman <loberman@redhat.com>
->> Cc: Prakash Sangappa <prakash.sangappa@oracle.com>
->> Cc: Nadav Amit <nadav.amit@gmail.com>
->>
->> David Hildenbrand (Red Hat) (4):
->>    mm/hugetlb: fix hugetlb_pmd_shared()
->>    mm/hugetlb: fix two comments related to huge_pmd_unshare()
->>    mm/rmap: fix two comments related to huge_pmd_unshare()
->>    mm/hugetlb: fix excessive IPI broadcasts when unsharing PMD tables
->>      using mmu_gather
->>
->>   include/asm-generic/tlb.h |  77 +++++++++++++++++++++-
->>   include/linux/hugetlb.h   |  17 +++--
->>   include/linux/mm_types.h  |   1 +
->>   mm/hugetlb.c              | 131 +++++++++++++++++++++---------------
->> --
->>   mm/mmu_gather.c           |  33 ++++++++++
->>   mm/rmap.c                 |  45 ++++++-------
->>   6 files changed, 213 insertions(+), 91 deletions(-)
->>
->>
->> base-commit: b927546677c876e26eba308550207c2ddf812a43
-> Hello David
+On Thu, Dec 25, 2025 at 09:56:55AM +0900, FUJITA Tomonori wrote:
+[...]
+> >> The architectures supporting Rust, implement atomic xchg families
+> >> using architecture-specific instructions. They work for i8/i16 too so
+> >> the helpers just call them.
+> >> 
+> >> Tested on QEMU (86_64, arm64, riscv, loongarch, and armv7).
+> >> 
+> >> Note the architectures that support Rust handle xchg differently:
+> >> 
+> >> - arm64 and riscv support xchg with all the orderings.
+> >> 
+> >> - x86_64 and loongarch support only full-ordering xchg. They calls the
+> >>   full-ordering xchg for any orderings.
+> > 
+> > Maybe it's just that I'm reading this differently, but I think this is a
+> > bit confusing, as if there's an optimisation opportunity.
+> > 
+> > x86 is TSO, so even a relaxed xchg is a full xchg. So in this sense x86
+> > has implemented all orderings.
 > 
-> For the V3 series, I re-ran the tests and the original reproducer and
-> its clean. I see the same almost 6x improvement for the original
-> reproducer
+> For x86_64, I agree that the wording is confusing. xchg always implies
+> lock so different memory orderings all map to the same full-ordered
+> xchg there.
 > 
-> # uname -r
-> 6.19.0-rc2-hugetlbv3+
-> 
-> Un-patched Result of reproducer Iteration completed in 3436 ms
-> V3 Patched Result of reproducer Iteration completed in 639 ms
-> 
-> I also ran a test to map every hugepage I could access (460GB of them)
-> then fill and validate and had no issues.
-> 
-> Tested-by: Laurence Oberman <loberman@redhat.com>
 
-Thanks a lot for the quick retest Laurence! I'd love to get some generic 
-hugetlb testing on arm64 and powerpc, that do hugetlb TLB flushing stuff 
-a bit more special.
+I feel a bit confusing as well about the need of mentioning the exact
+ordering of these primitives on each arch. In my opinion, as long as
+rust_helper_xchg_X() is mapped to xchg_X() in C, then it's clear that
+they have the ordering of the corresponding C APIs. But I keep it as it
+is for now, I may remove them from the commit logs later after I
+re-think about this.
 
-I'll try doing some arm64 testing early in the new year myself.
+> 
+> > Looking at loongarch ISA manual it's suggested that apart from load/store,
+> > all other atomic memory instructions are also always full ordering.
+> 
+> On loongarch there are two possible implementations: an LL/SC-based
+> one, which is effectively always full-ordered (similar to x86), and an
+> AMO-based on, where weaker orderings may be possible, as only the AM
+> variants with the DBAR function appear to be full-ordered.
+> 
+> 
+> > The change themselves LGTM, so
+> > 
+> > Reviewed-by: Gary Guo <gary@garyguo.net>
+> 
+> Thanks a lot!
+> 
 
--- 
-Cheers
+Thank you all! Applied in rust-sync:
 
-David
+	https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git/ rust-sync
+
+Regards,
+Boqun
 
