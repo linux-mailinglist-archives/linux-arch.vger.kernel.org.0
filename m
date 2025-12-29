@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-15595-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15597-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE2FECE749C
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 17:02:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFAEBCE74C0
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 17:06:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C4307300DB8B
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 16:02:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 97DBC300D654
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 16:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0FF32D43D;
-	Mon, 29 Dec 2025 16:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115D832E6BE;
+	Mon, 29 Dec 2025 16:06:36 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4EC32D0E9
-	for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 16:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71369329365
+	for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 16:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767024174; cv=none; b=pV3NklXyq100dJ+wDyB7LqXCC/DHxdKPisxGRbh4rRFH1a6E8H+xEgxAAdpZ/XMT68mKvfKtEe8EjFaZegyEozReC3LpThkpVtHI0EUC6QwU06/WY8wMReIXiNWSNle6pynwlKgATSh3ypzPr45BeWyuQoHuY3nAqrFlFPT1LmM=
+	t=1767024396; cv=none; b=BjdKwKb1cJsvGIoJ7u+ybTg+VUDnGTvsXIACZD1tH36tVdboSXC8sQjaO1SDYM1sA59HMTaXtCfqdX4om20ral/Kt1NBPiAfkZEQMPMZNypsHuu8uBeIbEhZY7d5MRal77zvFbg8YwlO2/Kdfd6dcAlG7SzSItW6CBEOta1+E08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767024174; c=relaxed/simple;
-	bh=N8padF7buaqa1eXg1+Igz+XpRALmc90ogMazOG4CwFc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rr+eH04fwWYbKJHlq4PZa4Mm3l1jaOTZiN0Rm6LTOlshE2qu26V6rxdWmEc1kLt1c1ZmPOi4XHPTAh8m+2BreKENRvonu10TWzFmsmw+JaieMFJ6+HU6+MGnrp4e2rmDBg3SySYdlYVCCQ8o4cOEbq2Rc5y2Picp23iqe4I058Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.49
+	s=arc-20240116; t=1767024396; c=relaxed/simple;
+	bh=n7zOUW6Ej9XQxpCqpcebXYRtyBmuik8QvZ4x35PJmsc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ItX54KBJ5Z5rmjaOXU1JNWux8ZaPVMrLK4Mt4znUUn9pqySZ1wyQZ4gi/QlCLR4/qMypCUQVkAUZtcg1SmV/243H3cKs9PqxTMuoFOu99mHd0ELWt/b6zF8HDvFYJUPdWYeRCvXnRjYdd2GU/jwn+6B/9LhPae66pLKJtY/PBcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-3ed15120e55so6535601fac.2
-        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 08:02:52 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-65cff0c342eso6338076eaf.3
+        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 08:06:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767024171; x=1767628971;
+        d=1e100.net; s=20230601; t=1767024393; x=1767629193;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6lnYMzB+dCUz+mkORGwbpkYC+kll7m3t+mAqWOhKrD8=;
-        b=i2Pl533A+vF6x3URsMG+IJq1ZmNnWSEEE6UnhzGkUoo8uuCxUnbErUg+36X45wm8bd
-         FvuZ5Ivjo+iEoAP0hJX2smOhPQD8WXo7pAnnkF1zgAn5zs/kY1JC2XXIueXLtcxqGNEz
-         PwEJoyLlbmnT3Fb7Oc2oKFuQ/xwYYzVRcTiFReaI571/uMk6ju86d+LZbkK/7W6u66jM
-         aUiSHJempi7cJFtxmRO4cocOnqmNX5SKRTGtyuCiaRnp2I7u9a52t+HxB7MK1Ga/H6be
-         Mn4dd/Fvs3+gv4nZL0NWAwW2k97VRa0DQwwGrKqkkf1YL4GbksujjvGj4MIGNVblZxev
-         BoJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbZyhc5KyVKdrHdcOhKotg71kthZtatDbzIoKBYSqy91OaCg4ycX8bc7DGQchFOdaXXFyRDzg4nkN6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9e76LZnq7lKRFKwEgQo8LaJfQXBJqEOMtWVBtiWH2nYG0HH+z
-	YswoJ5SnfQZlib2DJ2Ys0yoPfK55/Spt24Rmn4h8TgoGM/eTqGGpuBEB7XYQTDozcPc=
-X-Gm-Gg: AY/fxX5mrbk1S6MzlY0U3hjxj8AodE72ByCZ00vUkwIxf8xBZ6VdkptUYLCXRgL27wv
-	s/owDt1VfDPp8k1ZYa+22Y/sXo3celvue9K0r8XziFlMhtUJhbiiw2tsWGJZuOzH52N9X/AmnBW
-	sFXu2+/s/uX3K70C22NszpO+A18weUbiG1FeaV2Jq7DcVwxNrrmw9ISLH/rw0sUkcaCA5BUdko/
-	Wt8R3YnJ6aon+ZfOvoBkoN16TlPBkVlRChoHbqeCz5HIrvIE1qWyrsLSZrpUO10isKhnTWp0/0X
-	IQgNwbX+0RMLNSFwhzXMxIZE51sJulyg8nPBcXTtG49cfNjZYNXSONaaiVUngznNa0XVw8jpG1T
-	Y1R82XsA926S2c9qBFn0cuO40CcjKgFLuicaDndDB/h9lr03na9OoM7VKYOtSG/PEM/qcH22DAU
-	I6Rs7kLrYxKE9HX3vWN1d9
-X-Google-Smtp-Source: AGHT+IHg6byxM/xkxubE4jTDVkQ4ULmMFOY4QfJYQWgFM4sIg4d8O/EzQKPsy5ALE1+u/Z3o6zsA5w==
-X-Received: by 2002:a05:6a00:9089:b0:781:be:277e with SMTP id d2e1a72fcca58-7ff64401115mr28062284b3a.4.1767017579562;
-        Mon, 29 Dec 2025 06:12:59 -0800 (PST)
+        bh=DI/SttekhGDiQM1tlGP5eL+usMVrVsg1suNc61YphTc=;
+        b=mS2o9RDn462zoDXbhBWCr1thW1TtHS7Y4GXS3UZ828OFGEFXGSW3OHK83hERHeIA2M
+         FjiRnyIxNX3gX951l6XvREl3p3uDSC0kmoqTfb8fcZg5s7EDctaZ61xMznYu01ZghG2e
+         EtgDu3nrbpYP37ohI0Q32CIP/OsNbJk5aehZNFYjN0B8NNJfUjg9yO5cZgPneOeswIcd
+         DRlVw2XOLkBBTxZW3vUVjmgWbOO5kXgtQnur4B9dYieHgsbt7RtJWmSj+4GB5GGjpyu+
+         9mML+jDV9Qp+y722fbJVMG3nN5x/HQougC8i20PahyACxQVQekSQEsAGDqE8J8RUuQUQ
+         +6JQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWQI+LuaF+JVf28mqynBIy8y69oF/Jz0965viBesPLqcsREDPGKFEV5CwV0AHmT8J2a7xcHSvny7aDi@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDcVSFhOInAO/3pDZSgqoLdb5P86UzrCd7SPfBYTUKudiyOoLK
+	a02tGC8g4ICzLz9mUun6/C8z0BKvpVWz2I9iexAKtmTH61pyHW2qFBnx8zIMGGjOzFQ=
+X-Gm-Gg: AY/fxX6ScvFuIvLXZRlRLvfjVK3tSgZ/t6eJpRY78zwZfoEOhRuf+o8sWdmQYESDRcY
+	6W03EC18g62d4zddaS0JO5eHHOVjuwiiu7we4kWHWi559TUvf0fbO1GWHOnt9Qyh0WUO+PgUH9G
+	oi5LgGEOwiSGRQ4JFDwFvlIW5fIuhJTjlXH3OQZapOWxxHB53PFAwHh0rbtQmKVz0Ig8X0OHWG+
+	UM6oF/t8mA8pFDvIgXVO9N26EoWtUg4irDIokKWMW1mmGOxwdt2mj2h3t4TwJnFTxip6RS9xiM4
+	QNUP7ugC0rkfrQ5m2nYNfiLnACizep/FBGflZSkbEVCdViHLHa7Ohr+38jEGU8PiOYj6rrw1fSN
+	/BaQnIqve/XH5AYTKVbtiofIKhpBHZ/DsjmxwJMrhhLuuABHnpYRks3idVfZS7sO9AcgMUeaDkd
+	ElzoAEU7HATSHAN+P3Pl1u
+X-Google-Smtp-Source: AGHT+IF8h2vXgJODZ7JZMxunWbJsYMMr6g5hSF24Ns6SSSKowIEhxB0xTevh9xlGxdP/5/5wrf4fPA==
+X-Received: by 2002:a05:6a00:f99:b0:7e8:43f5:bd55 with SMTP id d2e1a72fcca58-7ff67759f24mr24454290b3a.65.1767018650539;
+        Mon, 29 Dec 2025 06:30:50 -0800 (PST)
 Received: from EBJ9932692.tcent.cn ([103.88.46.167])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7a93ab3csm29472636b3a.7.2025.12.29.06.12.50
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7dfac28fsm29705159b3a.32.2025.12.29.06.30.42
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 29 Dec 2025 06:12:59 -0800 (PST)
+        Mon, 29 Dec 2025 06:30:49 -0800 (PST)
 From: Lance Yang <lance.yang@linux.dev>
 To: akpm@linux-foundation.org
 Cc: will@kernel.org,
@@ -86,9 +86,9 @@ Cc: will@kernel.org,
 	linux-arch@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/3] skip redundant TLB sync IPIs
-Date: Mon, 29 Dec 2025 22:12:42 +0800
-Message-ID: <20251229141246.63435-1-lance.yang@linux.dev>
+Subject: [PATCH RESEND v1 0/3] skip redundant TLB sync IPIs
+Date: Mon, 29 Dec 2025 22:30:30 +0800
+Message-ID: <20251229143038.73315-1-lance.yang@linux.dev>
 X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -98,6 +98,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+
+From: Lance Yang <lance.yang@linux.dev>
 
 Hi all,
 
