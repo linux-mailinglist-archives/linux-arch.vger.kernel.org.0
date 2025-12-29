@@ -1,135 +1,298 @@
-Return-Path: <linux-arch+bounces-15572-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15573-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0A78CE69E1
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 12:55:14 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A340CE69FF
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 12:59:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BAEB03005FCE
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 11:55:13 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 13BDB3011907
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Dec 2025 11:59:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8369D2D8DA6;
-	Mon, 29 Dec 2025 11:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75CBA1FF5E3;
+	Mon, 29 Dec 2025 11:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HdPdEBYW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d+7Mvv38"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E422D97AA
-	for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 11:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1AD04A0C
+	for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 11:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767009312; cv=none; b=r70AwmtToW9h2SSQH2o3gqMCZQrS67Y81t7lJN3U9sEqtw2FPfVkOeFYjY8FkxRRM3VFPt+ZF38rTnB2fHfIca+R+6c3DXQcoJ//61T1/Gb8HA+uGelFhvIyOEL5rdkIzoe7q2OhnFe/clTNdRI1JljB4iGzEpigexaO9kAqX8E=
+	t=1767009541; cv=none; b=J+29zEa+K6GTEDLg2teSk+MyhdBhBvuDLnnpIGXVIxel+JP5Wwd7TVLliDwBGv6RsQSSB38cgXPbYH/I7d5foa2Qb1CJU1Q50mu9yFEa1MgURmp+0iq0eMR4ske3L+GLDwDNC/allma/dZ7nNG+wd33mXqQefV5jORR/hw+JHUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767009312; c=relaxed/simple;
-	bh=2UHmRmoXWeVJuSC4QC2czvIeBfX/Ei1ahpC0tfWmCyw=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=h4O6zvB0mWSw5OOx+twO8XS06dIVT5fJ/WAhB/7Prqn6D5uEEE96+vrujm3zoUN0UXcB9/RuKLJpJEIhm5if4ffXGqZrSBmAvpoXGFzzjNQpDrKnMg0B5UDcUprqGPNwZCOCFHYtgdx4qeX9MtqRWDFCSs+jU10nTaeLEKP5DyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HdPdEBYW; arc=none smtp.client-ip=209.85.216.41
+	s=arc-20240116; t=1767009541; c=relaxed/simple;
+	bh=QdaHuz4+XalIyIGBrYqJORXm4OdGDdAIaAcu+Q5qbO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LbW+0q4QinzMNOVd2sL+NA8eieFS2yWwKHB7fuu+a76UO27pQRYlnZfFglkZrK9iYAmEGy3El2Js6uYZT8k4MXgzOzIYJQH8+YvI9J4QP1izHyamOa7bd6O6/gM/tt8LUPZsghZito2W80Jj+ViS0WCoNjnQe2y/WxxjYevwYmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d+7Mvv38; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-34c3cb504efso10387551a91.2
-        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 03:55:09 -0800 (PST)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-888bd3bd639so120920336d6.1
+        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 03:58:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767009309; x=1767614109; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:from
-         :subject:cc:to:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oPLUbxjgWCgN0vsRKS1WyRCGYPSvsQjEIbdCCRkhqsQ=;
-        b=HdPdEBYWVr0l0mHgbWNPupjqPoVexZ5bRY1kcshiD1j2zd0QmaXVdzQZzcSrdhiPlK
-         wDFxO+3ubBBzEwO3gEDzQ5eT8oTkZqSokeTgIITGKb04g/CKshKHvlXByNDl86MbdFyB
-         UjBvGuwEBpgn6Zq0ZCG7ycBvxA7QAYyjFG0DZA798zylqWjvdKnRWshzcT8etrEXDUBb
-         QX4RcHhbKyF0caCMp9cz+3Hs+twvLuIrvs9+ATl5F4gQxr+zqlB3E8G5v+V3Z8S97otr
-         ycjQQeclgV0zdLGeozrmYZHOHL+L2vdzotL3VL/CSXnnxF2qg+tBWmaPw6oLRyQDNeo8
-         GsqA==
+        d=gmail.com; s=20230601; t=1767009539; x=1767614339; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UwOlffPgoxBlHSMmCKnukNQHZsicEfKa4Lb6NhA2aGo=;
+        b=d+7Mvv38OvK/kzyTci6Jc7Tn9ArYXK4orB2ucIM9gxKxAjURb970B5UABsLgbcCs6I
+         nr36cA5T6novpUTwypf79QQn4bnhlq8WNwoFz72jSFIlNCtyDR0nAT24cerswolt89RK
+         FNTy0os2/Eo0JQcRjPO3JHJLd1LjwVAsyd1NmgWCuj8DxIYM44OROAuTPj9ELxzx5D83
+         gkLr7FDrQMqXuWAph1+V+1OaycvrTm2rxKnXKvR7TJSWhS0IAgH/tMmIKNB5AynyFmdg
+         YDxk0vpTWjfFy8xAbX/77L7++sE6/OCrfh33JlYp8Zdpsd7Cq801p0EmuGj6Uw1Jg4NJ
+         82OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767009309; x=1767614109;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:from
-         :subject:cc:to:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oPLUbxjgWCgN0vsRKS1WyRCGYPSvsQjEIbdCCRkhqsQ=;
-        b=VlIaJLeoacs/k1f8323R+S96ZdTDga5e55UpUF85x0CEO857HH4L8WSKZomPXO8u32
-         i8EgMQQaIP+73L1tYUM2zT1balLxmTQu0i2Su9zuku2OPPPbP6Y59/8EHssWioCCNZ9g
-         T/AqRU65hwB6kQCd1AdCMUqfIhB/zPWBitM9QiTY1KM7gTpqK85DQUhjOKp06pzBoOa/
-         ZG3YP+Iye18KVjTHqsczVnjzEKge8rS4+XUwWL1wICkMioh1kj6wKpJGEiKpYJcq6vSr
-         sXoWdM37DObX+MH7/ccrtZmLIgIFAFCA3nZVODNCs4M1CQ+ORz9DAW0dME6YEdtxY2jW
-         T2gw==
-X-Forwarded-Encrypted: i=1; AJvYcCWN8Vta4iD5MaPp2sD600myYem4lUMrrRuCrQ+qcdfEGCdWYbcomtYdpFNYaUzcBD18egw3TZQRSmSo@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9RctA51qXU3bdE+tummWT1idVN7nO58pfACBu+47x2g3ZIngq
-	xxlUZki8twYEHCAx7dmhPaACu6wRav5fs+EdWeF68rIlFXPk+0RZ5kLEGXIiNA==
-X-Gm-Gg: AY/fxX5ejbnxa7LXtNCotd8d7ETJklGbnANBikbpBmykotE3+jvwytuImW/Ha1AYOWL
-	2XdeEe7e99hu2+pes2507XVwp4BxBkpg/bzjcqVYFDmUHMzUgxPloLZbVvaImeN/C3jv7gaeU+S
-	of2OCUIaO/YGCTi3SisHecJC4gQGBOeBk8tX7iSeQoKDdhg0rvKpZ8l3sQdkvPws3bc0c3aJL5X
-	Bm49YL15kNC6yunFk5+VAyu7Yw3Bczj3XNXRSNm1+GgJJcwo7Ng7QUxHIUe4AIeUC+DrP88Mfdi
-	26Np2dn9ZMztuVnVuTw46QbQb25xTd7QtCNWuoufuCEUtc2NqNTPxgohe4j15rzbmEf3Mt2SYMF
-	se8bEpMGb0R5CjErm0UWn0DqCZ/9BIix1oOeRQSN7WVOauiFosSneyNIJwq3LRY9RigoHR+GRov
-	oVS5zegaP6c5Tpp81z73X6JDOV/mZRr2fXmhBdtqxflsYWZdZJvlqjwnfguMUTX3c2dnk=
-X-Google-Smtp-Source: AGHT+IFqi0/hM2TBTczvURv0i5GVkN1X/kCu7v11mqWTtgi4jukIDw2QBEFK7bu82Sk1IdQUVyktkw==
-X-Received: by 2002:a17:90a:d406:b0:349:5b1b:78bf with SMTP id 98e67ed59e1d1-34e921b0646mr27277305a91.23.1767009308670;
-        Mon, 29 Dec 2025 03:55:08 -0800 (PST)
-Received: from localhost (p5342157-ipxg23901hodogaya.kanagawa.ocn.ne.jp. [180.39.242.157])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e9219eb13sm27105493a91.1.2025.12.29.03.55.05
+        d=1e100.net; s=20230601; t=1767009539; x=1767614339;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UwOlffPgoxBlHSMmCKnukNQHZsicEfKa4Lb6NhA2aGo=;
+        b=oOyxDoicyHewdX62ISWN2PdEf1NgmSDBh52I0qOJ9NB6gqyeQrbEROB74hiKbNR+4d
+         IohT4j++PQyMUgm0kQt5QA/p40sOZp4Z5qgI1VtT8addL+RGSNXJeRpchwFR8fxi7Rb+
+         JRVdd/IA2+DEpPx4KL+cpfeqgnzsRNqLu5eJZDjqqhIs4DY4EcWXgGUmuIsBEJS3w0GD
+         GEzYw09hsRYzMHXibpyOoRE7oZjmVZPEAy37uipT0LsuF/8kFisKlbaVBPa6Z/DuQh5E
+         8UL6HYX6VEXpL0H+nLz4KJ93nEuAXWfIHFZCFETXTLb77wFSBaTYvnD8h9/JbtcfvnTc
+         8c1g==
+X-Forwarded-Encrypted: i=1; AJvYcCUvSdbBpTio3eD7TEz2SCx15pJRu910zInn4vL4VXIWTFip4ZKfgKoZvcfcd+tGMoSXU94B9vrvLxeE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGifWy2UwvrVquCsgxpdx+OSJrcj9531dybAxs4F0fdo5NtRDz
+	N7aKJ9l++UdoMZ39JF82hWISWIbCf6704IGJznIAlbmJ5ceAsCWbMbpAVt4bDQ==
+X-Gm-Gg: AY/fxX7OOIDeFxcENzbhLDiPgJt0gxSIPqiaRmnG6GPkWxKmww+TFbfqScqoXED2o/z
+	GPynKzJaoC9NlBDUThOqU8yAFNs0KdIxsraw1dvwwifovmLXnqaDlwxrhxc1bwqGpquy4qh289q
+	dmWaS5Q28a28mfx3qC+KUV2MCdxaG101b3mLJbIsytpwgm/4wOact6/GH6Ll8z0wStcT/qljZmn
+	KrHsW9UI6YQcf/aQ8GtdrtunRDJbT+w7fDMdRKqP7+Uo/PZAN2xn9+9v1Yy6F7iEIGe45TgAxPk
+	9HsW75db0qgairOoOoHqqoFKKM9ihJ3lU9CHp1C105/F5BXX2DjajySKrsx5n1onaGS3PKxHVke
+	nY+ZCCmiTObR1AO2JW19HvaCbaZ7dISh8jfCRmrlpv4qWDHAM5zBnFH0yllGtka3nsSWOgz25K8
+	r6F1l+BSagTyt5jxWnpw5IN8LRiK/eSgUeJ87JQLr2lQzA8RzqbjxGSkZg1eMtKHl8iRPDX+mnT
+	0AGq4gGI31vyiX4EfOTOb1rUw==
+X-Google-Smtp-Source: AGHT+IFzXq+ynGI24wv1yLcTVC4fQGx1cvQRkqSmIN6hhCsbXSpYjuakUMfNM2gQW1lzdctnUGV79A==
+X-Received: by 2002:a05:6214:1d03:b0:88a:316e:dad6 with SMTP id 6a1803df08f44-88c5204d7bemr499292946d6.23.1767009538526;
+        Mon, 29 Dec 2025 03:58:58 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88d9680c323sm219001636d6.13.2025.12.29.03.58.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Dec 2025 03:55:08 -0800 (PST)
-Date: Mon, 29 Dec 2025 20:54:53 +0900 (JST)
-Message-Id: <20251229.205453.623137996017774034.fujita.tomonori@gmail.com>
-To: boqun.feng@gmail.com
-Cc: fujita.tomonori@gmail.com, ojeda@kernel.org, a.hindborg@kernel.org,
- aliceryhl@google.com, bjorn3_gh@protonmail.com, dakr@kernel.org,
- gary@garyguo.net, lossin@kernel.org, tmgross@umich.edu,
- acourbot@nvidia.com, rust-for-linux@vger.kernel.org,
- linux-arch@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] rust: sync: atomic: Prepare AtomicOps macros
- for i8/i16 support
-From: FUJITA Tomonori <fujita.tomonori@gmail.com>
-In-Reply-To: <aVJiR72gcz_uonoS@tardis-2.local>
+        Mon, 29 Dec 2025 03:58:58 -0800 (PST)
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id B4441F4007F;
+	Mon, 29 Dec 2025 06:58:57 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Mon, 29 Dec 2025 06:58:57 -0500
+X-ME-Sender: <xms:AW1SaVO-ZYcTfkDU2e1aB29NECWBg4LQ1eqvS58QLHKWKpPkhmh2oA>
+    <xme:AW1Saec6QuOA6W5HNxFlAH6KU0lOOcdA7AJODtnbBEGWqUHlxIEMuJYpdjAprhhpP
+    oV73GYVYdTOpRrG5WuhGQIZVDMQK4-hbT4YU7k17-_cuu0U0fHS5g>
+X-ME-Received: <xmr:AW1SaSSp_HukLQU-OASrDG0Hmi1n6iwDD5iI4IwVbpewF-wrnUlTCMG7Tw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdejjedtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeegvddvhedt
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
+    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
+    udefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehfuhhjihhtrgdrthhomhhonh
+    horhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheprgdrhhhinhgusghorhhgsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopegrlhhitggvrhihhhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopegsjhho
+    rhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopegurghkrheskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhr
+    tghpthhtoheplhhoshhsihhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtmhhgrh
+    hoshhssehumhhitghhrdgvughu
+X-ME-Proxy: <xmx:AW1SaUeoZP0jhsKJpIPxpO7hKk2I5xggGYnzu9hT4SK_Ye8igV8t8Q>
+    <xmx:AW1SaTtTbYBVw1QqgKAGjpkn6SMH49s0DfAP3qKIazA0zbRg3SVbXA>
+    <xmx:AW1SaYJlfWnkah3tz85LUxbATKqrE_Ud5dbMYnl9rO7CRiVl3WYNCQ>
+    <xmx:AW1SafZR5qrsuVXeddwczvojx_Y5IWDZyVxK40l3yGW0db9JShFXBg>
+    <xmx:AW1SaTkx_MQIFWzsOYi5WDWP7cPiE-f81RHG7IkLsj14NtISZK_A7vAO>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 29 Dec 2025 06:58:56 -0500 (EST)
+Date: Mon, 29 Dec 2025 19:58:48 +0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: FUJITA Tomonori <fujita.tomonori@gmail.com>
+Cc: ojeda@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com,
+	bjorn3_gh@protonmail.com, dakr@kernel.org, gary@garyguo.net,
+	lossin@kernel.org, tmgross@umich.edu, acourbot@nvidia.com,
+	rust-for-linux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] rust: sync: atomic: Remove workaround macro for
+ i8/i16 BasicOps
+Message-ID: <aVJs-D4V1IpfzR7z@tardis-2.local>
 References: <20251228120546.1602275-1-fujita.tomonori@gmail.com>
-	<20251228120546.1602275-2-fujita.tomonori@gmail.com>
-	<aVJiR72gcz_uonoS@tardis-2.local>
+ <20251228120546.1602275-3-fujita.tomonori@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251228120546.1602275-3-fujita.tomonori@gmail.com>
 
-On Mon, 29 Dec 2025 19:13:11 +0800
-Boqun Feng <boqun.feng@gmail.com> wrote:
+On Sun, Dec 28, 2025 at 09:05:45PM +0900, FUJITA Tomonori wrote:
+> Remove workaround impl_atomic_only_load_and_store_ops macro and use
+> declare_and_impl_atomic_methods to add AtomicBasicOps support for
+> i8/i16.
+> 
 
-> On Sun, Dec 28, 2025 at 09:05:44PM +0900, FUJITA Tomonori wrote:
->> Rework the internal AtomicOps macro plumbing to generate per-type
->> implementations from a mapping list.
->> 
->> Capture the trait definition once and reuse it for both declaration
->> and per-type impl expansion to reduce duplication and keep future
->> extensions simple.
->> 
->> This is a preparatory refactor for enabling i8/i16 atomics cleanly.
->> 
->> Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
-> 
-> Thanks! I have an idea that uses proc-macro to generate the Atomic*Ops
-> impls, e.g.
-> 
->     #[atomic_ops(i8, i16, i32, i64)]
->     pub trait AtomicBasicOps {
->         #[variant(acquire)]
->         fn read(a: &AtomicRepr<Self>) -> Self {
-> 	    unsafe { binding_call!(a.as_ptr().cast()) }
-> 	}
->     }
-> 
-> But I think the current solution in your patch suffices as a temporary
-> solution at least.
+I did the following so that we can drop this ;-)
+
+1. Change function names of [1] and [2] from *{load,store}* to
+   *{read,set}*.
+
+2. Reorder [3] before [4] to avoid introduction of
+   impl_atomic_only_load_and_store_ops!()
+
+[1]: https://lore.kernel.org/all/20251211113826.1299077-3-fujita.tomonori@gmail.com/
+[2]: https://lore.kernel.org/all/20251211113826.1299077-2-fujita.tomonori@gmail.com/
+[3]: https://lore.kernel.org/all/20251228120546.1602275-2-fujita.tomonori@gmail.com/
+[4]: https://lore.kernel.org/all/20251211113826.1299077-4-fujita.tomonori@gmail.com/
+
+I also reorder a bit to make the introduction of helpers are grouped
+together, please see at
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git/log/?h=rust-sync.20251229
+
+I feel this way we have a cleaner history of changes.
 
 Thanks!
 
-I'll leave the proc-macro approach to you. If this can be merged as a
-temporary, incremental solution, that would be great. Once this is in,
-I'll send follow-up patches shortly to add Atomic<bool> support and
-migrate the remaining core::sync users in the tree.
+Regards,
+Boqun
 
+> Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
+> ---
+>  rust/helpers/atomic_ext.c           | 16 +++++-----
+>  rust/kernel/sync/atomic/internal.rs | 48 +----------------------------
+>  2 files changed, 9 insertions(+), 55 deletions(-)
+> 
+> diff --git a/rust/helpers/atomic_ext.c b/rust/helpers/atomic_ext.c
+> index 3a5ef6bb2776..10733bb4a75e 100644
+> --- a/rust/helpers/atomic_ext.c
+> +++ b/rust/helpers/atomic_ext.c
+> @@ -4,42 +4,42 @@
+>  #include <asm/rwonce.h>
+>  #include <linux/atomic.h>
+>  
+> -__rust_helper s8 rust_helper_atomic_i8_load(s8 *ptr)
+> +__rust_helper s8 rust_helper_atomic_i8_read(s8 *ptr)
+>  {
+>  	return READ_ONCE(*ptr);
+>  }
+>  
+> -__rust_helper s8 rust_helper_atomic_i8_load_acquire(s8 *ptr)
+> +__rust_helper s8 rust_helper_atomic_i8_read_acquire(s8 *ptr)
+>  {
+>  	return smp_load_acquire(ptr);
+>  }
+>  
+> -__rust_helper s16 rust_helper_atomic_i16_load(s16 *ptr)
+> +__rust_helper s16 rust_helper_atomic_i16_read(s16 *ptr)
+>  {
+>  	return READ_ONCE(*ptr);
+>  }
+>  
+> -__rust_helper s16 rust_helper_atomic_i16_load_acquire(s16 *ptr)
+> +__rust_helper s16 rust_helper_atomic_i16_read_acquire(s16 *ptr)
+>  {
+>  	return smp_load_acquire(ptr);
+>  }
+>  
+> -__rust_helper void rust_helper_atomic_i8_store(s8 *ptr, s8 val)
+> +__rust_helper void rust_helper_atomic_i8_set(s8 *ptr, s8 val)
+>  {
+>  	WRITE_ONCE(*ptr, val);
+>  }
+>  
+> -__rust_helper void rust_helper_atomic_i8_store_release(s8 *ptr, s8 val)
+> +__rust_helper void rust_helper_atomic_i8_set_release(s8 *ptr, s8 val)
+>  {
+>  	smp_store_release(ptr, val);
+>  }
+>  
+> -__rust_helper void rust_helper_atomic_i16_store(s16 *ptr, s16 val)
+> +__rust_helper void rust_helper_atomic_i16_set(s16 *ptr, s16 val)
+>  {
+>  	WRITE_ONCE(*ptr, val);
+>  }
+>  
+> -__rust_helper void rust_helper_atomic_i16_store_release(s16 *ptr, s16 val)
+> +__rust_helper void rust_helper_atomic_i16_set_release(s16 *ptr, s16 val)
+>  {
+>  	smp_store_release(ptr, val);
+>  }
+> diff --git a/rust/kernel/sync/atomic/internal.rs b/rust/kernel/sync/atomic/internal.rs
+> index 0634368d10d2..1b2a7933bc14 100644
+> --- a/rust/kernel/sync/atomic/internal.rs
+> +++ b/rust/kernel/sync/atomic/internal.rs
+> @@ -256,7 +256,7 @@ macro_rules! declare_and_impl_atomic_methods {
+>  }
+>  
+>  declare_and_impl_atomic_methods!(
+> -    [ i32 => atomic, i64 => atomic64 ]
+> +    [ i8 => atomic_i8, i16 => atomic_i16, i32 => atomic, i64 => atomic64 ]
+>      /// Basic atomic operations
+>      pub trait AtomicBasicOps {
+>          /// Atomic read (load).
+> @@ -273,15 +273,6 @@ fn set[release](a: &AtomicRepr<Self>, v: Self) {
+>      }
+>  );
+>  
+> -// It is still unclear whether i8/i16 atomics will eventually support
+> -// the same set of operations as i32/i64, because some architectures
+> -// do not provide hardware support for the required atomic primitives.
+> -// Furthermore, supporting Atomic<bool> will require even more
+> -// significant structural changes.
+> -//
+> -// To avoid premature refactoring, a separate macro for i8 and i16 is
+> -// used for now, leaving the existing macros untouched until the overall
+> -// design requirements are settled.
+>  declare_and_impl_atomic_methods!(
+>      [ i32 => atomic, i64 => atomic64 ]
+>      /// Exchange and compare-and-exchange atomic operations
+> @@ -332,40 +323,3 @@ fn fetch_add[acquire, release, relaxed](a: &AtomicRepr<Self>, v: Self::Delta) ->
+>          }
+>      }
+>  );
+> -
+> -macro_rules! impl_atomic_only_load_and_store_ops {
+> -    ($($ty:ty),* $(,)?) => {
+> -        $(
+> -            impl AtomicBasicOps for $ty {
+> -                paste! {
+> -                    #[inline(always)]
+> -                    fn atomic_read(a: &AtomicRepr<Self>) -> Self {
+> -                        // SAFETY: `a.as_ptr()` is valid and properly aligned.
+> -                        unsafe { bindings::[< atomic_ $ty _load >](a.as_ptr().cast()) }
+> -                    }
+> -
+> -                    #[inline(always)]
+> -                    fn atomic_read_acquire(a: &AtomicRepr<Self>) -> Self {
+> -                        // SAFETY: `a.as_ptr()` is valid and properly aligned.
+> -                        unsafe { bindings::[< atomic_ $ty _load_acquire >](a.as_ptr().cast()) }
+> -                    }
+> -
+> -                    // Generate atomic_set and atomic_set_release
+> -                    #[inline(always)]
+> -                    fn atomic_set(a: &AtomicRepr<Self>, v: Self) {
+> -                        // SAFETY: `a.as_ptr()` is valid and properly aligned.
+> -                        unsafe { bindings::[< atomic_ $ty _store >](a.as_ptr().cast(), v) }
+> -                    }
+> -
+> -                    #[inline(always)]
+> -                    fn atomic_set_release(a: &AtomicRepr<Self>, v: Self) {
+> -                        // SAFETY: `a.as_ptr()` is valid and properly aligned.
+> -                        unsafe { bindings::[< atomic_ $ty _store_release >](a.as_ptr().cast(), v) }
+> -                    }
+> -                }
+> -            }
+> -        )*
+> -    };
+> -}
+> -
+> -impl_atomic_only_load_and_store_ops!(i8, i16);
+> -- 
+> 2.43.0
+> 
 
