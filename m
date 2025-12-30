@@ -1,127 +1,126 @@
-Return-Path: <linux-arch+bounces-15602-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15603-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5ABFCE8668
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 01:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B357DCE8786
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 02:14:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7F23D3010ABD
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 00:17:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 34FDD300EA23
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 01:14:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFF91DFF0;
-	Tue, 30 Dec 2025 00:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4433B2D9EF3;
+	Tue, 30 Dec 2025 01:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HCI3Hsgw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlDfUdA/"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB54F3D76
-	for <linux-arch@vger.kernel.org>; Tue, 30 Dec 2025 00:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE4E285CAA
+	for <linux-arch@vger.kernel.org>; Tue, 30 Dec 2025 01:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767053841; cv=none; b=LbZCJX3+HMEbLnQYY9/tn2wb+2ibIvPzoRSXHJJwvDCt0x+UOM2ivQONMkc131Wu+QZyZDXIvB6Sxk0czDrjntF8md7yi3Je0CLU9eVrD+6OJfZf44E4ceQ+wzWCRfuD75+2EmKguH6pg+fAB2IKsLeU2NwX8WH2D0fITHLtlAY=
+	t=1767057267; cv=none; b=sF8eSJj+06dvqYY3IvTXZb3Vyaa1+aWxL73Jit5LXmSq9E8d8lVKj802dDh6Rw2bAzJnSODEsCKqk92ULG8S50DA6CFuqi6iFcuLz0ax7cgOVXO3PZPjJ7exr/ZntWmtozZWVNFEtS4HMnT+5pIOckkO34u4kGkdO7OWfW04JPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767053841; c=relaxed/simple;
-	bh=/4DDN/3gIQCM0o5cnOfsf59pP8c4OuQrBPqNlv11YC4=;
+	s=arc-20240116; t=1767057267; c=relaxed/simple;
+	bh=Q8HrMOBevQUpnO/GCmv6B8cLelHI6Acj+1ShFOhXpvI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pSS7/FpMKvXcCpT4DwAXl5Y/FcMuwPzQfUgY63Lhg3+P18sXA/ndX52Hpi5F7s/MkLaSCb7/8N2QzT8pZClPi2O37Myd+hbAUoaOEIXwEYkFjGF/SPb4RpYeMuWU/GeuZBc0McOya2EnAJZB8skhthW5YLWVax92351UB7wYLyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HCI3Hsgw; arc=none smtp.client-ip=209.85.160.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=UcWGLBTfI9pLIhHh7lMZmN8ZVvxvcXTLbexcB9q6xwIfBLeZ8nkm2h9+BqWHV7TR4kW6UU5ySRQWNyezKaK9NfrnOq6mYRCyj2rizte5VJLPV1tzwpdyvJShSOaR/Et26g+2F9iwLf8h10rkrabsZJx57kWV7pVyY+npKRyYdmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlDfUdA/; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4ee19b1fe5dso108242721cf.0
-        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 16:17:19 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4eda057f3c0so108082711cf.2
+        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 17:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767053839; x=1767658639; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767057264; x=1767662064; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I3W+y9lqoOSloOorX1TW32/410l7bPpqKG/R2mp51Mg=;
-        b=HCI3HsgwL28Aovk81lPv8g9iN3ToSS2bZIwHQcISLclU1BcJViC+/Iv1tf/Airkxhf
-         lqxsPHheKX5+OyNll7EhfTE4NHLTNfJ+h+bnUTmIzRdhRLYwaTXcXAoUwwQDoFr1MfrK
-         lGvgSZGkxS4Fi5J06eNU8GqTejhSy+01sF41Jmg4XCgsiJWaAtniNsiFIlMMXqb+nUs+
-         MOYqbZejE+c3LYDoj8XTBa9ARBbvb1g6CYfUIcDouyqqh9tKGcC3Aty9CY1PXomrwBg4
-         V1NIOO3t0PJkL9uXkIz2DtKpnnrFGbuxSy/xc8WNdeyvavpUUSfUWJuW5whVsp18pFa9
-         KBIA==
+        bh=s0W/EDw4kUB8T6ntkWeZ4jGeLwTy5P5tI2atkfqX3cg=;
+        b=IlDfUdA/ip3vDZMhSzuMQ+l3uB8vjfCqokLFLaRDrkJVKpHvgqrMWB4we4FtTlbE76
+         sS/ob6eW+FDFOU2Ie24Ml4vYaykw81EYzO2JEr5w9MOHiTf5MJhOtiKcBlIWKQExoTRO
+         /r0ZDwPTBLlerbWnK1lxQGbusDXZ3QDfJf/BD9XyBmiSRPebZE1JtmoZwWS83q9xiSR+
+         XafvCPXqt/fBcW2RmLFZzCM70999D02Fokx1U1K91e3ERCvJIhKSlCOK/4TUsx5S/BUA
+         1Hc2CD499hn8MmlAA3rrM8q05wnblJw4G5WA3BsrGYNVmot9+66/aKAQ4+ysmhtTg+0y
+         02aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767053839; x=1767658639;
+        d=1e100.net; s=20230601; t=1767057264; x=1767662064;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=I3W+y9lqoOSloOorX1TW32/410l7bPpqKG/R2mp51Mg=;
-        b=B+oeuiQLBSeuZW0IJhdUqQns/6N0tQ/Gwd0JkdwPih5adhJTdQZqUY/48Vnl+1qQ5c
-         Bgo32I/Dvt/lOBJdfbfUwDgR5tiuYymAwP48ffW+Sd4UrUSc9b85v6ldCMSK9ye8byOS
-         RXv7w7/QLfNdOwQpbgajBx8qg+nNsf0e5xeHh4t8FvNlcNQZXhw362s129AJ7elOYE6X
-         0/sWGUbKb8Apf3lgAQcTZVYAzl/5vHIEWkpCbVMBaV5r366ecs/cY1ynX5I3ud0GiC7Y
-         8l1gj0COYWNQsVisJiJRqjrox3CCIco5ormKMuZhKK8CUurXQxqU9C/QkMVwR6z7pJuR
-         F6hw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDGjy5RB4gPUswipK+cBLx/GpkRmIq3SKuwlr/Au4MAI4U/oe5JN+pLluiK0lvqG0DwOpjiwZ3PrE9@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz/2YtaUDUa1vRyNF/LIyf44NIYh07Upf5l28e+6lHobCNhyUM
-	glL0QdBWQDeg2CQcVZUY0d9EHYO45LrXYJfYJLQgw1c4s0i3CP9AT73k
-X-Gm-Gg: AY/fxX4JSezUJDgSeJUxV3SjOZDoND+lqfDIA1RcRIRM4zK5Y+qnO60nEoCqQLMuZ6q
-	9mYgiTfhuxkFseY08aVCHL+qCCjKIm8zyMuvM5NCw2nwIdpiJ06G3R2BnNYXJaZKI22Md2q6BbR
-	v1yvpw8WlXBHKqOUPoDU7PF09dgxcA3QIdtOagdNuOXnTNxBaox9RKKXwbKg47G1wUy2YGdYr3D
-	EWmx3OLE61uy5otaWbm9+7RDC8DsM+Br3gDlf4+KbOuJSBaOXqSzm0aILA/L+1efygb77SeIGu/
-	dfJf0TFhTHiNsaACnECOBPgGreD0UNg2ZI9RSgFelbYZIBQ6doMvLOhieETn1DUFg9RXB2bCTM6
-	jJzyJYX8l8DD7R48hIznQtIB7gHI4N4Mt4V19Izv9sDOHyBuVlWPu4g1HVK54g1mYxODIYqoikq
-	dqDTd//nhBOAQZC+BqXRQQrutGoTyoAx6mPWWWwiy89XZsxyjf88LakMKGxyxwEtLEwLVMIaAW3
-	PQcBp7VaD9zuAqhXcQjVRjnYA==
-X-Google-Smtp-Source: AGHT+IGMhISQN0aQ5+CVm+O84FCUsvrfO0PjPvKQRNTJQjKuH52aETix+mqiToBhhZBeLE6evVYvUw==
-X-Received: by 2002:a05:622a:588c:b0:4f3:4c48:8899 with SMTP id d75a77b69052e-4f4abd8c8damr594549821cf.46.1767053838917;
-        Mon, 29 Dec 2025 16:17:18 -0800 (PST)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f4ac62e1e7sm230890441cf.21.2025.12.29.16.17.18
+        bh=s0W/EDw4kUB8T6ntkWeZ4jGeLwTy5P5tI2atkfqX3cg=;
+        b=SOtpTISnbYYsIzV4+ZVjMOwxJ9tv4s2D7F3J2W9JH9gcsiuSfI0oQP0B8YlYVEZy5R
+         Euyw1ywXFHpBf5E4BKR3ayfcRmF7NQBZ+2bkzG9rzvnB2pWSwNrjoDYc8obLb7YmVojw
+         O6YaG8+kjVDJw2+BGM9FgW6EQQgarhcuiHgYamoSfIOnANPnd/wlMnnN9zu7Fr+D6LEd
+         +zIFr4kBR2YbBkIIR65+lIU7NfG79R3vKPMP0KYi+eYr/xb9TjC3k0mwsTBPk2XlxU6C
+         LtWG/xF9SNrsAiHZe/IksAUT8cIGu6QVEU4+YQjrOAijqJLrV9B88/vofy8wRmSNq07I
+         pGwA==
+X-Forwarded-Encrypted: i=1; AJvYcCUkfpuKdy8fUjjyt9FILD6aN9jv6Y2o30K7N5aaLfNMnUc46Wva9tn7i3HxN3lfzJIAGrJZCiasIPoy@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcLk2sKeCajBfYxVhsQ9Hd9CmyC/Vq/hEGKPsrfQBJVYPIaCvm
+	R0F/6zJVDKY0C5j6yKXT+1iikTv1BCEAlsJ7YJPzBGz2ikUTxTltLULY
+X-Gm-Gg: AY/fxX5hWfJ+DVs4iMdGPq71yTND1hHldPzYtcPh5zc7c5xtdMYx19hzW8X4ggxb+/X
+	uyDI1zU3sGcyiOUbsaAl4KiJjIvMmCytvDnoWrFppADB8C3jwFNELzq2swl2o16TUnrXk5AVth+
+	Yy1LUmq3u+unwlfs2GyOAXhNrc14KApUU4viYj1uZgIk7NZD5MUZFFU1qbff8DT7iyXiAU2hQnf
+	6Ckfb2OnyDHCDqP/D+oYk5R+rB2/1CI7MKqCEN75LR8JWYQPxIGuZf/163sIPx7bblZqtxunwdV
+	c81fdUdpZsqi0ezZtJNNNyitNB/H/WhNnt5fYFomm7Tp0z1KVOpgd3sLG0JDm9So1yZ3+G033AX
+	EBRccaQiZboMgE1hMgrLZwY8PFtK6aLTprUKZKHuYa15j5EM2oujtbqDOBvEX/Ao6FO8Jsvy3na
+	qnI9eLyWwc2vZSKMRE+yb6EF/2dcEE94tEG0OMKnSC8cetY4qWOYm2bDklJ4vOIOA7m/BVDoYOy
+	Efj1rnwo4VmC/zKaW6Q/bXLYg==
+X-Google-Smtp-Source: AGHT+IHpuGdhRZ3CbF3fVzRnkQZfBHeV8M6APgRZyJsGV4w5CuU3pCGiToOutAk3blctjF9cUdIvOA==
+X-Received: by 2002:a05:622a:4c1b:b0:4ee:49b8:fb4f with SMTP id d75a77b69052e-4f4abdb326emr471279661cf.71.1767057264458;
+        Mon, 29 Dec 2025 17:14:24 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88d96ce4e23sm274953746d6.19.2025.12.29.17.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Dec 2025 16:17:18 -0800 (PST)
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id B5F5CF40068;
-	Mon, 29 Dec 2025 19:17:17 -0500 (EST)
+        Mon, 29 Dec 2025 17:14:24 -0800 (PST)
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 8B11EF4006C;
+	Mon, 29 Dec 2025 20:14:23 -0500 (EST)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Mon, 29 Dec 2025 19:17:17 -0500
-X-ME-Sender: <xms:DRpTaTnQ761mN5xwzJrL8489UjsF9HpV4DmCtA-Ci9y3E2lhQzRwNQ>
-    <xme:DRpTadV9KEz6rM8l8fJwHuWbdB9GqfEmctwG3Omud98YfwlIsmTy3mV9BPQlD1tAi
-    zsWdpkbJ_-VBDsW_qx4ZRboeLKwaqdhs-VjIIxuJbXOTbZAX5_R>
-X-ME-Received: <xmr:DRpTaXr8kB3qNFb2o5BKtuEJsQuTVSKltjm2KRcdtwr7MmbaWprKD2pMb6X->
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdejkeehiecutefuodetggdotefrod
+  by phl-compute-01.internal (MEProxy); Mon, 29 Dec 2025 20:14:23 -0500
+X-ME-Sender: <xms:bydTafcnEpZ4mT23c8rblSiMXUL5zTzXgTDVFiEjksZuBA3Rz4lccw>
+    <xme:bydTabuNxKTCA0EdVX8M8ZSx1vfK6VFAQmhPn7dQi7jpNMAHds2IyV3Y5U50Vknuj
+    KX2GrrAhiwhrZSRAqD_bPHfK2E1NTtDaWomGvwjxpqmbunB5brW-A>
+X-ME-Received: <xmr:bydTaWhlVCrCP9KikMUDCjLvek02lah8MXT3nbM29RUCGKPRiS4OPjAaFGZ9>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdejkeeikecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
     hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
     vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudffiedv
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
-    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
-    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
-    drnhgrmhgvpdhnsggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhrtghpthhtohepfhhujhhithgrrd
-    htohhmohhnohhrihesghhmrghilhdrtghomhdprhgtphhtthhopehojhgvuggrsehkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopegrrdhhihhnuggsohhrgheskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtoheprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghpthht
-    ohepsghjohhrnhefpghghhesphhrohhtohhnmhgrihhlrdgtohhmpdhrtghpthhtohepug
-    grkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlohhsshhinheskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepthhmghhrohhsshesuhhmihgthhdrvgguuh
-X-ME-Proxy: <xmx:DRpTaeVns3OQ73Nz_y8_yQg9aN-xSbqKrkC4qejvX4fY5uM1e2pU8Q>
-    <xmx:DRpTaYHdxEnJjX3QCncUtxy0rWhW-RkoAQMuBNVMv8522sdndVnokQ>
-    <xmx:DRpTaVAphvbcwSZvHF_9VtCY9lvHO8m61P5wDZjfjPH8BQxWHaeRlQ>
-    <xmx:DRpTaazEdL2lupbLvEGak9BkmFajKU0vB3IxTRuu-xz0HLKV6DhZcg>
-    <xmx:DRpTabeMejqKaYx16bshlGrfNpLjDUZh0yehbCoWaGyKDvVgjhx8jav7>
+    hrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeegvddvhedt
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
+    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohep
+    udefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehfuhhjihhtrgdrthhomhhonh
+    horhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhn
+    vghtpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprg
+    drhhhinhgusghorhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhhitggvrhih
+    hhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhoth
+    honhhmrghilhdrtghomhdprhgtphhtthhopegurghkrheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheplhhoshhsihhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtmhhgrh
+    hoshhssehumhhitghhrdgvughu
+X-ME-Proxy: <xmx:bydTaTvplJKRXWW28iSLhL7bQRiTZ7_FL0cnmoHGJjyw8n3ioYl9Aw>
+    <xmx:bydTaR8zRNlkJHh8FTBu6DAnK0f2I2Xwm0fjqslbXBtRRKyLzUb90g>
+    <xmx:bydTaZaRUWgc_nbvM8EoDyZ8L99rJsIyRfSL0c5d3j-TrZRpHkKO6g>
+    <xmx:bydTaXoOR8XovlLeknsUSKt7Gb5S0aIJy9QE1cXgB9ujlKpBdy3bDw>
+    <xmx:bydTaW0NOyvVzF9E2VwDR_M-4CVivZzClVzxkUppFlsG-WSrJldPNelY>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 29 Dec 2025 19:17:16 -0500 (EST)
-Date: Tue, 30 Dec 2025 08:17:13 +0800
+ 29 Dec 2025 20:14:22 -0500 (EST)
+Date: Tue, 30 Dec 2025 09:14:19 +0800
 From: Boqun Feng <boqun.feng@gmail.com>
-To: Gary Guo <gary@garyguo.net>
-Cc: FUJITA Tomonori <fujita.tomonori@gmail.com>, ojeda@kernel.org,
-	a.hindborg@kernel.org, aliceryhl@google.com,
-	bjorn3_gh@protonmail.com, dakr@kernel.org, lossin@kernel.org,
-	tmgross@umich.edu, acourbot@nvidia.com,
+To: FUJITA Tomonori <fujita.tomonori@gmail.com>
+Cc: gary@garyguo.net, ojeda@kernel.org, a.hindborg@kernel.org,
+	aliceryhl@google.com, bjorn3_gh@protonmail.com, dakr@kernel.org,
+	lossin@kernel.org, tmgross@umich.edu, acourbot@nvidia.com,
 	rust-for-linux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] rust: sync: atomic: Prepare AtomicOps macros for
- i8/i16 support
-Message-ID: <aVMaCTO1zOAHU6fR@tardis-2.local>
-References: <20251228120546.1602275-1-fujita.tomonori@gmail.com>
- <20251228120546.1602275-2-fujita.tomonori@gmail.com>
- <aVJiR72gcz_uonoS@tardis-2.local>
- <20251229163616.732caffb.gary@garyguo.net>
+Subject: Re: [PATCH v2 0/4] rust: Add i8/i16 atomic xchg helpers
+Message-ID: <aVMna3OX5gIZJKCV@tardis-2.local>
+References: <20251223124639.7771082d.gary@garyguo.net>
+ <20251225.095655.275822477142372376.fujita.tomonori@gmail.com>
+ <aU-JcvYaOYznqD-M@tardis-2.local>
+ <20251227.181717.1843883205283099818.fujita.tomonori@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -130,54 +129,68 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251229163616.732caffb.gary@garyguo.net>
+In-Reply-To: <20251227.181717.1843883205283099818.fujita.tomonori@gmail.com>
 
-On Mon, Dec 29, 2025 at 04:36:16PM +0000, Gary Guo wrote:
-> On Mon, 29 Dec 2025 19:13:11 +0800
+On Sat, Dec 27, 2025 at 06:17:17PM +0900, FUJITA Tomonori wrote:
+> On Sat, 27 Dec 2025 15:23:30 +0800
 > Boqun Feng <boqun.feng@gmail.com> wrote:
 > 
-> > On Sun, Dec 28, 2025 at 09:05:44PM +0900, FUJITA Tomonori wrote:
-> > > Rework the internal AtomicOps macro plumbing to generate per-type
-> > > implementations from a mapping list.
-> > > 
-> > > Capture the trait definition once and reuse it for both declaration
-> > > and per-type impl expansion to reduce duplication and keep future
-> > > extensions simple.
-> > > 
-> > > This is a preparatory refactor for enabling i8/i16 atomics cleanly.
-> > > 
-> > > Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>  
+> > On Thu, Dec 25, 2025 at 09:56:55AM +0900, FUJITA Tomonori wrote:
+> > [...]
+> >> >> The architectures supporting Rust, implement atomic xchg families
+> >> >> using architecture-specific instructions. They work for i8/i16 too so
+> >> >> the helpers just call them.
+> >> >> 
+> >> >> Tested on QEMU (86_64, arm64, riscv, loongarch, and armv7).
+> >> >> 
+> >> >> Note the architectures that support Rust handle xchg differently:
+> >> >> 
+> >> >> - arm64 and riscv support xchg with all the orderings.
+> >> >> 
+> >> >> - x86_64 and loongarch support only full-ordering xchg. They calls the
+> >> >>   full-ordering xchg for any orderings.
+> >> > 
+> >> > Maybe it's just that I'm reading this differently, but I think this is a
+> >> > bit confusing, as if there's an optimisation opportunity.
+> >> > 
+> >> > x86 is TSO, so even a relaxed xchg is a full xchg. So in this sense x86
+> >> > has implemented all orderings.
+> >> 
+> >> For x86_64, I agree that the wording is confusing. xchg always implies
+> >> lock so different memory orderings all map to the same full-ordered
+> >> xchg there.
+> >> 
 > > 
-> > Thanks! I have an idea that uses proc-macro to generate the Atomic*Ops
-> > impls, e.g.
-> > 
-> >     #[atomic_ops(i8, i16, i32, i64)]
-> >     pub trait AtomicBasicOps {
-> >         #[variant(acquire)]
-> >         fn read(a: &AtomicRepr<Self>) -> Self {
-> > 	    unsafe { binding_call!(a.as_ptr().cast()) }
-> > 	}
-> >     }
+> > I feel a bit confusing as well about the need of mentioning the exact
+> > ordering of these primitives on each arch. In my opinion, as long as
+> > rust_helper_xchg_X() is mapped to xchg_X() in C, then it's clear that
+> > they have the ordering of the corresponding C APIs. But I keep it as it
+> > is for now, I may remove them from the commit logs later after I
+> > re-think about this.
 > 
-> Unless the proc macro is generally applicable to a wide range of subsystem
-> abstractions, I would still prefer to use declarative macros.
+> Given the current implementation, I agree that the ordering
+> explanation is redundant.
+> 
+> When I started working on this, I initially thought we would need
+> architecture-specific ifdefs to select the appropriate implementation
+> for each ordering, rather than having a straightforward per-ordering
+> mapping like this. That's why I added the explanation about how xchg
+> is handled on each architecture.
 > 
 
-But the tt-muncher style is quite challenging for a boarder audience to
-understand and change (if necessary) the declarative macros. IMO, if we
-can have mod-specific proc macros (i.e. macros that are only usable in
-atomic mod) then it should be fine. Thoughts?
+I will remove those ordering explanation and I will also apply other
+changes to the xchg/cmpxchg helpers: we should use xchg() and
+try_cmpxchg() instead of raw_xchg() and raw_try_cmpxchg() because we
+want to keep the KCSan instrumentation for those helpers.
 
 Regards,
 Boqun
 
-> Best,
-> Gary
 > 
+> > Thank you all! Applied in rust-sync:
 > > 
-> > But I think the current solution in your patch suffices as a temporary
-> > solution at least.
-> > 
-> > Regards,
-> > Boqun
+> > 	https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git/ rust-sync
+> 
+> Thanks a lot!
+> 
 
