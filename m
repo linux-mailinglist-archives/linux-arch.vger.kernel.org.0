@@ -1,77 +1,77 @@
-Return-Path: <linux-arch+bounces-15606-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15607-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F6A0CE8B0C
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 05:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D932FCE8B0F
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 05:50:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 84AAA300204F
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 04:50:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 001463002045
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 04:50:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7A9288C2C;
-	Tue, 30 Dec 2025 04:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940762D73A9;
+	Tue, 30 Dec 2025 04:50:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TOBNgV06"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fgv6dLCe"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386642D73A9
-	for <linux-arch@vger.kernel.org>; Tue, 30 Dec 2025 04:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AE826CE1E
+	for <linux-arch@vger.kernel.org>; Tue, 30 Dec 2025 04:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767070240; cv=none; b=IPRVNTO58km/+VolwuuO+58eeqYmSiK6a+w7GKUto4oefitr9FOWfAA8IlFYwSNt/ImG9UGqn50HJxZVXKaT53DdbuZmKSvgNsjIJ++rit4wllyFIKUzPOhLFMLervp9m4Qn7W4xhVHKG/s5cT/97SR37uOi6inH5FrkBQBPXfI=
+	t=1767070243; cv=none; b=sruoGUwgyWuCvHBoQLhQqKr58OTWEVpRsMCvIjgj84CwyUJgRoSJ9iQBWNY4j/Il405qIjnxrl4mqrUIESlCNA7z+PFgVKxrqn8QCXAyRSOqd7DcCGlypsfVXW6CiysDCqqZ+gvsftLcGnrhfcwTke5R7TWt0uz69g1xB1MZMQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767070240; c=relaxed/simple;
-	bh=pfSjhiBCdWEueZV2JY7NvPpeGueAo/ur4F5F/8tuP2M=;
+	s=arc-20240116; t=1767070243; c=relaxed/simple;
+	bh=Hp8DN7D/yTHZZuYL6cvL6rGmqaVhTJhqpDL41o8WHio=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Oe14H5yta8WxV4HbDOLdXvKczbiwvL/80519tni+YQCcDZqRV8x/yimB8HSOpCfL/BM1OProyZwfwsiwcYg5+feskBP+hTSnrbGZ8mWKDGiHCoq7xK1maweQZPmanWegEQiAkioQS+OoJGH/7Khq9Qlwq/Jdqlf2PSvA5smusYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TOBNgV06; arc=none smtp.client-ip=209.85.210.173
+	 MIME-Version; b=QmyjNRAxz0JDYGJ8rv+6mgKMGnyVaPLzv5S85nxHOmi06bB4ElFy23/jQ5r5eGRlbYmvoITdGqxvRd0wdgIQHGhCJeAQgXgSslbLmTB4DdhdjPuXicYTMe5GTR4OAsPdMSvIiLXdIj0TNFEkNidTxXsiDOiQnurciSuqvntUW+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fgv6dLCe; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7b8eff36e3bso15392880b3a.2
-        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 20:50:38 -0800 (PST)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7fc0c1d45a4so8558490b3a.0
+        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 20:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767070238; x=1767675038; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767070241; x=1767675041; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BAQu8usZZgPqr6XefOMeBwVUvwr/9/vXnmhBkCIeE70=;
-        b=TOBNgV06j1CjDiomX/VT+VmbIAps/hLd3GlUG42NA3DjUG4ukI+liKGoeaBx7jtRS4
-         aWAW7TtXfCZptxyAW7TIwUb/ih/N+vwBcECz2hj/vvtk4dTaWjgLJv6a7qcGHACsk6BD
-         KHESCyibSrLFzCnC/w5yGEwg6aWq4y9d7h/57fiJn+hN4GTzpDafAvuBzcwnSgSmDfDK
-         H0kIAnqd5HrxJ4Tzw3fFHVejPQ7ekVXbqrcl9OOdAalQtIAZu9a4eXHVvHfk/odUY9Dh
-         QTTOkkxcW4FfKi1M1UpFZ81ZZYaJmm1XusEHJYbi4Rt8+5BabvF46G+K64tiAgUeOL2f
-         EZ1w==
+        bh=UTgqKg/NyZLs05GYEiIMrHKONV7wwa4BNTXrO2B8hPs=;
+        b=Fgv6dLCeQO++tv5hKfxJWXgPc5IgcFLT3FNEsRSIcU/zgTvdhiq6UeC36mz2eiSj4u
+         zTmnw7zubC9R2YCyc33IHN2RRpEeOpF9smbEpV84VY6bao4HyoUIuJb4LLchx9ynHsFb
+         HUIYltWR8Bv5+7RgnUdVK7c6yqVO3a8KPhvBJFyd0owW9CktB/aaPRdcLmIt7gyjrGRG
+         AMWtEICiKGED+Gjy7v4uw6/NVv385Wo6Mwlv+PqmPlMrKXDIr4zUDGWFsJ6QPDk3wNzK
+         8ftJSvjPFtrvgVJBqYxDOtCN1LJ6hFQgGfMtIXUxzDvGUXDmMhTyWPoFVwfSY/RRnKBq
+         qykQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767070238; x=1767675038;
+        d=1e100.net; s=20230601; t=1767070241; x=1767675041;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BAQu8usZZgPqr6XefOMeBwVUvwr/9/vXnmhBkCIeE70=;
-        b=uNC71iATIh2V2vYsvLfe+t9zsRcjT9OuO6bCjzSL+i4fhZvedoAYdzIyyPMTy14auN
-         7qMuYW+UUYxAImv1fEkmtmvey+OCZ1rIqs+3ThwDLzUBVF1bj97kHTV9yXhcX6XnRIGN
-         K4OpTpQGXJbQr8bQB58bcPNCNrdcFUWNwtTq4Ol8Uxnp4ypwfMU5H1Imh+G1REzph1PX
-         uQSeDKZwA9xJIzPi6XXqvEjm+wBdYkoDG6RzBFu6uMacQ2stiouJCrcgdITVkCUrBnx3
-         MMuRgEQ71TNBva5WsJHmIxjz8HJ8FyGNHt5MYMQG8j13ycgRFfAosxZckmZ+0oG1bYwG
-         XqFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWtuFs2QJ/IidoG1REQ2Gfgv6rKnzjo02fQP+CFgK5x8SpkULY7SAdN7cq/0NZXDUVbTl0V+H4zkX3B@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhRoXnTf1XIjVG70OKsFLTv+9FoiL/dYdX1PK9vqZSrR6Hr8QM
-	15Oak/ZN+m0XWhMYH3Mg8NibQ2xvtPQmN7afourfR95d7j5awx7GkNhg
-X-Gm-Gg: AY/fxX4UKrjbrcHQsXHJIL3I8Z6vU3wQkj2OZrQCjPcezioV4SqhkP/1fL2YWy3ohVU
-	7dfsfGTGNU0y2m3087kRftpNBZRaYRQaHyEScY5sMiBpGj+1XEASD4kMhfm/HLECGg1YLRi1Hde
-	95qqiItkVKIcCVO9b/bbDLfQJTwClNE1ICEx/YZpy9JcUYNAMBG4EaOaIMyvlfoJOlmB2x62BGQ
-	QQ4xXh6VwJKHYFvJVaZWsT5FQkAtPMxoSo2zkrsqLUiZtealcZAXUqzhQp4S/oV8moPUDST+/zU
-	AximQu7itLzN0f5dnni+vIg2akHVSnmjaySweh5LJzYT+aknKv0T34rwSniALqdBXPefOMDmQMv
-	Q9Ru4Jp9I0+aj+eEty4/c2tkYhVFzUH0LXRxoczC9TMqZvcA8OSGrgeTiJxOhfDADn6Xv8KXnhr
-	yWubv6Qp211VOi+63sw1VGPyF1fVM9qZh8uP2LVsqkIRfieTA1qRV9Ob1rolkCLQ==
-X-Google-Smtp-Source: AGHT+IFRltqB5h90bJgRJypmxdLSXnFioKVInc9YxdWoeZP/3RSsexZ217SSNT+4mgmdbFQb9uXs2w==
-X-Received: by 2002:a05:6a00:420f:b0:7ac:1444:6777 with SMTP id d2e1a72fcca58-7ff646f9380mr30293750b3a.12.1767070238391;
-        Mon, 29 Dec 2025 20:50:38 -0800 (PST)
+        bh=UTgqKg/NyZLs05GYEiIMrHKONV7wwa4BNTXrO2B8hPs=;
+        b=If+iYbmPWyQ6XP/7ou3JXTdtwDCy/OvNcqeOYUMmtnoVuOzWz4JL4b6Mtwvi5accE7
+         /6ZNbEfoOR2q2n40+SYdZwzqyiZoeMVBLL9CLMYuN+Tn1Eic2komR7DDmttfJYd7ycxd
+         z+Pj4nUJXfMhZwjSu39oCozjg8KMjJ3esTvOahn/yxWzQXvuq4c5XYQ0GU9tLMkS3rwX
+         Up+9sUp9SENWeHvBOnHOGKJ82nG84EiYzQ3Itt7ZXYzadXk1T5XRJb5L8+C0cCX0zOct
+         FV1iZRS/YtOE3JsMtp9xr0UEOB0oJPvZG9bX8A2zRdfG0R7W2ERo4BfFAAwg6Ks0EpaV
+         t76g==
+X-Forwarded-Encrypted: i=1; AJvYcCXD23qga6DuPPzpr6yPAGmTZoTp2Pa41F8Fui7K3ML9PUn6cn/WOI6d2I3Gtv0f6QtL9N+NCwKEBUjt@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuBEum2urkTVSn2PZHyOy6/2hzqdRaNPwFovAIaKxlPJYpzxZV
+	mkMSHlzuGmOl83jVFohin5LvO6it4nIrMup/tD1RZ1kumD7+uRV1jQLk
+X-Gm-Gg: AY/fxX51CaA/N+mjZRrxYr6ju3+WO+BJw4VYpj+RRINE9q1y7upITPkU2fxWohijsyG
+	u8QHmyU7rmO5wKI0x7naKHBPuRhjVT9f959aKhJaq8aq1ayV97Xv70nrqu9oV2bygaUjuSWXj+B
+	fDi55yLDT0sYmHLozQ0gtm1B6tBvOfNZLAaDwxvZTKZFUhJo1f7FZGZ+UOGgFr2rR2rLuZHFGPJ
+	zcbQ2sq6R80e39I2g08ix987EYHTC4A9DzYXouhgYmSlWSK9ZjzYrHZr3lMnM+0Um8Rwa5IhBrR
+	Hn/9jneh3sQIie8vUxDy/cUa7cmR3FdpgbAJlyBAa2mGzFfUuqwI5zHTD9EeR3QeVRnYecsLIYH
+	+qRSRizPkQDe1ApZ4+4G/f8gtGS6k+swzC0/gkU+uUNV2N/XtlKewGwT1a284h8ZuKykqxEttuW
+	v0iI8ljLZburGMSWPxed5owyNE7Ji0kaxPXsrVBE7l7afIOXTYctvU7vob/E9CAQ==
+X-Google-Smtp-Source: AGHT+IFp/furovjQLO4bXBkp4xN3goFxeJ8eFSrn0cqg2OMY1aa1X8jUq7WSnLEQmATL6Ib38PpzvA==
+X-Received: by 2002:a05:6a00:140f:b0:807:c2b9:38ec with SMTP id d2e1a72fcca58-807c2b93f63mr13436515b3a.15.1767070241311;
+        Mon, 29 Dec 2025 20:50:41 -0800 (PST)
 Received: from bee.. (p5342157-ipxg23901hodogaya.kanagawa.ocn.ne.jp. [180.39.242.157])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7aa328basm31100194b3a.11.2025.12.29.20.50.35
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7aa328basm31100194b3a.11.2025.12.29.20.50.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Dec 2025 20:50:38 -0800 (PST)
+        Mon, 29 Dec 2025 20:50:40 -0800 (PST)
 From: FUJITA Tomonori <fujita.tomonori@gmail.com>
 To: boqun.feng@gmail.com,
 	ojeda@kernel.org
@@ -85,9 +85,9 @@ Cc: a.hindborg@kernel.org,
 	acourbot@nvidia.com,
 	rust-for-linux@vger.kernel.org,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v1 1/2] rust: sync: atomic: Add atomic bool support via i8 representation
-Date: Tue, 30 Dec 2025 13:50:27 +0900
-Message-ID: <20251230045028.1773445-2-fujita.tomonori@gmail.com>
+Subject: [PATCH v1 2/2] rust: sync: atomic: Add atomic bool tests
+Date: Tue, 30 Dec 2025 13:50:28 +0900
+Message-ID: <20251230045028.1773445-3-fujita.tomonori@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251230045028.1773445-1-fujita.tomonori@gmail.com>
 References: <20251230045028.1773445-1-fujita.tomonori@gmail.com>
@@ -99,89 +99,41 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-Add `bool` support, `Atomic<bool>` by using `i8` as its underlying
-representation.
+Add tests for Atomic<bool> operations.
 
-Rust specifies that `bool` has size 1 and alignment 1 [1], so it
-matches `i8` on layout; keep `static_assert!()` checks to enforce this
-assumption at build time.
+Atomic<bool> does not fit into the existing u8/16/32/64 tests so
+introduce a dedicated tests for it.
 
-Implement `AtomicImpl` for `bool` under
-`CONFIG_ARCH_SUPPORTS_ATOMIC_RMW`, consistent with the existing
-`i8/i16` gating.
-
-Document the additional safety requirement for
-`Atomic::<bool>::from_ptr`: only bit patterns 0 (false) and 1 (true)
-are valid.
-
-Link: https://doc.rust-lang.org/reference/types/boolean.html [1]
 Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
 ---
- rust/kernel/sync/atomic.rs           |  1 +
- rust/kernel/sync/atomic/internal.rs  |  8 ++++++++
- rust/kernel/sync/atomic/predefine.rs | 11 +++++++++++
- 3 files changed, 20 insertions(+)
+ rust/kernel/sync/atomic/predefine.rs | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
-index 4aebeacb961a..2c998cbd300e 100644
---- a/rust/kernel/sync/atomic.rs
-+++ b/rust/kernel/sync/atomic.rs
-@@ -158,6 +158,7 @@ pub const fn new(v: T) -> Self {
-     ///
-     /// - `ptr` is aligned to `align_of::<T>()`.
-     /// - `ptr` is valid for reads and writes for `'a`.
-+    /// - If `T` is `bool`, only the bit patterns 0 (`false`) and 1 (`true`) are valid.
-     /// - For the duration of `'a`, other accesses to `*ptr` must not cause data races (defined
-     ///   by [`LKMM`]) against atomic operations on the returned reference. Note that if all other
-     ///   accesses are atomic, then this safety requirement is trivially fulfilled.
-diff --git a/rust/kernel/sync/atomic/internal.rs b/rust/kernel/sync/atomic/internal.rs
-index 0dac58bca2b3..0e12955082e5 100644
---- a/rust/kernel/sync/atomic/internal.rs
-+++ b/rust/kernel/sync/atomic/internal.rs
-@@ -16,6 +16,7 @@ pub trait Sealed {}
- // The C side supports atomic primitives only for `i32` and `i64` (`atomic_t` and `atomic64_t`),
- // while the Rust side also layers provides atomic support for `i8` and `i16`
- // on top of lower-level C primitives.
-+impl private::Sealed for bool {}
- impl private::Sealed for i8 {}
- impl private::Sealed for i16 {}
- impl private::Sealed for i32 {}
-@@ -37,6 +38,13 @@ pub trait AtomicImpl: Sized + Send + Copy + private::Sealed {
-     type Delta;
- }
- 
-+// The current helpers of load/store uses `{WRITE,READ}_ONCE()` hence the atomicity is only
-+// guaranteed against read-modify-write operations if the architecture supports native atomic RmW.
-+#[cfg(CONFIG_ARCH_SUPPORTS_ATOMIC_RMW)]
-+impl AtomicImpl for bool {
-+    type Delta = Self;
-+}
-+
- // The current helpers of load/store uses `{WRITE,READ}_ONCE()` hence the atomicity is only
- // guaranteed against read-modify-write operations if the architecture supports native atomic RmW.
- #[cfg(CONFIG_ARCH_SUPPORTS_ATOMIC_RMW)]
 diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atomic/predefine.rs
-index 248d26555ccf..3fc99174b086 100644
+index 3fc99174b086..42067c6a266c 100644
 --- a/rust/kernel/sync/atomic/predefine.rs
 +++ b/rust/kernel/sync/atomic/predefine.rs
-@@ -5,6 +5,17 @@
- use crate::static_assert;
- use core::mem::{align_of, size_of};
- 
-+// Ensure size and alignment requirements are checked.
-+static_assert!(size_of::<bool>() == size_of::<i8>());
-+static_assert!(align_of::<bool>() == align_of::<i8>());
+@@ -199,4 +199,20 @@ fn atomic_arithmetic_tests() {
+             assert_eq!(v + 25, x.load(Relaxed));
+         });
+     }
 +
-+// SAFETY: `bool` has the same size and alignment as `i8`, and Rust guarantees that `bool` has
-+// only two valid bit patterns: 0 (false) and 1 (true). Those are valid `i8` values, so `bool` is
-+// round-trip transmutable to `i8`.
-+unsafe impl super::AtomicType for bool {
-+    type Repr = i8;
-+}
++    #[test]
++    fn atomic_bool_tests() {
++        let x = Atomic::new(false);
 +
- // SAFETY: `i8` has the same size and alignment with itself, and is round-trip transmutable to
- // itself.
- unsafe impl super::AtomicType for i8 {
++        assert_eq!(false, x.load(Relaxed));
++        x.store(true, Relaxed);
++        assert_eq!(true, x.load(Relaxed));
++
++        assert_eq!(true, x.xchg(false, Relaxed));
++        assert_eq!(false, x.load(Relaxed));
++
++        assert_eq!(Err(false), x.cmpxchg(true, true, Relaxed));
++        assert_eq!(false, x.load(Relaxed));
++        assert_eq!(Ok(false), x.cmpxchg(false, true, Full));
++    }
+ }
 -- 
 2.43.0
 
