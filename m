@@ -1,140 +1,128 @@
-Return-Path: <linux-arch+bounces-15607-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15608-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D932FCE8B0F
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 05:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E029ACEA9C0
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 21:32:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 001463002045
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 04:50:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B7A683005F3D
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Dec 2025 20:32:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940762D73A9;
-	Tue, 30 Dec 2025 04:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B864526F46E;
+	Tue, 30 Dec 2025 20:32:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fgv6dLCe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFImDH+K"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AE826CE1E
-	for <linux-arch@vger.kernel.org>; Tue, 30 Dec 2025 04:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A032641CA;
+	Tue, 30 Dec 2025 20:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767070243; cv=none; b=sruoGUwgyWuCvHBoQLhQqKr58OTWEVpRsMCvIjgj84CwyUJgRoSJ9iQBWNY4j/Il405qIjnxrl4mqrUIESlCNA7z+PFgVKxrqn8QCXAyRSOqd7DcCGlypsfVXW6CiysDCqqZ+gvsftLcGnrhfcwTke5R7TWt0uz69g1xB1MZMQo=
+	t=1767126721; cv=none; b=RmdzfZutQz66tunuAFxViueoB7FYjT89vpbj3JSxDGgOSHqcXaSs9TPvBLM/FZfrAsP9Cdyw7SZegvepW75bE25BvomFqdU/pA63tlkWEm9FwWARI62qIPt1kNVwUXcOUKMPVW5WPwdoy9XbScSdTxGQtt3S2imNE1xPH2ZYC3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767070243; c=relaxed/simple;
-	bh=Hp8DN7D/yTHZZuYL6cvL6rGmqaVhTJhqpDL41o8WHio=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QmyjNRAxz0JDYGJ8rv+6mgKMGnyVaPLzv5S85nxHOmi06bB4ElFy23/jQ5r5eGRlbYmvoITdGqxvRd0wdgIQHGhCJeAQgXgSslbLmTB4DdhdjPuXicYTMe5GTR4OAsPdMSvIiLXdIj0TNFEkNidTxXsiDOiQnurciSuqvntUW+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fgv6dLCe; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7fc0c1d45a4so8558490b3a.0
-        for <linux-arch@vger.kernel.org>; Mon, 29 Dec 2025 20:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767070241; x=1767675041; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UTgqKg/NyZLs05GYEiIMrHKONV7wwa4BNTXrO2B8hPs=;
-        b=Fgv6dLCeQO++tv5hKfxJWXgPc5IgcFLT3FNEsRSIcU/zgTvdhiq6UeC36mz2eiSj4u
-         zTmnw7zubC9R2YCyc33IHN2RRpEeOpF9smbEpV84VY6bao4HyoUIuJb4LLchx9ynHsFb
-         HUIYltWR8Bv5+7RgnUdVK7c6yqVO3a8KPhvBJFyd0owW9CktB/aaPRdcLmIt7gyjrGRG
-         AMWtEICiKGED+Gjy7v4uw6/NVv385Wo6Mwlv+PqmPlMrKXDIr4zUDGWFsJ6QPDk3wNzK
-         8ftJSvjPFtrvgVJBqYxDOtCN1LJ6hFQgGfMtIXUxzDvGUXDmMhTyWPoFVwfSY/RRnKBq
-         qykQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767070241; x=1767675041;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UTgqKg/NyZLs05GYEiIMrHKONV7wwa4BNTXrO2B8hPs=;
-        b=If+iYbmPWyQ6XP/7ou3JXTdtwDCy/OvNcqeOYUMmtnoVuOzWz4JL4b6Mtwvi5accE7
-         /6ZNbEfoOR2q2n40+SYdZwzqyiZoeMVBLL9CLMYuN+Tn1Eic2komR7DDmttfJYd7ycxd
-         z+Pj4nUJXfMhZwjSu39oCozjg8KMjJ3esTvOahn/yxWzQXvuq4c5XYQ0GU9tLMkS3rwX
-         Up+9sUp9SENWeHvBOnHOGKJ82nG84EiYzQ3Itt7ZXYzadXk1T5XRJb5L8+C0cCX0zOct
-         FV1iZRS/YtOE3JsMtp9xr0UEOB0oJPvZG9bX8A2zRdfG0R7W2ERo4BfFAAwg6Ks0EpaV
-         t76g==
-X-Forwarded-Encrypted: i=1; AJvYcCXD23qga6DuPPzpr6yPAGmTZoTp2Pa41F8Fui7K3ML9PUn6cn/WOI6d2I3Gtv0f6QtL9N+NCwKEBUjt@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuBEum2urkTVSn2PZHyOy6/2hzqdRaNPwFovAIaKxlPJYpzxZV
-	mkMSHlzuGmOl83jVFohin5LvO6it4nIrMup/tD1RZ1kumD7+uRV1jQLk
-X-Gm-Gg: AY/fxX51CaA/N+mjZRrxYr6ju3+WO+BJw4VYpj+RRINE9q1y7upITPkU2fxWohijsyG
-	u8QHmyU7rmO5wKI0x7naKHBPuRhjVT9f959aKhJaq8aq1ayV97Xv70nrqu9oV2bygaUjuSWXj+B
-	fDi55yLDT0sYmHLozQ0gtm1B6tBvOfNZLAaDwxvZTKZFUhJo1f7FZGZ+UOGgFr2rR2rLuZHFGPJ
-	zcbQ2sq6R80e39I2g08ix987EYHTC4A9DzYXouhgYmSlWSK9ZjzYrHZr3lMnM+0Um8Rwa5IhBrR
-	Hn/9jneh3sQIie8vUxDy/cUa7cmR3FdpgbAJlyBAa2mGzFfUuqwI5zHTD9EeR3QeVRnYecsLIYH
-	+qRSRizPkQDe1ApZ4+4G/f8gtGS6k+swzC0/gkU+uUNV2N/XtlKewGwT1a284h8ZuKykqxEttuW
-	v0iI8ljLZburGMSWPxed5owyNE7Ji0kaxPXsrVBE7l7afIOXTYctvU7vob/E9CAQ==
-X-Google-Smtp-Source: AGHT+IFp/furovjQLO4bXBkp4xN3goFxeJ8eFSrn0cqg2OMY1aa1X8jUq7WSnLEQmATL6Ib38PpzvA==
-X-Received: by 2002:a05:6a00:140f:b0:807:c2b9:38ec with SMTP id d2e1a72fcca58-807c2b93f63mr13436515b3a.15.1767070241311;
-        Mon, 29 Dec 2025 20:50:41 -0800 (PST)
-Received: from bee.. (p5342157-ipxg23901hodogaya.kanagawa.ocn.ne.jp. [180.39.242.157])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7aa328basm31100194b3a.11.2025.12.29.20.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Dec 2025 20:50:40 -0800 (PST)
-From: FUJITA Tomonori <fujita.tomonori@gmail.com>
-To: boqun.feng@gmail.com,
-	ojeda@kernel.org
-Cc: a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	bjorn3_gh@protonmail.com,
-	dakr@kernel.org,
-	gary@garyguo.net,
-	lossin@kernel.org,
-	tmgross@umich.edu,
-	acourbot@nvidia.com,
-	rust-for-linux@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v1 2/2] rust: sync: atomic: Add atomic bool tests
-Date: Tue, 30 Dec 2025 13:50:28 +0900
-Message-ID: <20251230045028.1773445-3-fujita.tomonori@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251230045028.1773445-1-fujita.tomonori@gmail.com>
-References: <20251230045028.1773445-1-fujita.tomonori@gmail.com>
+	s=arc-20240116; t=1767126721; c=relaxed/simple;
+	bh=cndBsIdqWaO0mAWgypNK8SdnZmIn09dB7jgukNbm22w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lvVlSgt/vqCbrBDxeUwvPRyS7VT7UB3/VpmoNrwksABNNzwRpNk3+cm3p+mibzUUXeIqo8QjMfj/x8ocjBt5II6SBW+1GbVfA8Bm8+jtO/Io7RKtB9kaIk60p0oF04ZdgXAD0XvTNCJi9bUg8ezZ7aLxxx7dRO38A8i4pEuWTMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFImDH+K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB22C4CEFB;
+	Tue, 30 Dec 2025 20:31:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767126721;
+	bh=cndBsIdqWaO0mAWgypNK8SdnZmIn09dB7jgukNbm22w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RFImDH+KE8o0n4QR10H4g03pXnoFVlnXi95t2jkVwzBvm3iUyPAFFUDsKjAGKDS6O
+	 1384jK4bXsTUKQREFbHc8T14YsyjZ+5+N8hJOzl4uztvoAtlBb3DmFTDK6k9t9bzqf
+	 ZJEBD9PvLpA5IArOlpb5q2+k+IMGVc11Rw89kMQbSOPhEt7RAZUMFXt8wVmNpDEzR+
+	 1c2TTUYBxQn4PU1f477EIXkUnOabLBlYBPHtygvfN3TT098hZXv+M8VvSEg+q82w0L
+	 Lyje7kaCTXZXIiAkmhIbGXmDPlFCtiuzom3Hy4MBH5P6HZtutqAiPtkJM6DqHmd2LZ
+	 zJ4zf1lkPnAhw==
+Message-ID: <725b85bf-ff5e-45d6-991e-d92598779f98@kernel.org>
+Date: Tue, 30 Dec 2025 21:31:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] mm/tlb: allow architectures to skip redundant TLB
+ sync IPIs
+To: Lance Yang <lance.yang@linux.dev>, akpm@linux-foundation.org
+Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+ lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
+ shy828301@gmail.com, riel@surriel.com, jannh@google.com,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20251229145245.85452-1-lance.yang@linux.dev>
+ <20251229145245.85452-2-lance.yang@linux.dev>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251229145245.85452-2-lance.yang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Add tests for Atomic<bool> operations.
+On 12/29/25 15:52, Lance Yang wrote:
+> From: Lance Yang <lance.yang@linux.dev>
+> 
+> When unsharing hugetlb PMD page tables, we currently send two IPIs: one
+> for TLB invalidation, and another to synchronize with concurrent GUP-fast
+> walkers.
+> 
+> However, if the TLB flush already reaches all CPUs, the second IPI is
+> redundant. GUP-fast runs with IRQs disabled, so when the TLB flush IPI
+> completes, any concurrent GUP-fast must have finished.
+> 
+> Add tlb_table_flush_implies_ipi_broadcast() to let architectures indicate
+> their TLB flush provides full synchronization, enabling the redundant IPI
+> to be skipped.
+> 
+> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> Signed-off-by: Lance Yang <lance.yang@linux.dev>
+> ---
+>   include/asm-generic/tlb.h | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+> 
+> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> index 4d679d2a206b..e8d99b5e831f 100644
+> --- a/include/asm-generic/tlb.h
+> +++ b/include/asm-generic/tlb.h
+> @@ -261,6 +261,20 @@ static inline void tlb_remove_table_sync_one(void) { }
+>   
+>   #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
+>   
+> +/*
+> + * Architectures can override if their TLB flush already broadcasts IPIs to all
+> + * CPUs when freeing or unsharing page tables.
+> + *
+> + * Return true only when the flush guarantees:
+> + * - IPIs reach all CPUs with potentially stale paging-structure cache entries
+> + * - Synchronization with IRQ-disabled code like GUP-fast
+> + */
+> +#ifndef tlb_table_flush_implies_ipi_broadcast
+> +static inline bool tlb_table_flush_implies_ipi_broadcast(void)
+> +{
+> +	return false;
+> +}
+> +#endif
+>   
+>   #ifndef CONFIG_MMU_GATHER_NO_GATHER
+>   /*
 
-Atomic<bool> does not fit into the existing u8/16/32/64 tests so
-introduce a dedicated tests for it.
 
-Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
----
- rust/kernel/sync/atomic/predefine.rs | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+This should likely get squashed into patch #3. Patch #1 itself does not 
+add a lot of value to be had separately.
 
-diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atomic/predefine.rs
-index 3fc99174b086..42067c6a266c 100644
---- a/rust/kernel/sync/atomic/predefine.rs
-+++ b/rust/kernel/sync/atomic/predefine.rs
-@@ -199,4 +199,20 @@ fn atomic_arithmetic_tests() {
-             assert_eq!(v + 25, x.load(Relaxed));
-         });
-     }
-+
-+    #[test]
-+    fn atomic_bool_tests() {
-+        let x = Atomic::new(false);
-+
-+        assert_eq!(false, x.load(Relaxed));
-+        x.store(true, Relaxed);
-+        assert_eq!(true, x.load(Relaxed));
-+
-+        assert_eq!(true, x.xchg(false, Relaxed));
-+        assert_eq!(false, x.load(Relaxed));
-+
-+        assert_eq!(Err(false), x.cmpxchg(true, true, Relaxed));
-+        assert_eq!(false, x.load(Relaxed));
-+        assert_eq!(Ok(false), x.cmpxchg(false, true, Full));
-+    }
- }
+So best to squash both and have them as #1, to then implement it in #2 
+for x86.
+
 -- 
-2.43.0
+Cheers
 
+David
 
