@@ -1,176 +1,130 @@
-Return-Path: <linux-arch+bounces-15623-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15624-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A825CEBF34
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 13:22:10 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CE26CEBFA3
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 13:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C91033009118
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 12:21:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D4567301057F
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 12:33:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A16320CA2;
-	Wed, 31 Dec 2025 12:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9768D322A30;
+	Wed, 31 Dec 2025 12:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaqYAudL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oE4r/UCf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFB9184540
-	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 12:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414B1320A01;
+	Wed, 31 Dec 2025 12:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767183718; cv=none; b=u2I/0hiu7CFdGObXRH8TnyKKr++LKAQgtTPB1Ny08ghf0JQzR9vH+Ol1EMAzJ6jau8vHGW44uy49Z6+utcdwW4AhKxWSPq4v/8EFj69D03eXq49PcJCpWFks8+NamWQetYFGy1Rn5D3UasRG1pgwKVqjkOoTe2veqD8Zmbm75go=
+	t=1767184420; cv=none; b=W/odhbBiNDBpbHms3QKmH5VRgqo+4Bl/x81z5v7umcQlXdi9cV8qUsqZ7W/0WowGDihmxKBiBaiW28OzukBvkdyOyZ34bJWI/k2xES102OlgpAKq05TXb/6hXysXfpi2RaMF49zybsaZ8HSsRwdHdh9GlBOaj0aJykpO+TxbdUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767183718; c=relaxed/simple;
-	bh=vDYEFC/1ZVknYn2H4nn49xNZKvkbj0AVhwkeRtZjduE=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Oj9EjCccMWX8g9vpMesXJydUOZ579Ayna79INc6R1GZ3A5UpezsXkutECBc7DjBfwkuoZyTUcZe7VAwUImPllU5FhStb0/9acxncM2+obfJubcqShkSCyr/mNR781Jplaj6DiUFvsSuwfgLy0k1R/CRkfugPdjp50RvLyEkV1NQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NaqYAudL; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7d26a7e5639so12226029b3a.1
-        for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 04:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767183716; x=1767788516; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:from
-         :subject:cc:to:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YiPh9iNHDcZdxkSlmhXO/2HAlh7ZmUw+8qvd0QJAg2I=;
-        b=NaqYAudLUQ2i1WChcDHg/9jIshtGewVU+rraXREV/nvJLlF7W0rhbO4BYq9/IJKQK+
-         fbuRFFLGRKJcWKVlc6zxPyOtcDySIxhHay+4ztaHqR1Gtffok2uhvP1iCjhV+fTgsQtC
-         woeloAIcC6RVwr6kJLXN7R4o65u+KUYDg/CXZaHkAIQr8+9F4+Yy21R+BtF+1joZZksp
-         yg3Q1nkqMAx/fpfb9/QR7vcwlSpSZZMLLdTANt4KTEYzrjSjSyIGsDks+bkG46/7dnC1
-         u86d6zhSRzrA0evDSuqvqGSIARR1+LkNONlwpFg4ZVb3lSZ0LTtMTZUFtqGRMKkYx6RT
-         /QNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767183716; x=1767788516;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:from
-         :subject:cc:to:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YiPh9iNHDcZdxkSlmhXO/2HAlh7ZmUw+8qvd0QJAg2I=;
-        b=JgN7KZqb4jQl0nfGF49gFd//PtItDZVi3AaBK3c7rzHexoTdBzKchtPh3M9ifC/vJH
-         iKflGVDQzMq0CzFS6HKkptNYJb+YSS7Z/62Ey7mih3WDQf79bTtFLvB6WFfXuOnH9354
-         P6Ux+i1rchI2IZZ2knJQjzP0jOcEq/QKWiM9qkqLoobOKWrcc2lGD1Hlu5eQSPTFmE75
-         AU7y0/3KkerwW5S8wn65sRfubsCEgzhI1w9erNrFcZdOrcsw2fqNpmCTI9UMGZ2zEqpn
-         h+I4fOhVwGBC4II+KqJMTIMGjAisNRNoTbD65DCrE0DKM5IO2YOGsWh0kTDqNcXUa3DI
-         Xumw==
-X-Forwarded-Encrypted: i=1; AJvYcCXzzxmHf0NCfRrbx7jrbrZDIlBDkgLtCqWME2k1su6z13ir7o6tOXo8twoRf1DHPF8LTO/fJOyATO24@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxvjgoJX/TeOHgHWlsAELUdN5f6CGJXScn7TRTY/64DudlZ/w+
-	EyIu5ZjNyM4kBPEVClrw1cheBJyjLOIXGSqIK5ibfRGlmqPUszSwagu/
-X-Gm-Gg: AY/fxX5XgBT+i2dc3jEHjTebSdlfYubbAdV8SGgQBbEXDIfw9xObWZ1bBnUe31N5D++
-	zge6y50j2qmG3XNVnw+ZuvTWB2hvuBjlUxrKvaJHmJJpH3zElwMoYAvxM0lJnqu6l75S2JUHmzA
-	cgzxST8qNoFyKLjaPiA7ojpEHdABTCDg2A3FHdvqoDj1byiKYA5cfhLJUO9xiuIq3M6Pn/wMvOP
-	WezIWfQPLbnLTGAFff2UbMDcalMnpfJ8upHWvao9nbXI+ugyjZzaoF+A0mP24TcOcxi4+pVZi/8
-	/caNkMvqDRHzXPPrPU0Si+QLZLJ8/duszfsGuYxAJPjG6upNCg0E8jYZ2W0DTolByLU7UK6lm5H
-	vlTxgcJFdE0cg/FUxDVrFgeUjuTjjvUuToXnfNJCiy9mGcfBS0Oc1IgUkal6kNASFy2G45wJeAj
-	SoYKvIjIAkEpLGgmx5+ES6fBedTSGgoFjp/AW0yMapPByEuncLMdTwzeO9mLfKrwnX1Vg=
-X-Google-Smtp-Source: AGHT+IECgioPTsy7O8h4IMn7prBqsQJ/6jdGSCsU2tlyHIbj0RAMCS1DIWe+8/Sx5YpAoA1u+jIUjQ==
-X-Received: by 2002:a05:6a00:140f:b0:807:c2b9:38ec with SMTP id d2e1a72fcca58-807c2b93f63mr16449954b3a.15.1767183715580;
-        Wed, 31 Dec 2025 04:21:55 -0800 (PST)
-Received: from localhost (p5342157-ipxg23901hodogaya.kanagawa.ocn.ne.jp. [180.39.242.157])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7961c130sm30128093a12.3.2025.12.31.04.21.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Dec 2025 04:21:55 -0800 (PST)
-Date: Wed, 31 Dec 2025 21:21:51 +0900 (JST)
-Message-Id: <20251231.212151.889123388469793161.fujita.tomonori@gmail.com>
-To: boqun.feng@gmail.com
-Cc: fujita.tomonori@gmail.com, ojeda@kernel.org, a.hindborg@kernel.org,
- aliceryhl@google.com, bjorn3_gh@protonmail.com, dakr@kernel.org,
- gary@garyguo.net, lossin@kernel.org, tmgross@umich.edu,
- acourbot@nvidia.com, rust-for-linux@vger.kernel.org,
- linux-arch@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] rust: sync: atomic: Add atomic bool support via
- i8 representation
-From: FUJITA Tomonori <fujita.tomonori@gmail.com>
-In-Reply-To: <aVRWDgb29OkHAGnY@tardis-2.local>
-References: <20251230045028.1773445-1-fujita.tomonori@gmail.com>
-	<20251230045028.1773445-2-fujita.tomonori@gmail.com>
-	<aVRWDgb29OkHAGnY@tardis-2.local>
+	s=arc-20240116; t=1767184420; c=relaxed/simple;
+	bh=88co770AdIIceGvPwMVRk+/DHD76pSN9yIlkzwg/7uM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KkJtApnKudXQJBUBfscndO3shhBF3jXVgpbGK58auVkYoWe4ZnSWKjnuiWm8a9jIqBdTkSUBOsXQeNPMLW424A7wrdhymlxMhiTsPiGceKoOoIhaj4si6q7wMh5yWW9knleXeAP9VtAxOAT7IvX6mz3PMoh8xXyp3sMKJYcLpHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oE4r/UCf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105F8C113D0;
+	Wed, 31 Dec 2025 12:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767184419;
+	bh=88co770AdIIceGvPwMVRk+/DHD76pSN9yIlkzwg/7uM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oE4r/UCfpuC1PaAb9MdsdBU8sXRc2ePgeEuIj2rQ9eP5m1TU5zx587hBGLFLuo9xJ
+	 V7g5LTrqyXvIRLQfqgbp2rXq3sEKWQ1HzoGh9Ey43xw0G5Pl9sACb+IRdk+GKEl32D
+	 KEdMisFv9H9UmI0Bhbhmm07yLfYehoNYdLQy+tkyYHwGwF2r3lPx8/2Xp++Ws1aSmK
+	 bOCTDRyrwF0Rg+NieWnXQCDeZK5Nrix7UnVkrveR+OUyU+3JVbFYMpu9OIxv3GQoDF
+	 /llElF2C7gkZ0d07keo6NKLapRuK/yrG1QrFbSmZ2x87lJ+6oDPlbtH7eyIEAgcmC2
+	 To5UZafOHYpqg==
+Message-ID: <1b27a3fa-359a-43d0-bdeb-c31341749367@kernel.org>
+Date: Wed, 31 Dec 2025 13:33:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] skip redundant TLB sync IPIs
+To: Dave Hansen <dave.hansen@intel.com>, Lance Yang <lance.yang@linux.dev>,
+ akpm@linux-foundation.org
+Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+ lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
+ shy828301@gmail.com, riel@surriel.com, jannh@google.com,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20251229145245.85452-1-lance.yang@linux.dev>
+ <f81b98e5-87c0-4c21-9a75-ad5f9b6af6aa@intel.com>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <f81b98e5-87c0-4c21-9a75-ad5f9b6af6aa@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Wed, 31 Dec 2025 06:45:34 +0800
-Boqun Feng <boqun.feng@gmail.com> wrote:
-
-> On Tue, Dec 30, 2025 at 01:50:27PM +0900, FUJITA Tomonori wrote:
->> Add `bool` support, `Atomic<bool>` by using `i8` as its underlying
->> representation.
->> 
->> Rust specifies that `bool` has size 1 and alignment 1 [1], so it
->> matches `i8` on layout; keep `static_assert!()` checks to enforce this
->> assumption at build time.
->> 
->> Implement `AtomicImpl` for `bool` under
->> `CONFIG_ARCH_SUPPORTS_ATOMIC_RMW`, consistent with the existing
->> `i8/i16` gating.
->> 
->> Document the additional safety requirement for
->> `Atomic::<bool>::from_ptr`: only bit patterns 0 (false) and 1 (true)
->> are valid.
->> 
->> Link: https://doc.rust-lang.org/reference/types/boolean.html [1]
->> Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
->> ---
->>  rust/kernel/sync/atomic.rs           |  1 +
->>  rust/kernel/sync/atomic/internal.rs  |  8 ++++++++
->>  rust/kernel/sync/atomic/predefine.rs | 11 +++++++++++
->>  3 files changed, 20 insertions(+)
->> 
->> diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
->> index 4aebeacb961a..2c998cbd300e 100644
->> --- a/rust/kernel/sync/atomic.rs
->> +++ b/rust/kernel/sync/atomic.rs
->> @@ -158,6 +158,7 @@ pub const fn new(v: T) -> Self {
->>      ///
->>      /// - `ptr` is aligned to `align_of::<T>()`.
->>      /// - `ptr` is valid for reads and writes for `'a`.
->> +    /// - If `T` is `bool`, only the bit patterns 0 (`false`) and 1 (`true`) are valid.
+On 12/31/25 05:26, Dave Hansen wrote:
+> On 12/29/25 06:52, Lance Yang wrote:
+> ...
+>> This series introduces a way for architectures to indicate their TLB flush
+>> already provides full synchronization, allowing the redundant IPI to be
+>> skipped. For now, the optimization is implemented for x86 first and applied
+>> to all page table operations that free or unshare tables.
 > 
-> This line is unnecessary, since "`ptr` is valid for ..." means `*ptr`
-> has to have the valid binary representive of `T`.
+> I really don't like all the complexity here. Even on x86, there are
+> three or more ways of deriving this. Having the pv_ops check the value
+> of another pv op is also a bit unsettling.
 
-Understood, I will drop this in v2.
+Right. What I actually meant is that we simply have a property "bool 
+flush_tlb_multi_implies_ipi_broadcast" that we set only to true from the 
+initialization code.
 
+Without comparing the pv_ops.
 
->>      /// - For the duration of `'a`, other accesses to `*ptr` must not cause data races (defined
->>      ///   by [`LKMM`]) against atomic operations on the returned reference. Note that if all other
->>      ///   accesses are atomic, then this safety requirement is trivially fulfilled.
->> diff --git a/rust/kernel/sync/atomic/internal.rs b/rust/kernel/sync/atomic/internal.rs
->> index 0dac58bca2b3..0e12955082e5 100644
->> --- a/rust/kernel/sync/atomic/internal.rs
->> +++ b/rust/kernel/sync/atomic/internal.rs
->> @@ -16,6 +16,7 @@ pub trait Sealed {}
->>  // The C side supports atomic primitives only for `i32` and `i64` (`atomic_t` and `atomic64_t`),
->>  // while the Rust side also layers provides atomic support for `i8` and `i16`
->>  // on top of lower-level C primitives.
->> +impl private::Sealed for bool {}
->>  impl private::Sealed for i8 {}
->>  impl private::Sealed for i16 {}
->>  impl private::Sealed for i32 {}
->> @@ -37,6 +38,13 @@ pub trait AtomicImpl: Sized + Send + Copy + private::Sealed {
->>      type Delta;
->>  }
->>  
->> +// The current helpers of load/store uses `{WRITE,READ}_ONCE()` hence the atomicity is only
->> +// guaranteed against read-modify-write operations if the architecture supports native atomic RmW.
->> +#[cfg(CONFIG_ARCH_SUPPORTS_ATOMIC_RMW)]
->> +impl AtomicImpl for bool {
->> +    type Delta = Self;
->> +}
+That should reduce the complexity quite a bit IMHO.
+
+But maybe you have an even better way on how to indicate support, in a 
+very simple way.
+
 > 
-> I don't think you need this impl block.
+> That said, complexity can be worth it with sufficient demonstrated
+> gains. But:
+> 
+>> When unsharing hugetlb PMD page tables or collapsing pages in khugepaged,
+>> we send two IPIs: one for TLB invalidation, and another to synchronize
+>> with concurrent GUP-fast walkers.
+> 
+> Those aren't exactly hot paths. khugepaged is fundamentally rate
+> limited. I don't think unsharing hugetlb PMD page tables just is all
+> that common either.
 
-You are right. Only the backing atomic types need to implement this. I
-will drop in v2.
+Given that the added IPIs during unsharing broke Oracle DBs rather badly 
+[1], I think this is actually a case worth optimizing.
 
+I'd assume that the impact can be measured on a many-core/many-socket 
+system with an adjusted reproducer of [1]. The impact will not be as big 
+as what [1] fixed (we reduced the tlb_remove_table_sync_one() 
+invocations quite drastically).
 
-Thanks!
+After all, tlb_remove_table_sync_one() sends an IPI to *all* CPUs in the 
+system, not just the ones in the MM CPU mask, which is rather bad on 
+systems with a lot of CPUs. Of course, this way we can only optimize on 
+systems that actually send IPIs during TLB flushes.
 
+For other systems, it will be more tricky to avoid these broadcast IPIs.
+
+(I have the faint recollection that the IPI broadcast through 
+tlb_remove_table_sync_one() is a problem when called from 
+__tlb_remove_table_one() on RT systems ...)
+
+[1] https://lkml.kernel.org/r/20251223214037.580860-1-david@kernel.org
+
+-- 
+Cheers
+
+David
 
