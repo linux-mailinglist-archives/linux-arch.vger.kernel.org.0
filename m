@@ -1,135 +1,181 @@
-Return-Path: <linux-arch+bounces-15612-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15613-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C613CEB130
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 03:30:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17855CEB251
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 04:00:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 96D53300C340
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 02:30:17 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 854D6300A56D
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 03:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A60A2E62B5;
-	Wed, 31 Dec 2025 02:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4361A223DD4;
+	Wed, 31 Dec 2025 03:00:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XWjmBNlf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VogUHt8q"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C862E62A2
-	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 02:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820A91F5437
+	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 03:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767148196; cv=none; b=Xy1m2btp83YYFbzV4OmsKR5jIuiaK14aldWNE+btfhdgnP2SCElK61Qk3boPb1tGf80GraXZ7ILn3NjDQXJSMuQ5pVb6S45hpecUWAw0FRcInmIA+heJt308dBUzUI7vkkAsqQhEiyMhZmUIIOmbfifSTm2CXbX039j+cTpHjr4=
+	t=1767150043; cv=none; b=qn9MdKlYEyhs5GcYoZVjQAsX8XPamvGWKl8jcP3rv1iHLNTMthiaQHvo7z6ihlzKyd+f0FKoO0UdA5rR3DiD/4RY8dwXdU7PWRVWDoG1RMvpWejjc+7t1dF9R2j1LKErq6jqzEorZVN59Jp7bYnKiAyDH2Ae6QjutRffwo18kPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767148196; c=relaxed/simple;
-	bh=7rXjqJR/SeOtUouPwaConEb1plJhkxgMWyk7kIs0yws=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P7nJmuOur9ue2jt724yRoObMOmDhbyyYmepB+tUm0rG6w9SWUFHPTHYFOdJliEnf6/v8bdP6lwhQJc/fBjHN5OCm0GrJ/JU3e1ZdvsWczILrY7Vnqqf3f+kA6tSOBDCZy1PjtVGTJ82nOo5eQBkarYQOIko49ctFX/Yi40QCa/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XWjmBNlf; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <af13561e-c512-4ab3-af5f-3b2057ac6667@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767148180;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=37nD/3cQoIBI0/8IexFOw2YpceIM7p2wvl3IFIN7jQc=;
-	b=XWjmBNlfSH4f7yYWlEW51gqh/6yRLbDw2YvyaNBHRcNpxz64Ud8N5126J65U7ERVSnQQfr
-	59jIGP68fKaJXi4HB2xgjLejyEflrzDJT8yqvo2Xzz5i73aE1om/wwQUGbnV2tYXPzjyTx
-	xbZc/lV026OlxMR2SGFTkWLyaXCHkQo=
-Date: Wed, 31 Dec 2025 10:29:29 +0800
+	s=arc-20240116; t=1767150043; c=relaxed/simple;
+	bh=dHwD+0A9amhmH8NdE47S8FVYcVASPYZHLixjaKOa6oE=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=SiT5tuSu3NsS8t63R5tzjPUgSDNfDQ7yiz/h7DSQVM80dbLmaO4K8K1d0UPMnHTlojyLfZ/YgxPqWvyfpHdRz+HKlIkgS7+mUPVLjFhnYGYso3DThhzrYq3x2jR+VpF4eNYZQfS9J3E60SZHhP8CjaRXRQXvYOzv20Bnjj4ArmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VogUHt8q; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b7ce5d6627dso1865323566b.2
+        for <linux-arch@vger.kernel.org>; Tue, 30 Dec 2025 19:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767150040; x=1767754840; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MMZvWbbIBBmy2hVTByTqVU/28wHL8fmh5GRIKAADEPk=;
+        b=VogUHt8qE0JG0+ZR+BZdGNgTM0lQ0RbLlihyPCCYyRa6Owo4AXogDmTcf8mEtFZpl0
+         gmT/ufgX+s+y07qhWiIieLOWwgJO9dJy+hnLR3R1v7oCU9rzZscMgwvOoydNVvAmD0Mx
+         Uh7lcHXn5neVC8qi+hcG/amzx9Lzvq4ydVsfNbFPASHML0VvMSlrebElHAt6ZHtIMHiv
+         oUISMCngwToQqQQlQyk51G3y1oPBeBbjOhet6xya4KaC1+c8hrJFvtBBrWFHi4gvpGvp
+         cFVzVU7ukzmjwtwMCLBLlEkdEluOTjzhlIKOhjpOj9UUSZoeqx7tSuuByO8T54aN/exT
+         TtEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767150040; x=1767754840;
+        h=message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MMZvWbbIBBmy2hVTByTqVU/28wHL8fmh5GRIKAADEPk=;
+        b=Kub2jdGRTyp2q85yb4J2aiPDYj6YBZzA8Kfp8NTDAWE8mKBN8DxDrADLK/9ShleyBV
+         s3vWd/bIA59QWd2Id6zQ6EqaQpjSN4qMftsuv9BM5HGe12MBy8wpawtmCmfi/Hbz5vcg
+         vswJL8+0rSm4vh3EgkdP9rKodvfWDDdub9Rc89eFJCXpyQSRA+VfpHwxXXNjYAGgW/CB
+         +W90M6RKeRALjyI5WIklhstePKNuxVlr00mdt2pQYS8m7+Hnv/rENck9en5/fwsZpOo+
+         4uVfgRJPg67DJ0gue+UvGAFe/E4Ejq3OnGVn4WC9sTx9H729yBEMR3oI9UQ6bSV07rhK
+         mnqA==
+X-Gm-Message-State: AOJu0YwxIZhwZoiI8vQdAIOM01nEX5r9CN2TQs6I8xUPOGg/WT1VGELM
+	RAktBbnmZqzjdJgpbvOXip3JhvcrY6BY/4/1IrbMqGpWc/A4KI7IAmca
+X-Gm-Gg: AY/fxX79B4nfaQTU5dLT92QS8FowIwVssFkOXebW8IuZt32gmIsCHJ5/d5k6UJTUQS7
+	br1P1b41qtVxXwJKuC6HyqElHyStFnFYSXPlDRZypyFVvBdJb29yMXVchKYeKawu3Ky0e7phAKP
+	T0UL5Z4WR2BQb1QM3dzlaipHdKQl6Wwz74Q7bPmlw6eJK739t7IODnsEm/1sDn3e/v/3XhbkK7H
+	oQRUj3OMgjbR6d0/oNDKZZ7XQQwWLGR7ZU2wqGy8Pj4c3/aQITPh4A8cHVyA4i0Wymz+8RkrOgn
+	X6X1FjyqLNxh0yAE4R/qmiOsXCxjDAA4Fz08JHrED2H5/8virXY6WW8KMMfbfIuqprqOBym15jI
+	tN18EWaop7dWDqj7ry4Fh1eqooCBMk+UF21qBuGlsCC12mtb4PWKolDkmMAx4RgegW/L0nFU59l
+	jCyAogF7MX0Q==
+X-Google-Smtp-Source: AGHT+IF8S0Qg+GmPFjjVlu2NlHvua7TCiotJg06/+N0u+q+yODVpwkPNVE7It1PwxVV5gykBDT11FQ==
+X-Received: by 2002:a17:907:78b:b0:b83:975:f8a5 with SMTP id a640c23a62f3a-b830976511cmr2325146266b.40.1767150039609;
+        Tue, 30 Dec 2025 19:00:39 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037a6050dsm3865880566b.9.2025.12.30.19.00.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 30 Dec 2025 19:00:39 -0800 (PST)
+From: Wei Yang <richard.weiyang@gmail.com>
+To: will@kernel.org,
+	aneesh.kumar@kernel.org,
+	akpm@linux-foundation.org,
+	npiggin@gmail.com,
+	peterz@infradead.org,
+	hca@linux.ibm.com,
+	gor@linux.ibm.com,
+	agordeev@linux.ibm.com,
+	borntraeger@linux.ibm.com,
+	svens@linux.ibm.com,
+	arnd@arndb.de
+Cc: linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-s390@vger.kernel.org,
+	Wei Yang <richard.weiyang@gmail.com>,
+	"David Hildenbrand (Red Hat)" <david@kernel.org>
+Subject: [PATCH] mm/mmu_gather: remove @delay_remap of __tlb_remove_page_size()
+Date: Wed, 31 Dec 2025 03:00:26 +0000
+Message-Id: <20251231030026.15938-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/3] mm/tlb: allow architectures to skip redundant TLB
- sync IPIs
-Content-Language: en-US
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>,
- akpm@linux-foundation.org
-Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
- peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
- lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
- shy828301@gmail.com, riel@surriel.com, jannh@google.com,
- linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20251229145245.85452-1-lance.yang@linux.dev>
- <20251229145245.85452-2-lance.yang@linux.dev>
- <725b85bf-ff5e-45d6-991e-d92598779f98@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <725b85bf-ff5e-45d6-991e-d92598779f98@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+Functioin __tlb_remove_page_size() is only used in
+tlb_remove_page_size() with @delay_remap set to false and it is passed
+directly to __tlb_remove_folio_pages_size().
 
+Remove @delay_remap of __tlb_remove_page_size() and call
+__tlb_remove_folio_pages_size() with false @delay_remap.
 
-On 2025/12/31 04:31, David Hildenbrand (Red Hat) wrote:
-> On 12/29/25 15:52, Lance Yang wrote:
->> From: Lance Yang <lance.yang@linux.dev>
->>
->> When unsharing hugetlb PMD page tables, we currently send two IPIs: one
->> for TLB invalidation, and another to synchronize with concurrent GUP-fast
->> walkers.
->>
->> However, if the TLB flush already reaches all CPUs, the second IPI is
->> redundant. GUP-fast runs with IRQs disabled, so when the TLB flush IPI
->> completes, any concurrent GUP-fast must have finished.
->>
->> Add tlb_table_flush_implies_ipi_broadcast() to let architectures indicate
->> their TLB flush provides full synchronization, enabling the redundant IPI
->> to be skipped.
->>
->> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
->> Signed-off-by: Lance Yang <lance.yang@linux.dev>
->> ---
->>   include/asm-generic/tlb.h | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
->>
->> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
->> index 4d679d2a206b..e8d99b5e831f 100644
->> --- a/include/asm-generic/tlb.h
->> +++ b/include/asm-generic/tlb.h
->> @@ -261,6 +261,20 @@ static inline void 
->> tlb_remove_table_sync_one(void) { }
->>   #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
->> +/*
->> + * Architectures can override if their TLB flush already broadcasts 
->> IPIs to all
->> + * CPUs when freeing or unsharing page tables.
->> + *
->> + * Return true only when the flush guarantees:
->> + * - IPIs reach all CPUs with potentially stale paging-structure 
->> cache entries
->> + * - Synchronization with IRQ-disabled code like GUP-fast
->> + */
->> +#ifndef tlb_table_flush_implies_ipi_broadcast
->> +static inline bool tlb_table_flush_implies_ipi_broadcast(void)
->> +{
->> +    return false;
->> +}
->> +#endif
->>   #ifndef CONFIG_MMU_GATHER_NO_GATHER
->>   /*
-> 
-> 
-> This should likely get squashed into patch #3. Patch #1 itself does not 
-> add a lot of value to be had separately.
-> 
-> So best to squash both and have them as #1, to then implement it in #2 
-> for x86.
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>
+---
+ arch/s390/include/asm/tlb.h | 6 ++----
+ include/asm-generic/tlb.h   | 5 ++---
+ mm/mmu_gather.c             | 5 ++---
+ 3 files changed, 6 insertions(+), 10 deletions(-)
 
-Sounds good, will do! Squashing #1 and #3 together, keeping the x86
-implementation as #2 ;)
+diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
+index 1e50f6f1ad9d..0b7b4df94b24 100644
+--- a/arch/s390/include/asm/tlb.h
++++ b/arch/s390/include/asm/tlb.h
+@@ -24,7 +24,7 @@
+ 
+ static inline void tlb_flush(struct mmu_gather *tlb);
+ static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
+-		struct page *page, bool delay_rmap, int page_size);
++		struct page *page, int page_size);
+ static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
+ 		struct page *page, unsigned int nr_pages, bool delay_rmap);
+ 
+@@ -46,10 +46,8 @@ static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
+  * s390 doesn't delay rmap removal.
+  */
+ static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
+-		struct page *page, bool delay_rmap, int page_size)
++		struct page *page, int page_size)
+ {
+-	VM_WARN_ON_ONCE(delay_rmap);
+-
+ 	free_folio_and_swap_cache(page_folio(page));
+ 	return false;
+ }
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index 4d679d2a206b..3975f7d11553 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -287,8 +287,7 @@ struct mmu_gather_batch {
+  */
+ #define MAX_GATHER_BATCH_COUNT	(10000UL/MAX_GATHER_BATCH)
+ 
+-extern bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
+-		bool delay_rmap, int page_size);
++extern bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_size);
+ bool __tlb_remove_folio_pages(struct mmu_gather *tlb, struct page *page,
+ 		unsigned int nr_pages, bool delay_rmap);
+ 
+@@ -510,7 +509,7 @@ static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
+ static inline void tlb_remove_page_size(struct mmu_gather *tlb,
+ 					struct page *page, int page_size)
+ {
+-	if (__tlb_remove_page_size(tlb, page, false, page_size))
++	if (__tlb_remove_page_size(tlb, page, page_size))
+ 		tlb_flush_mmu(tlb);
+ }
+ 
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index 7468ec388455..2faa23d7f8d4 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -210,10 +210,9 @@ bool __tlb_remove_folio_pages(struct mmu_gather *tlb, struct page *page,
+ 					     PAGE_SIZE);
+ }
+ 
+-bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
+-		bool delay_rmap, int page_size)
++bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_size)
+ {
+-	return __tlb_remove_folio_pages_size(tlb, page, 1, delay_rmap, page_size);
++	return __tlb_remove_folio_pages_size(tlb, page, 1, false, page_size);
+ }
+ 
+ #endif /* MMU_GATHER_NO_GATHER */
+-- 
+2.34.1
 
-Cheers,
-Lance
 
