@@ -1,181 +1,204 @@
-Return-Path: <linux-arch+bounces-15613-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15614-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17855CEB251
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 04:00:45 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB0D4CEB278
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 04:03:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 854D6300A56D
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 03:00:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EAEB43008550
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 03:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4361A223DD4;
-	Wed, 31 Dec 2025 03:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0787225D1E6;
+	Wed, 31 Dec 2025 03:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VogUHt8q"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UnQ3nijP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820A91F5437
-	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 03:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B91C23D7E0
+	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 03:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767150043; cv=none; b=qn9MdKlYEyhs5GcYoZVjQAsX8XPamvGWKl8jcP3rv1iHLNTMthiaQHvo7z6ihlzKyd+f0FKoO0UdA5rR3DiD/4RY8dwXdU7PWRVWDoG1RMvpWejjc+7t1dF9R2j1LKErq6jqzEorZVN59Jp7bYnKiAyDH2Ae6QjutRffwo18kPk=
+	t=1767150236; cv=none; b=a2BlsaHVAsljUEKHe0u5LIG4NUQkqo461Iyk0PDmT1FCUw+sLCtU7S80inwIAcxV31MNbV0jOiEwnhNQzsEqZV44GUTe9GCPdpvo31Gp/BlqnsRrsKKlCizmfyFVM7tJDfDlBUffXgPGMtPOCQsd9+F/iY9KWnsTVdCjtsC49x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767150043; c=relaxed/simple;
-	bh=dHwD+0A9amhmH8NdE47S8FVYcVASPYZHLixjaKOa6oE=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=SiT5tuSu3NsS8t63R5tzjPUgSDNfDQ7yiz/h7DSQVM80dbLmaO4K8K1d0UPMnHTlojyLfZ/YgxPqWvyfpHdRz+HKlIkgS7+mUPVLjFhnYGYso3DThhzrYq3x2jR+VpF4eNYZQfS9J3E60SZHhP8CjaRXRQXvYOzv20Bnjj4ArmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VogUHt8q; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b7ce5d6627dso1865323566b.2
-        for <linux-arch@vger.kernel.org>; Tue, 30 Dec 2025 19:00:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767150040; x=1767754840; darn=vger.kernel.org;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MMZvWbbIBBmy2hVTByTqVU/28wHL8fmh5GRIKAADEPk=;
-        b=VogUHt8qE0JG0+ZR+BZdGNgTM0lQ0RbLlihyPCCYyRa6Owo4AXogDmTcf8mEtFZpl0
-         gmT/ufgX+s+y07qhWiIieLOWwgJO9dJy+hnLR3R1v7oCU9rzZscMgwvOoydNVvAmD0Mx
-         Uh7lcHXn5neVC8qi+hcG/amzx9Lzvq4ydVsfNbFPASHML0VvMSlrebElHAt6ZHtIMHiv
-         oUISMCngwToQqQQlQyk51G3y1oPBeBbjOhet6xya4KaC1+c8hrJFvtBBrWFHi4gvpGvp
-         cFVzVU7ukzmjwtwMCLBLlEkdEluOTjzhlIKOhjpOj9UUSZoeqx7tSuuByO8T54aN/exT
-         TtEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767150040; x=1767754840;
-        h=message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MMZvWbbIBBmy2hVTByTqVU/28wHL8fmh5GRIKAADEPk=;
-        b=Kub2jdGRTyp2q85yb4J2aiPDYj6YBZzA8Kfp8NTDAWE8mKBN8DxDrADLK/9ShleyBV
-         s3vWd/bIA59QWd2Id6zQ6EqaQpjSN4qMftsuv9BM5HGe12MBy8wpawtmCmfi/Hbz5vcg
-         vswJL8+0rSm4vh3EgkdP9rKodvfWDDdub9Rc89eFJCXpyQSRA+VfpHwxXXNjYAGgW/CB
-         +W90M6RKeRALjyI5WIklhstePKNuxVlr00mdt2pQYS8m7+Hnv/rENck9en5/fwsZpOo+
-         4uVfgRJPg67DJ0gue+UvGAFe/E4Ejq3OnGVn4WC9sTx9H729yBEMR3oI9UQ6bSV07rhK
-         mnqA==
-X-Gm-Message-State: AOJu0YwxIZhwZoiI8vQdAIOM01nEX5r9CN2TQs6I8xUPOGg/WT1VGELM
-	RAktBbnmZqzjdJgpbvOXip3JhvcrY6BY/4/1IrbMqGpWc/A4KI7IAmca
-X-Gm-Gg: AY/fxX79B4nfaQTU5dLT92QS8FowIwVssFkOXebW8IuZt32gmIsCHJ5/d5k6UJTUQS7
-	br1P1b41qtVxXwJKuC6HyqElHyStFnFYSXPlDRZypyFVvBdJb29yMXVchKYeKawu3Ky0e7phAKP
-	T0UL5Z4WR2BQb1QM3dzlaipHdKQl6Wwz74Q7bPmlw6eJK739t7IODnsEm/1sDn3e/v/3XhbkK7H
-	oQRUj3OMgjbR6d0/oNDKZZ7XQQwWLGR7ZU2wqGy8Pj4c3/aQITPh4A8cHVyA4i0Wymz+8RkrOgn
-	X6X1FjyqLNxh0yAE4R/qmiOsXCxjDAA4Fz08JHrED2H5/8virXY6WW8KMMfbfIuqprqOBym15jI
-	tN18EWaop7dWDqj7ry4Fh1eqooCBMk+UF21qBuGlsCC12mtb4PWKolDkmMAx4RgegW/L0nFU59l
-	jCyAogF7MX0Q==
-X-Google-Smtp-Source: AGHT+IF8S0Qg+GmPFjjVlu2NlHvua7TCiotJg06/+N0u+q+yODVpwkPNVE7It1PwxVV5gykBDT11FQ==
-X-Received: by 2002:a17:907:78b:b0:b83:975:f8a5 with SMTP id a640c23a62f3a-b830976511cmr2325146266b.40.1767150039609;
-        Tue, 30 Dec 2025 19:00:39 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037a6050dsm3865880566b.9.2025.12.30.19.00.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Dec 2025 19:00:39 -0800 (PST)
-From: Wei Yang <richard.weiyang@gmail.com>
-To: will@kernel.org,
-	aneesh.kumar@kernel.org,
-	akpm@linux-foundation.org,
-	npiggin@gmail.com,
-	peterz@infradead.org,
-	hca@linux.ibm.com,
-	gor@linux.ibm.com,
-	agordeev@linux.ibm.com,
-	borntraeger@linux.ibm.com,
-	svens@linux.ibm.com,
-	arnd@arndb.de
-Cc: linux-arch@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-s390@vger.kernel.org,
-	Wei Yang <richard.weiyang@gmail.com>,
-	"David Hildenbrand (Red Hat)" <david@kernel.org>
-Subject: [PATCH] mm/mmu_gather: remove @delay_remap of __tlb_remove_page_size()
-Date: Wed, 31 Dec 2025 03:00:26 +0000
-Message-Id: <20251231030026.15938-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+	s=arc-20240116; t=1767150236; c=relaxed/simple;
+	bh=RJ39g3nQ/9p3fLkTnWC3KA9Fm+fzogIq3ixw9ivEg8M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kI9NmWLBoeU4/A3ksTD6nBkEXbpOVmXCMSVHp33BbNIneRZ5nhvcvI+Cy557LCfaomlzJQ9BAEFhG/GMZVOdB0jMVs8f1giyxG5HMACJBtKEul5JleBsA9NbA3IL3jNGoj2vqKJJrmJ5Q08qmEb1VlcpuwTPXjHbTPf6m9H5h7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UnQ3nijP; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <dafd2f83-c242-4d60-8270-8e52e2e066e6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767150231;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TWAvq8dov7INFoDSveKxp8LJoL97QfNYZbwnUjDG4hM=;
+	b=UnQ3nijP6X0/b80mQR948EKNaJrCZarFp2fTfHeiSDk84uHzXtZJ2uV6Xetixo917rL93u
+	1YCs1wkbcEpQskFZ9WFMzZ4LbTB6oBFIPc86SXcd4Q0/KM1eCVW7oZUekXGoOBs3RexWxs
+	4qdflp3C1Jn82CTaW7XnSF1hlEd/+8E=
+Date: Wed, 31 Dec 2025 11:03:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH v2 3/3] mm: embed TLB flush IPI check in
+ tlb_remove_table_sync_one()
+Content-Language: en-US
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ akpm@linux-foundation.org
+Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+ lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
+ shy828301@gmail.com, riel@surriel.com, jannh@google.com,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20251229145245.85452-1-lance.yang@linux.dev>
+ <20251229145245.85452-4-lance.yang@linux.dev>
+ <f4d5548d-6045-47a3-b233-0a67702bb477@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <f4d5548d-6045-47a3-b233-0a67702bb477@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Functioin __tlb_remove_page_size() is only used in
-tlb_remove_page_size() with @delay_remap set to false and it is passed
-directly to __tlb_remove_folio_pages_size().
 
-Remove @delay_remap of __tlb_remove_page_size() and call
-__tlb_remove_folio_pages_size() with false @delay_remap.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>
----
- arch/s390/include/asm/tlb.h | 6 ++----
- include/asm-generic/tlb.h   | 5 ++---
- mm/mmu_gather.c             | 5 ++---
- 3 files changed, 6 insertions(+), 10 deletions(-)
+On 2025/12/31 04:33, David Hildenbrand (Red Hat) wrote:
+> On 12/29/25 15:52, Lance Yang wrote:
+>> From: Lance Yang <lance.yang@linux.dev>
+>>
+>> Embed the tlb_table_flush_implies_ipi_broadcast() check directly inside
+>> tlb_remove_table_sync_one() instead of requiring every caller to check
+>> it explicitly. This relies on callers to do the right thing: flush with
+>> freed_tables=true or unshared_tables=true beforehand.
+>>
+>> All existing callers satisfy this requirement:
+>>
+>> 1. mm/khugepaged.c:1188 (collapse_huge_page):
+>>
+>>     pmdp_collapse_flush(vma, address, pmd)
+>>     -> flush_tlb_range(vma, address, address + HPAGE_PMD_SIZE)
+>>        -> flush_tlb_mm_range(mm, ..., freed_tables = true)
+>>           -> flush_tlb_multi(mm_cpumask(mm), info)
+>>
+>>     So freed_tables=true before calling tlb_remove_table_sync_one().
+>>
+>> 2. include/asm-generic/tlb.h:861 (tlb_flush_unshared_tables):
+>>
+>>     tlb_flush_mmu_tlbonly(tlb)
+>>     -> tlb_flush(tlb)
+>>        -> flush_tlb_mm_range(mm, ..., unshared_tables = true)
+>>           -> flush_tlb_multi(mm_cpumask(mm), info)
+>>
+>>     unshared_tables=true (equivalent to freed_tables for sending IPIs).
+>>
+>> 3. mm/mmu_gather.c:341 (__tlb_remove_table_one):
+>>
+>>     When we can't allocate a batch page in tlb_remove_table(), we do:
+>>
+>>     tlb_table_invalidate(tlb)
+>>     -> tlb_flush_mmu_tlbonly(tlb)
+>>        -> flush_tlb_mm_range(mm, ..., freed_tables = true)
+>>           -> flush_tlb_multi(mm_cpumask(mm), info)
+>>
+>>     Then:
+>>     tlb_remove_table_one(table)
+>>     -> __tlb_remove_table_one(table) // if !CONFIG_PT_RECLAIM
+>>        -> tlb_remove_table_sync_one()
+>>
+>>     freed_tables=true, and this should work too.
+>>
+>>     Why is tlb->freed_tables guaranteed? Because callers like
+>>     pte_free_tlb() (via free_pte_range) set freed_tables=true before
+>>     calling __pte_free_tlb(), which then calls tlb_remove_table().
+>>     We cannot free page tables without freed_tables=true.
+>>
+>>     Note that tlb_remove_table_sync_one() was a NOP on bare metal x86
+>>     (CONFIG_MMU_GATHER_RCU_TABLE_FREE=n) before commit a37259732a7d
+>>     ("x86/mm: Make MMU_GATHER_RCU_TABLE_FREE unconditional").
+>>
+>> 4-5. mm/khugepaged.c:1683,1819 (pmdp_get_lockless_sync macro):
+>>
+>>     Same as #1. These also use pmdp_collapse_flush() beforehand.
+>>
+>> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+>> Signed-off-by: Lance Yang <lance.yang@linux.dev>
+> 
+> LGTM. I think we should document that somewhere. Can we add some 
 
-diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
-index 1e50f6f1ad9d..0b7b4df94b24 100644
---- a/arch/s390/include/asm/tlb.h
-+++ b/arch/s390/include/asm/tlb.h
-@@ -24,7 +24,7 @@
- 
- static inline void tlb_flush(struct mmu_gather *tlb);
- static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
--		struct page *page, bool delay_rmap, int page_size);
-+		struct page *page, int page_size);
- static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
- 		struct page *page, unsigned int nr_pages, bool delay_rmap);
- 
-@@ -46,10 +46,8 @@ static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
-  * s390 doesn't delay rmap removal.
-  */
- static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
--		struct page *page, bool delay_rmap, int page_size)
-+		struct page *page, int page_size)
- {
--	VM_WARN_ON_ONCE(delay_rmap);
--
- 	free_folio_and_swap_cache(page_folio(page));
- 	return false;
- }
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 4d679d2a206b..3975f7d11553 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -287,8 +287,7 @@ struct mmu_gather_batch {
-  */
- #define MAX_GATHER_BATCH_COUNT	(10000UL/MAX_GATHER_BATCH)
- 
--extern bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
--		bool delay_rmap, int page_size);
-+extern bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_size);
- bool __tlb_remove_folio_pages(struct mmu_gather *tlb, struct page *page,
- 		unsigned int nr_pages, bool delay_rmap);
- 
-@@ -510,7 +509,7 @@ static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
- static inline void tlb_remove_page_size(struct mmu_gather *tlb,
- 					struct page *page, int page_size)
- {
--	if (__tlb_remove_page_size(tlb, page, false, page_size))
-+	if (__tlb_remove_page_size(tlb, page, page_size))
- 		tlb_flush_mmu(tlb);
- }
- 
+Thanks!
+
+> kerneldoc for tlb_remove_table_sync_one() where we document that it 
+> doesn't to any sync if a previous TLB flush when removing/unsharing page 
+> tables would have already performed an IPI?
+
+Fair point. Would something like this work?
+
+---8<---
 diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-index 7468ec388455..2faa23d7f8d4 100644
+index 7b588643cbae..9139f0a6b8bd 100644
 --- a/mm/mmu_gather.c
 +++ b/mm/mmu_gather.c
-@@ -210,10 +210,9 @@ bool __tlb_remove_folio_pages(struct mmu_gather *tlb, struct page *page,
- 					     PAGE_SIZE);
- }
- 
--bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
--		bool delay_rmap, int page_size)
-+bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_size)
- {
--	return __tlb_remove_folio_pages_size(tlb, page, 1, delay_rmap, page_size);
-+	return __tlb_remove_folio_pages_size(tlb, page, 1, false, page_size);
- }
- 
- #endif /* MMU_GATHER_NO_GATHER */
--- 
-2.34.1
+@@ -274,6 +274,20 @@ static void tlb_remove_table_smp_sync(void *arg)
+  	/* Simply deliver the interrupt */
+  }
+
++/**
++ * tlb_remove_table_sync_one - Send IPI to synchronize page table 
+operations
++ *
++ * Sends an IPI to all CPUs to synchronize when freeing or unsharing page
++ * tables (e.g., to ensure concurrent GUP-fast walkers have completed).
++ *
++ * If a previous TLB flush (when removing/unsharing page tables) already
++ * broadcast IPIs to all CPUs, the redundant IPI is skipped. The 
+optimization
++ * relies on architectures implementing 
+tlb_table_flush_implies_ipi_broadcast()
++ * to indicate when their TLB flush provides sufficient synchronization.
++ *
++ * Note that callers must ensure that a TLB flush with freed_tables=true or
++ * unshared_tables=true has been performed before calling.
++ */
+  void tlb_remove_table_sync_one(void)
+  {
+  	/* Skip the IPI if the TLB flush already synchronized with other CPUs. */
+---
+
+Cheers,
+Lance
+
+> 
+>> ---
+>>   mm/mmu_gather.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+>> index 7468ec388455..7b588643cbae 100644
+>> --- a/mm/mmu_gather.c
+>> +++ b/mm/mmu_gather.c
+>> @@ -276,6 +276,10 @@ static void tlb_remove_table_smp_sync(void *arg)
+>>   void tlb_remove_table_sync_one(void)
+>>   {
+>> +    /* Skip the IPI if the TLB flush already synchronized with other 
+>> CPUs. */
+>> +    if (tlb_table_flush_implies_ipi_broadcast())
+>> +        return;
+>> +
+>>       /*
+>>        * This isn't an RCU grace period and hence the page-tables 
+>> cannot be
+>>        * assumed to be actually RCU-freed.
+> 
+> 
 
 
