@@ -1,237 +1,174 @@
-Return-Path: <linux-arch+bounces-15619-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15621-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 085DFCEB8B3
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 09:33:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F189CEBB67
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 10:43:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C1EED302F815
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 08:32:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 13DCA30321DB
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 09:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE5130BF59;
-	Wed, 31 Dec 2025 08:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F7C31960B;
+	Wed, 31 Dec 2025 09:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="sEL39B7U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZEa2fbsn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0CB2F7455;
-	Wed, 31 Dec 2025 08:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7649314D1F
+	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 09:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767169957; cv=none; b=sV5jEza3gL9zmeOf521hBO8oo3QkiqhybZVFQIFueiqnN1GRp+MnC64JxzjQZ/OgLmlMa+t7f3AWEu6Gab/EQ9BsN7R7KL99Yo8XblzoCZqxb40kdu7mpTZkU8JD6KfdSuqTpqVI+hBrcepYhETtzLSoYe/1YUsA7u6oFfYJ1gE=
+	t=1767174169; cv=none; b=JxUFoY6cNgM8Cbfou6QCSd0vPgivJL4bWaHkaLCdRJI5U82ZKlax8b+uAKD7s6/01jpgvQC3uotJx7daDcnc7k5hlTgm5axn6b5Vvf8NqnwgZTiUo1AF22D7UQSZ/xBQG3atQHgh1Ea1XTvBs44pr8Mz1ezBgjxE4X8dUMfP8e8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767169957; c=relaxed/simple;
-	bh=D8CLdfYVhw03T7M683GXA2rJE7VSouolMexLSrJZi+s=;
-	h=To:Cc:Message-ID:In-Reply-To:References:From:Subject:Date; b=ErqIM/AX9IspjWOBmwf+8up/L290nFH27CEbelS/IoVJf36W8c/JzxxI1VZNuVP+dikydBXbW6qHJereI8EFtsTJ4In2XzhwfGEt7J/taMz7QlGce9DYAvd+Kp3PYXJfsfeIUG0xrouPaQthIe5GlmMbuexKRbhFumMi8ned198=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=sEL39B7U; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfout.stl.internal (Postfix) with ESMTP id 1CE611D000C4;
-	Wed, 31 Dec 2025 03:32:34 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Wed, 31 Dec 2025 03:32:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767169953; x=
-	1767256353; bh=GTOExrkFdZz6ILdbiBTGhbMt+0HZHq9E17gN90wdwYg=; b=s
-	EL39B7URD/7b1EY2rfw7KLprl3qc+VO5DMWLvcLsZZqT5MNNq13qeno7NsVGmscZ
-	qDSKEeef15KEvl4EITkf0HiN6+8eMPFzZPtVqXhva5ucIm3cM7qpjdFcGuebuzA9
-	vf2dEajXjppmhi1L5wIJC3JfN1pwAqPDkoJ+Y/ZJIB7nqs6oawi7gB813qLyrNd3
-	IREBEjMpCaNnqgmraxgs0deUFuG5GQok6Kp/d6i0hEOQRF4LNbtLqJ44AVsN82jT
-	b09jJijckWquJsL5S4jCRC1Cv+zxb5CzWFsEf89Z+ya/Camw6drDaTN7maz6UiwF
-	sZVbJ4Gyu9O8EXqyt2l0A==
-X-ME-Sender: <xms:od9UaWXyOr8S_b9ovWf9w65-1BEEb0vj-v_VvqJxzOPOxYA__fRcmg>
-    <xme:od9UaR0rspE6vHj5TfVzXYAa6jwJzKbvLWaEnskd3oBvXg-xDSdQXZVGnReCJ7tt2
-    4ol0iUDVQtPTdDog94-eqAhWfs1WutBNs-VcaU8xu0ilPcHihZLudg>
-X-ME-Received: <xmr:od9UadNdsxrrgNvXWJi4uPK3TG2Y0y0O_puSXNeteFWuJXaze2Cl-HjmfrxORaruQrUW1zfv5UfwnVMuWo5Tz4Bq3gh82tCeNzw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdekvdegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefvvefkjghfhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhn
-    uceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnh
-    epheekudffheejvdeiveekleelgeffieduvdegleeuhfeuudegkeekheffkefggfehnecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-    pdhnsggprhgtphhtthhopeduledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprg
-    hkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehpvght
-    vghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopegs
-    ohhquhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrh
-    ihghhuohdrnhgvthdprhgtphhtthhopehmrghrkhdrrhhuthhlrghnugesrghrmhdrtgho
-    mhdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhr
-    gh
-X-ME-Proxy: <xmx:od9UaU1cAHr0mEBA8wWestIYj3apU0Pc2s4VjAfCv1TgHCox_u6U4g>
-    <xmx:od9UaU3DXFXmZZLkbZMafxSb3FO7Pq4jJOoXTWo_81-xHXEx-5oQ5Q>
-    <xmx:od9Uaa-k9Vx-Vw_JMdFmpDabS9CqIe5WtR_FtmJgDQn3fGr5ADQ3xw>
-    <xmx:od9UaYY_9OKoRL20VNKszsgqDU9AnljuCJBuW7RyuXNmL0T3OSNgdw>
-    <xmx:od9UaRy4SMsx5gy8z29mt3Uaf_58i-GxZtN4giSAEj3guA6LKPGd-JdK>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 31 Dec 2025 03:32:32 -0500 (EST)
-To: Andrew Morton <akpm@linux-foundation.org>,
-    Peter Zijlstra <peterz@infradead.org>,
-    Will Deacon <will@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-    Boqun Feng <boqun.feng@gmail.com>,
-    Gary Guo <gary@garyguo.net>,
-    Mark Rutland <mark.rutland@arm.com>,
-    linux-arch@vger.kernel.org,
-    linux-kernel@vger.kernel.org,
-    linux-m68k@lists.linux-m68k.org,
-    Sasha Levin <sashal@kernel.org>,
-    Thomas Gleixner <tglx@linutronix.de>,
-    Ingo Molnar <mingo@redhat.com>,
-    Borislav Petkov <bp@alien8.de>,
-    Dave Hansen <dave.hansen@linux.intel.com>,
-    x86@kernel.org,
-    Ard Biesheuvel <ardb@kernel.org>,
-    "H. Peter Anvin" <hpa@zytor.com>,
-    linux-efi@vger.kernel.org
-Message-ID: <f8cfe0d121be0849f5175495e73eafeeb85e1ad3.1767169542.git.fthain@linux-m68k.org>
-In-Reply-To: <cover.1767169542.git.fthain@linux-m68k.org>
-References: <cover.1767169542.git.fthain@linux-m68k.org>
-From: Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH v6 3/4] atomic: Add alignment check to instrumented atomic
- operations
-Date: Wed, 31 Dec 2025 19:25:42 +1100
+	s=arc-20240116; t=1767174169; c=relaxed/simple;
+	bh=6NyyhcRHSRbBjOQ8whZAS+PjNnfwKSUqmF6OUVwGHdc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AGz4R56YnWgBVEJud99KrYVu7+ljhrfT80faLc7y+pRuCtMdasMLrDmxicqEf/LkDFLl8XZn+Qi/tYsT4MkiBDkE8uryK8aUo/yd0sySCLl76LnbUjOZFLBiojGzUl5Yp0vmn518biF6tOmdgmMDIOlBWzEej7o1GyeLGviSb/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZEa2fbsn; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-64b4f730a02so17765818a12.0
+        for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 01:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767174164; x=1767778964; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RhQC3hnAx6vo8ybVJwyWTzkkYGMOha8q8BXdXCtNSM8=;
+        b=ZEa2fbsnG0HUCPuL/f9TUju7GtGrZ2Gs/x/d+fboujj0Q3gytjtVF8OD0pPeTrweSB
+         Yv/Yzo0i84u9+A/o/rQ0rzx/uq35Kpfz5w4saSelrbBCPfHVkqJJIcNbA7NZsazxP7AV
+         99MVmTAPMVxpUg9CVQZGbVg0qf4fG3BhNYSNcJlBJFiy5PF9x4dkwExWYpSdqxifvjVo
+         CQUom1yIEPXSMt7VXFjo5piI06NIbofnFHIwZk16xDHoo1MikIK3GxF7I1877Ks158fe
+         xp0D/ZSi54Bf1BrRzwY1qbh+5m5AHoa5PVaolJUjPRA9n77SFzEMcrApx70HqySAYkbe
+         6s4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767174164; x=1767778964;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RhQC3hnAx6vo8ybVJwyWTzkkYGMOha8q8BXdXCtNSM8=;
+        b=l+kx7P/EMhqiCn+N1VFqJW7OgGQmVZG60DhUwGMqIIWq933e+4LRWe7S6Rqn8niTgq
+         6LWEuOKMRiFSEpDkFS01RAbtY6cPJ5mw+ijo+LpsNsMO+kraFn0snJEA9TYkwpqS+HY2
+         V/scrK+scNEPndFUDPDOhe+aKcKJAXcOsRBcsFUY4Dq2YEDjTQ844ee1BHG4xox5XoD5
+         SWdSBen09n0Eu43Sa6UDOudGo1bzxiWWhEga9ijArAKj6BgpMLwV8g5uHHwGz4xvFWS2
+         MnReOGzcP/YPtGmT6avI8F2xKjl2kICL9E9kY6elRqldjr2iZFbltu5/v6gNnOZfuqIi
+         tYuA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcjmo27Ir1G+2KrDVwUKhHJD8gHNdXN18zeojbg9vlOMrUxb88HlL4W+6eDr625W5bCp1Y2mYDtuUC@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBrOqt3W+bcb5bPNtIj/yStuzjP7AC46+6M2gogYn65afCmd9Z
+	pVxF+ASQD7itgDCU42t00oMrKxT/gp9rthd6gTrlTDEEe58yF7nXuzGq
+X-Gm-Gg: AY/fxX5ZwcRauRzTo8NZAw7Iniey0lz4d7rZgBiLuLyBMOyIrZvNPCe9S9CAGZD5Whw
+	z4XJRpncZL62i1+xm5RhTZJ0pukkXx79P5o7/VdGbNcQiZihGaqvxTqT1Ae7pUoBb4h5cVv07Z9
+	2L/OXFN+TK+jUfNgeF5U6Byg7GoKvkS1VU22e1LK+OlTk8CJ3YJMXARBmaDD7aI3nhtg7Zk4rD3
+	QVEx15goveAKAJGi5gSn93ASW9/5BU1DnLY4wUae3NZliRBj0PKWUFmzWXwNNaz/UO8j3Lgr6Z3
+	uu0grmaQKRyniM+Rh/VkHsb/xZ0RBc3Qqd3o7B0L8DDwZgstTGou9hV8iTo+bp29T1lFIox2rXX
+	aQfUUcVkFWVDWkbSkyzhEWek3ZO2+jLlZwulfcEiYqUhO/ojC5gAlLpYvTYm/bJ9p5u2XY4dTYM
+	REh02EnexTyA==
+X-Google-Smtp-Source: AGHT+IG6BnZXWofbdukBItAk61uwrC2j9z3+nQpSf68E/xI1yNmjywUHcnARSPenSAEDWkU1hfWn1g==
+X-Received: by 2002:a05:6402:2356:b0:64d:4f75:aa28 with SMTP id 4fb4d7f45d1cf-64d4f75adb0mr30963979a12.18.1767174163924;
+        Wed, 31 Dec 2025 01:42:43 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64b9105655asm37568985a12.9.2025.12.31.01.42.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 31 Dec 2025 01:42:43 -0800 (PST)
+Date: Wed, 31 Dec 2025 09:42:43 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Qi Zheng <qi.zheng@linux.dev>
+Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+	peterz@infradead.org, dev.jain@arm.com, akpm@linux-foundation.org,
+	david@kernel.org, ioworker0@gmail.com, linmag7@gmail.com,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH v3 7/7] mm: make PT_RECLAIM depends on
+ MMU_GATHER_RCU_TABLE_FREE
+Message-ID: <20251231094243.zmjs7kgflm7q6k73@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <cover.1765963770.git.zhengqi.arch@bytedance.com>
+ <ac2bdb2a66da1edb24f60d1da1099e2a0b734880.1765963770.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac2bdb2a66da1edb24f60d1da1099e2a0b734880.1765963770.git.zhengqi.arch@bytedance.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-From: Peter Zijlstra <peterz@infradead.org>
+On Wed, Dec 17, 2025 at 05:45:48PM +0800, Qi Zheng wrote:
+>From: Qi Zheng <zhengqi.arch@bytedance.com>
+>
+>The PT_RECLAIM can work on all architectures that support
+>MMU_GATHER_RCU_TABLE_FREE, so make PT_RECLAIM depends on
+>MMU_GATHER_RCU_TABLE_FREE.
+>
+>BTW, change PT_RECLAIM to be enabled by default, since nobody should want
+>to turn it off.
+>
+>Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>---
+> arch/x86/Kconfig | 1 -
+> mm/Kconfig       | 9 ++-------
+> 2 files changed, 2 insertions(+), 8 deletions(-)
+>
+>diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>index 80527299f859a..0d22da56a71b0 100644
+>--- a/arch/x86/Kconfig
+>+++ b/arch/x86/Kconfig
+>@@ -331,7 +331,6 @@ config X86
+> 	select FUNCTION_ALIGNMENT_4B
+> 	imply IMA_SECURE_AND_OR_TRUSTED_BOOT    if EFI
+> 	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
+>-	select ARCH_SUPPORTS_PT_RECLAIM		if X86_64
+> 	select ARCH_SUPPORTS_SCHED_SMT		if SMP
+> 	select SCHED_SMT			if SMP
+> 	select ARCH_SUPPORTS_SCHED_CLUSTER	if SMP
+>diff --git a/mm/Kconfig b/mm/Kconfig
+>index bd0ea5454af82..fc00b429b7129 100644
+>--- a/mm/Kconfig
+>+++ b/mm/Kconfig
+>@@ -1447,14 +1447,9 @@ config ARCH_HAS_USER_SHADOW_STACK
+> 	  The architecture has hardware support for userspace shadow call
+>           stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
+> 
+>-config ARCH_SUPPORTS_PT_RECLAIM
+>-	def_bool n
+>-
+> config PT_RECLAIM
+>-	bool "reclaim empty user page table pages"
+>-	default y
+>-	depends on ARCH_SUPPORTS_PT_RECLAIM && MMU && SMP
+>-	select MMU_GATHER_RCU_TABLE_FREE
+>+	def_bool y
+>+	depends on MMU_GATHER_RCU_TABLE_FREE
+> 	help
+> 	  Try to reclaim empty user page table pages in paths other than munmap
+> 	  and exit_mmap path.
 
-Add a Kconfig option for debug builds which logs a warning when an
-instrumented atomic operation takes place that's misaligned.
-Some platforms don't trap for this.
+Hi, Qi
 
-[fthain: added __DISABLE_BUG_TABLE macro.]
+I am new to PT_RECLAIM, when reading related code I got one question.
 
-Cc: Sasha Levin <sashal@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Link: https://lore.kernel.org/lkml/20250901093600.GF4067720@noisy.programming.kicks-ass.net/
-Link: https://lore.kernel.org/linux-next/df9fbd22-a648-ada4-fee0-68fe4325ff82@linux-m68k.org/
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
-Checkpatch.pl says...
-ERROR: Missing Signed-off-by: line by nominal patch author 'Peter Ziljstra <peterz@infradead.org>'
----
-Changed since v5:
- - Add new __DISABLE_BUG_TABLE macro to prevent a build failure on those
-architectures which use atomics in pre-boot code like the EFI stub loader:
+Before this patch,  we could have this config combination:
 
-x86_64-linux-gnu-ld: error: unplaced orphan section `__bug_table' from `arch/x86/boot/compressed/sev-handle-vc.o'
+    CONFIG_MMU_GATHER_RCU_TABLE_FREE & !CONFIG_PT_RECLAIM
 
-Changed since v2:
- - Always check for natural alignment.
----
- arch/x86/boot/compressed/Makefile     |  1 +
- drivers/firmware/efi/libstub/Makefile |  1 +
- include/linux/instrumented.h          | 10 ++++++++++
- lib/Kconfig.debug                     | 10 ++++++++++
- 4 files changed, 22 insertions(+)
+This means tlb_remove_table_free() is rcu version while tlb_remove_table_one()
+is semi rcu version.
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 68f9d7a1683b..122967c80e48 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -42,6 +42,7 @@ KBUILD_CFLAGS += -Wno-microsoft-anon-tag
- endif
- KBUILD_CFLAGS += -Wno-pointer-sign
- KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
-+KBUILD_CFLAGS += -D__DISABLE_BUG_TABLE
- KBUILD_CFLAGS += -D__DISABLE_EXPORTS
- # Disable relocation relaxation in case the link is not PIE.
- KBUILD_CFLAGS += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index 7d15a85d579f..ac3e7c64aedb 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -42,6 +42,7 @@ KBUILD_CFLAGS			:= $(subst $(CC_FLAGS_FTRACE),,$(cflags-y)) \
- 				   -ffreestanding \
- 				   -fno-stack-protector \
- 				   $(call cc-option,-fno-addrsig) \
-+				   -D__DISABLE_BUG_TABLE \
- 				   -D__DISABLE_EXPORTS
- 
- #
-diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index 711a1f0d1a73..bcd1113b55a1 100644
---- a/include/linux/instrumented.h
-+++ b/include/linux/instrumented.h
-@@ -7,6 +7,7 @@
- #ifndef _LINUX_INSTRUMENTED_H
- #define _LINUX_INSTRUMENTED_H
- 
-+#include <linux/bug.h>
- #include <linux/compiler.h>
- #include <linux/kasan-checks.h>
- #include <linux/kcsan-checks.h>
-@@ -67,6 +68,9 @@ static __always_inline void instrument_atomic_read(const volatile void *v, size_
- {
- 	kasan_check_read(v, size);
- 	kcsan_check_atomic_read(v, size);
-+#ifndef __DISABLE_BUG_TABLE
-+	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ATOMIC) && ((unsigned long)v & (size - 1)));
-+#endif
- }
- 
- /**
-@@ -81,6 +85,9 @@ static __always_inline void instrument_atomic_write(const volatile void *v, size
- {
- 	kasan_check_write(v, size);
- 	kcsan_check_atomic_write(v, size);
-+#ifndef __DISABLE_BUG_TABLE
-+	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ATOMIC) && ((unsigned long)v & (size - 1)));
-+#endif
- }
- 
- /**
-@@ -95,6 +102,9 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
- {
- 	kasan_check_write(v, size);
- 	kcsan_check_atomic_read_write(v, size);
-+#ifndef __DISABLE_BUG_TABLE
-+	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ATOMIC) && ((unsigned long)v & (size - 1)));
-+#endif
- }
- 
- /**
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ba36939fda79..4b4d1445ef9c 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1359,6 +1359,16 @@ config DEBUG_PREEMPT
- 	  depending on workload as it triggers debugging routines for each
- 	  this_cpu operation. It should only be used for debugging purposes.
- 
-+config DEBUG_ATOMIC
-+	bool "Debug atomic variables"
-+	depends on DEBUG_KERNEL
-+	help
-+	  If you say Y here then the kernel will add a runtime alignment check
-+	  to atomic accesses. Useful for architectures that do not have trap on
-+	  mis-aligned access.
-+
-+	  This option has potentially significant overhead.
-+
- menu "Lock Debugging (spinlocks, mutexes, etc...)"
- 
- config LOCK_DEBUGGING_SUPPORT
+I am curious could we use rcu version tlb_remove_table_one() for this case?
+Use rcu version tlb_remove_table_one() if CONFIG_MMU_GATHER_RCU_TABLE_FREE. Is
+there some limitation here?
+
+Thanks in advance for your explanation.
+
+
 -- 
-2.49.1
-
+Wei Yang
+Help you, Help me
 
