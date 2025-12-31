@@ -1,146 +1,176 @@
-Return-Path: <linux-arch+bounces-15622-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15623-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D49CEBB9A
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 10:53:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A825CEBF34
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 13:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E36F63011FA3
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 09:53:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C91033009118
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Dec 2025 12:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD6231960E;
-	Wed, 31 Dec 2025 09:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A16320CA2;
+	Wed, 31 Dec 2025 12:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kA0qCy5s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaqYAudL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53AB4315D5F
-	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 09:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFB9184540
+	for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 12:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767174802; cv=none; b=Mqc7wyAsG0V/yhKmbd4C3rRFuROt1cIm+sBsoRTl16wXSPdbtUNKGgOJfxFQVHmgbul4kbeTMm7RC9AUORtS53LfCDtkAoPTWJauW9Q+VQwRdDH0xfkAluts+sNGXAvtLLQvCsoMk0IBieZacQzi+eIu+5EvT/iAdWiA3bpyijw=
+	t=1767183718; cv=none; b=u2I/0hiu7CFdGObXRH8TnyKKr++LKAQgtTPB1Ny08ghf0JQzR9vH+Ol1EMAzJ6jau8vHGW44uy49Z6+utcdwW4AhKxWSPq4v/8EFj69D03eXq49PcJCpWFks8+NamWQetYFGy1Rn5D3UasRG1pgwKVqjkOoTe2veqD8Zmbm75go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767174802; c=relaxed/simple;
-	bh=bgKG/XkgrbCcQBOUfd1V/7rkB3OG4Wmzv5QaKooC00k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mQKqypyBqvwtaQqqZycmhWbRGDihmUc0z5L+wOy+gHE6c2rSMO+6ub5LQF7Yagbf/uhSF6xpyer/3qPW/BklXbz38B7V9a1zPf4xVXbldO4LiBZfSNIExWHiFsPj53sdIq0LIpSTqQYg0zuqejEk5l84Jpq4yhFbv8/UuxdFmok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kA0qCy5s; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <a3a60bbb-70b7-49ed-abc6-937e6c13d681@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767174787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wl7HEoZMUzGsbQepWMVSfO0JV4YjBapS0e5mq4W7b+4=;
-	b=kA0qCy5swxT9/bUHnpErzkaTUIfgXxao85n1AotjzFLMJUomMkCAQjLXpZ4B+KRO9Tbq2L
-	WU+1OAl5FxBAuCo1I3+CkOeCjPhLEPbag/rozOxh+CRn8kHOwBSKIYK4ige8l1o+gK7jtK
-	Vz5BljGIGicYjbCKFeIBggxM5nn/wOQ=
-Date: Wed, 31 Dec 2025 17:52:57 +0800
+	s=arc-20240116; t=1767183718; c=relaxed/simple;
+	bh=vDYEFC/1ZVknYn2H4nn49xNZKvkbj0AVhwkeRtZjduE=;
+	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Oj9EjCccMWX8g9vpMesXJydUOZ579Ayna79INc6R1GZ3A5UpezsXkutECBc7DjBfwkuoZyTUcZe7VAwUImPllU5FhStb0/9acxncM2+obfJubcqShkSCyr/mNR781Jplaj6DiUFvsSuwfgLy0k1R/CRkfugPdjp50RvLyEkV1NQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NaqYAudL; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7d26a7e5639so12226029b3a.1
+        for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 04:21:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767183716; x=1767788516; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to:from
+         :subject:cc:to:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YiPh9iNHDcZdxkSlmhXO/2HAlh7ZmUw+8qvd0QJAg2I=;
+        b=NaqYAudLUQ2i1WChcDHg/9jIshtGewVU+rraXREV/nvJLlF7W0rhbO4BYq9/IJKQK+
+         fbuRFFLGRKJcWKVlc6zxPyOtcDySIxhHay+4ztaHqR1Gtffok2uhvP1iCjhV+fTgsQtC
+         woeloAIcC6RVwr6kJLXN7R4o65u+KUYDg/CXZaHkAIQr8+9F4+Yy21R+BtF+1joZZksp
+         yg3Q1nkqMAx/fpfb9/QR7vcwlSpSZZMLLdTANt4KTEYzrjSjSyIGsDks+bkG46/7dnC1
+         u86d6zhSRzrA0evDSuqvqGSIARR1+LkNONlwpFg4ZVb3lSZ0LTtMTZUFtqGRMKkYx6RT
+         /QNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767183716; x=1767788516;
+        h=content-transfer-encoding:mime-version:references:in-reply-to:from
+         :subject:cc:to:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YiPh9iNHDcZdxkSlmhXO/2HAlh7ZmUw+8qvd0QJAg2I=;
+        b=JgN7KZqb4jQl0nfGF49gFd//PtItDZVi3AaBK3c7rzHexoTdBzKchtPh3M9ifC/vJH
+         iKflGVDQzMq0CzFS6HKkptNYJb+YSS7Z/62Ey7mih3WDQf79bTtFLvB6WFfXuOnH9354
+         P6Ux+i1rchI2IZZ2knJQjzP0jOcEq/QKWiM9qkqLoobOKWrcc2lGD1Hlu5eQSPTFmE75
+         AU7y0/3KkerwW5S8wn65sRfubsCEgzhI1w9erNrFcZdOrcsw2fqNpmCTI9UMGZ2zEqpn
+         h+I4fOhVwGBC4II+KqJMTIMGjAisNRNoTbD65DCrE0DKM5IO2YOGsWh0kTDqNcXUa3DI
+         Xumw==
+X-Forwarded-Encrypted: i=1; AJvYcCXzzxmHf0NCfRrbx7jrbrZDIlBDkgLtCqWME2k1su6z13ir7o6tOXo8twoRf1DHPF8LTO/fJOyATO24@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxvjgoJX/TeOHgHWlsAELUdN5f6CGJXScn7TRTY/64DudlZ/w+
+	EyIu5ZjNyM4kBPEVClrw1cheBJyjLOIXGSqIK5ibfRGlmqPUszSwagu/
+X-Gm-Gg: AY/fxX5XgBT+i2dc3jEHjTebSdlfYubbAdV8SGgQBbEXDIfw9xObWZ1bBnUe31N5D++
+	zge6y50j2qmG3XNVnw+ZuvTWB2hvuBjlUxrKvaJHmJJpH3zElwMoYAvxM0lJnqu6l75S2JUHmzA
+	cgzxST8qNoFyKLjaPiA7ojpEHdABTCDg2A3FHdvqoDj1byiKYA5cfhLJUO9xiuIq3M6Pn/wMvOP
+	WezIWfQPLbnLTGAFff2UbMDcalMnpfJ8upHWvao9nbXI+ugyjZzaoF+A0mP24TcOcxi4+pVZi/8
+	/caNkMvqDRHzXPPrPU0Si+QLZLJ8/duszfsGuYxAJPjG6upNCg0E8jYZ2W0DTolByLU7UK6lm5H
+	vlTxgcJFdE0cg/FUxDVrFgeUjuTjjvUuToXnfNJCiy9mGcfBS0Oc1IgUkal6kNASFy2G45wJeAj
+	SoYKvIjIAkEpLGgmx5+ES6fBedTSGgoFjp/AW0yMapPByEuncLMdTwzeO9mLfKrwnX1Vg=
+X-Google-Smtp-Source: AGHT+IECgioPTsy7O8h4IMn7prBqsQJ/6jdGSCsU2tlyHIbj0RAMCS1DIWe+8/Sx5YpAoA1u+jIUjQ==
+X-Received: by 2002:a05:6a00:140f:b0:807:c2b9:38ec with SMTP id d2e1a72fcca58-807c2b93f63mr16449954b3a.15.1767183715580;
+        Wed, 31 Dec 2025 04:21:55 -0800 (PST)
+Received: from localhost (p5342157-ipxg23901hodogaya.kanagawa.ocn.ne.jp. [180.39.242.157])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7961c130sm30128093a12.3.2025.12.31.04.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Dec 2025 04:21:55 -0800 (PST)
+Date: Wed, 31 Dec 2025 21:21:51 +0900 (JST)
+Message-Id: <20251231.212151.889123388469793161.fujita.tomonori@gmail.com>
+To: boqun.feng@gmail.com
+Cc: fujita.tomonori@gmail.com, ojeda@kernel.org, a.hindborg@kernel.org,
+ aliceryhl@google.com, bjorn3_gh@protonmail.com, dakr@kernel.org,
+ gary@garyguo.net, lossin@kernel.org, tmgross@umich.edu,
+ acourbot@nvidia.com, rust-for-linux@vger.kernel.org,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] rust: sync: atomic: Add atomic bool support via
+ i8 representation
+From: FUJITA Tomonori <fujita.tomonori@gmail.com>
+In-Reply-To: <aVRWDgb29OkHAGnY@tardis-2.local>
+References: <20251230045028.1773445-1-fujita.tomonori@gmail.com>
+	<20251230045028.1773445-2-fujita.tomonori@gmail.com>
+	<aVRWDgb29OkHAGnY@tardis-2.local>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH v3 7/7] mm: make PT_RECLAIM depends on
- MMU_GATHER_RCU_TABLE_FREE
-To: Wei Yang <richard.weiyang@gmail.com>
-Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
- peterz@infradead.org, dev.jain@arm.com, akpm@linux-foundation.org,
- david@kernel.org, ioworker0@gmail.com, linmag7@gmail.com,
- linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>
-References: <cover.1765963770.git.zhengqi.arch@bytedance.com>
- <ac2bdb2a66da1edb24f60d1da1099e2a0b734880.1765963770.git.zhengqi.arch@bytedance.com>
- <20251231094243.zmjs7kgflm7q6k73@master>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Qi Zheng <qi.zheng@linux.dev>
-In-Reply-To: <20251231094243.zmjs7kgflm7q6k73@master>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+On Wed, 31 Dec 2025 06:45:34 +0800
+Boqun Feng <boqun.feng@gmail.com> wrote:
 
-
-On 12/31/25 5:42 PM, Wei Yang wrote:
-> On Wed, Dec 17, 2025 at 05:45:48PM +0800, Qi Zheng wrote:
->> From: Qi Zheng <zhengqi.arch@bytedance.com>
->>
->> The PT_RECLAIM can work on all architectures that support
->> MMU_GATHER_RCU_TABLE_FREE, so make PT_RECLAIM depends on
->> MMU_GATHER_RCU_TABLE_FREE.
->>
->> BTW, change PT_RECLAIM to be enabled by default, since nobody should want
->> to turn it off.
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> On Tue, Dec 30, 2025 at 01:50:27PM +0900, FUJITA Tomonori wrote:
+>> Add `bool` support, `Atomic<bool>` by using `i8` as its underlying
+>> representation.
+>> 
+>> Rust specifies that `bool` has size 1 and alignment 1 [1], so it
+>> matches `i8` on layout; keep `static_assert!()` checks to enforce this
+>> assumption at build time.
+>> 
+>> Implement `AtomicImpl` for `bool` under
+>> `CONFIG_ARCH_SUPPORTS_ATOMIC_RMW`, consistent with the existing
+>> `i8/i16` gating.
+>> 
+>> Document the additional safety requirement for
+>> `Atomic::<bool>::from_ptr`: only bit patterns 0 (false) and 1 (true)
+>> are valid.
+>> 
+>> Link: https://doc.rust-lang.org/reference/types/boolean.html [1]
+>> Signed-off-by: FUJITA Tomonori <fujita.tomonori@gmail.com>
 >> ---
->> arch/x86/Kconfig | 1 -
->> mm/Kconfig       | 9 ++-------
->> 2 files changed, 2 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->> index 80527299f859a..0d22da56a71b0 100644
->> --- a/arch/x86/Kconfig
->> +++ b/arch/x86/Kconfig
->> @@ -331,7 +331,6 @@ config X86
->> 	select FUNCTION_ALIGNMENT_4B
->> 	imply IMA_SECURE_AND_OR_TRUSTED_BOOT    if EFI
->> 	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
->> -	select ARCH_SUPPORTS_PT_RECLAIM		if X86_64
->> 	select ARCH_SUPPORTS_SCHED_SMT		if SMP
->> 	select SCHED_SMT			if SMP
->> 	select ARCH_SUPPORTS_SCHED_CLUSTER	if SMP
->> diff --git a/mm/Kconfig b/mm/Kconfig
->> index bd0ea5454af82..fc00b429b7129 100644
->> --- a/mm/Kconfig
->> +++ b/mm/Kconfig
->> @@ -1447,14 +1447,9 @@ config ARCH_HAS_USER_SHADOW_STACK
->> 	  The architecture has hardware support for userspace shadow call
->>            stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
->>
->> -config ARCH_SUPPORTS_PT_RECLAIM
->> -	def_bool n
->> -
->> config PT_RECLAIM
->> -	bool "reclaim empty user page table pages"
->> -	default y
->> -	depends on ARCH_SUPPORTS_PT_RECLAIM && MMU && SMP
->> -	select MMU_GATHER_RCU_TABLE_FREE
->> +	def_bool y
->> +	depends on MMU_GATHER_RCU_TABLE_FREE
->> 	help
->> 	  Try to reclaim empty user page table pages in paths other than munmap
->> 	  and exit_mmap path.
+>>  rust/kernel/sync/atomic.rs           |  1 +
+>>  rust/kernel/sync/atomic/internal.rs  |  8 ++++++++
+>>  rust/kernel/sync/atomic/predefine.rs | 11 +++++++++++
+>>  3 files changed, 20 insertions(+)
+>> 
+>> diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
+>> index 4aebeacb961a..2c998cbd300e 100644
+>> --- a/rust/kernel/sync/atomic.rs
+>> +++ b/rust/kernel/sync/atomic.rs
+>> @@ -158,6 +158,7 @@ pub const fn new(v: T) -> Self {
+>>      ///
+>>      /// - `ptr` is aligned to `align_of::<T>()`.
+>>      /// - `ptr` is valid for reads and writes for `'a`.
+>> +    /// - If `T` is `bool`, only the bit patterns 0 (`false`) and 1 (`true`) are valid.
 > 
-> Hi, Qi
-> 
-> I am new to PT_RECLAIM, when reading related code I got one question.
-> 
-> Before this patch,  we could have this config combination:
-> 
->      CONFIG_MMU_GATHER_RCU_TABLE_FREE & !CONFIG_PT_RECLAIM
-> 
-> This means tlb_remove_table_free() is rcu version while tlb_remove_table_one()
-> is semi rcu version.
-> 
-> I am curious could we use rcu version tlb_remove_table_one() for this case?
-> Use rcu version tlb_remove_table_one() if CONFIG_MMU_GATHER_RCU_TABLE_FREE. Is
-> there some limitation here?
+> This line is unnecessary, since "`ptr` is valid for ..." means `*ptr`
+> has to have the valid binary representive of `T`.
 
-I think there's no problem. The rcu version can also ensure that the
-fast GUP works well.
+Understood, I will drop this in v2.
 
+
+>>      /// - For the duration of `'a`, other accesses to `*ptr` must not cause data races (defined
+>>      ///   by [`LKMM`]) against atomic operations on the returned reference. Note that if all other
+>>      ///   accesses are atomic, then this safety requirement is trivially fulfilled.
+>> diff --git a/rust/kernel/sync/atomic/internal.rs b/rust/kernel/sync/atomic/internal.rs
+>> index 0dac58bca2b3..0e12955082e5 100644
+>> --- a/rust/kernel/sync/atomic/internal.rs
+>> +++ b/rust/kernel/sync/atomic/internal.rs
+>> @@ -16,6 +16,7 @@ pub trait Sealed {}
+>>  // The C side supports atomic primitives only for `i32` and `i64` (`atomic_t` and `atomic64_t`),
+>>  // while the Rust side also layers provides atomic support for `i8` and `i16`
+>>  // on top of lower-level C primitives.
+>> +impl private::Sealed for bool {}
+>>  impl private::Sealed for i8 {}
+>>  impl private::Sealed for i16 {}
+>>  impl private::Sealed for i32 {}
+>> @@ -37,6 +38,13 @@ pub trait AtomicImpl: Sized + Send + Copy + private::Sealed {
+>>      type Delta;
+>>  }
+>>  
+>> +// The current helpers of load/store uses `{WRITE,READ}_ONCE()` hence the atomicity is only
+>> +// guaranteed against read-modify-write operations if the architecture supports native atomic RmW.
+>> +#[cfg(CONFIG_ARCH_SUPPORTS_ATOMIC_RMW)]
+>> +impl AtomicImpl for bool {
+>> +    type Delta = Self;
+>> +}
 > 
-> Thanks in advance for your explanation.
-> 
-> 
+> I don't think you need this impl block.
+
+You are right. Only the backing atomic types need to implement this. I
+will drop in v2.
+
+
+Thanks!
 
 
