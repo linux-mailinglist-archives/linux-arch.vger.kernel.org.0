@@ -1,194 +1,126 @@
-Return-Path: <linux-arch+bounces-15627-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15628-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F33B7CECC22
-	for <lists+linux-arch@lfdr.de>; Thu, 01 Jan 2026 03:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29106CECC72
+	for <lists+linux-arch@lfdr.de>; Thu, 01 Jan 2026 04:27:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 92F04300DC90
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Jan 2026 02:07:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 71AE230088A7
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Jan 2026 03:27:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B656285050;
-	Thu,  1 Jan 2026 02:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876B021C17D;
+	Thu,  1 Jan 2026 03:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1n495X4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UkCgjdJ0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E7F2877D8
-	for <linux-arch@vger.kernel.org>; Thu,  1 Jan 2026 02:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2076A1400C
+	for <linux-arch@vger.kernel.org>; Thu,  1 Jan 2026 03:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767233240; cv=none; b=DZJMkVuG89DpQoCKkJDGrQFNPtlo7WDaIBguGEjQRP2bwYb/c9nuByQfGSCMSEpX9NgNQ2YGOlb75qlCYeKcbdlwF8XzuX2pggsjeob26e50/G1Ek8fJTkyjLz6mam6k5fwLWJp/+dr1iYAm1WJaIYEpzO0cAWO07uMSkBc+iq4=
+	t=1767238039; cv=none; b=B9MKKzUH9+dEZ+uMvGs9+LwQ2tc8sId95Gh+tlCAld4nGcXKzVRr4UZCJiT2/k1eO5EGNNNPibz5Q+InZNJuVIAM0Jgg4kTFzz2TyltsO9OVgQSTt4DWU+zwldaLS8M/g4ZnbFyOQuT+AfVOJp/gUWFfT96wYOex0d/vPhzSOWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767233240; c=relaxed/simple;
-	bh=NSSdoE7G/g/QaVmDnjP9LfDazgPNO8PlY1pApWlnZBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D3krVVW2auEKWFCFM2/wzYrAt/NrMFnUosuPuVjphCyLRSSxy1sO9eOaEyO3H0e5bBvPSGsMyBotj17Br1A8vvCcH4D6OeavnY1NEdp8cZ6SCX5xQbtiXLJKHPktPKaURknyx6RfPKdxZHWQXh2GbbuQjWAlD/QTwup8kIJMiVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1n495X4; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1767238039; c=relaxed/simple;
+	bh=eW21rXYuAMNL/Q/NB+5NsUTIo96fybhUX4uk4OSHdg4=;
+	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=GjuZsCjkKT7tW2ATWomgRzSw9fgyzwfQU4hjEo0fjjg1P9kTt0DJ1A7m/hZ0X4WehOJIiJrj+YhEd08l6vGe89f44XzFSYtXuE/ZZofOS6tDJqz0pZnDjeX6FNI0Vbz2DIBMITqXpQxFOkQAbEBMWpBLDOcNbdqtrJeWiUEzOvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UkCgjdJ0; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b7633027cb2so2027782066b.1
-        for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 18:07:18 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a0c20ee83dso143504595ad.2
+        for <linux-arch@vger.kernel.org>; Wed, 31 Dec 2025 19:27:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767233237; x=1767838037; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UQBF0g7LGMkaWXJONFj1Zzubf3JQP1KLJgb8Ha1McV4=;
-        b=i1n495X42Awi4n07MNXXkHhs/ZSWHAPyNb3ik83mMMvg7FjQvBFSC+rSMdi9Px3igo
-         ad9Hs5X4ug0sLCxi1ZTfwxmPNhO57XzfFjK2XzYXLBqTwhkTlmvIgF5yW8GvjCkwQbbU
-         NBN60YCrFfAHaoYx70H4Caie7FhFlYhTHrDGvZH51ECY9G5L9S84eZ1gsjPoIU5wrf/J
-         w1PMy2Fa0iKzfmNLuS3AqPw8moPkPPNKnssHuxbv09FulbTckOiPt0xA063QLX+AwQek
-         Yp1rTYvpi2E2k0qvHGE95AmwuJjpGUKSAN9TAAQAPA2l2LmiPgU1KiM9BmVeYPVefN+4
-         4vfA==
+        d=gmail.com; s=20230601; t=1767238037; x=1767842837; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to:from
+         :subject:cc:to:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=URkzJF6KuwnH0SlAYpJCl1hDAluJTaS1mvC2L+e7OI4=;
+        b=UkCgjdJ0YGZoK26p19zls1bBRkLmr834Z4mM0VaoWzpiDsHgiFNkxJfVi8M63D69o9
+         +yLKSl8NOm0SGdLBa8XSGSd4QUC3GRue9FzXw3Y9VOuM1OX2faoxHjMAgeUIQ5IBWsbJ
+         LS5wQCTzDlXaf2lXivLKljw2nWZXRu0TKiyYrK+o2Shox4qQRUpXBjgAtn+IIUUKLISa
+         8eLtG8SIRNZneC4KaJ/e4ENlj0TS0Ngr3459/VRAk2VolZh3vMPw1fJucqrgcj5/6Hxe
+         VQD0jLn4TarbYcoORUBCDpt2qeQQwlwPofTgjQnvhQ1pGBzDJbisJNDWZo/y5CJ5Xrdo
+         xngw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767233237; x=1767838037;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UQBF0g7LGMkaWXJONFj1Zzubf3JQP1KLJgb8Ha1McV4=;
-        b=f/DcNget56fG5+mtBFGbBbbE7sJAQR+Hz6h7wDNSjucOhLetJMafZU6ProK7XIOyLC
-         ouzxg+F2Q8LZj3AsB/X1pR7igOzTEv/HpwkkoWh9zYNn2JwyMruSrHC9CyG88bD7+e6u
-         Cz8xzSwy6Fz3TQmeVvWH/iP54xslevCnQ3D3Mqm/MUAMUyzD8bkA+Ym8MV483ZvA2ens
-         ziduS3RPMoIbyWdgYYBaWCw0AcAdPiwwFzBC+SiWXNVGT8KlbllZDzXpKJng2kbgigee
-         Yf3yCQr4VhsIEbN7KzAgP89EuBpzBXqamPks7+vHraPGjQGPwLZMYdu7yojjyf4TDeZe
-         3KWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVpx9Pl9D7WyQNdms9kmztfd1MVCjXAoSz/onfTw8kczg/eCmrnEf1K9ihJ0XjzmiyQYgMrQYxLuzGU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVCBOZ1/jSloo+HG6M4+mLGdlL7WS1FVRY+d6UFrjFXMNRr1nr
-	nhw3TQJbOvENKGuffu+hhBOFGXmMf4NQExvBH4vS5zu1rxuBNCHcEhTQ
-X-Gm-Gg: AY/fxX6mzI9WedsrnVohJAvw6ieS+2boke1AeJfksk5ayWQC0ou2Ws288RUIo4HBOCT
-	N5IZb49alv5y+7/HM80caUDqyrpwZiBkv+1QdZsHFQI3kiMd2mfYJWetTHriB9RNDVtoI0C/Qm/
-	E+4IomCTFrE1TvmsJ5jFviLWqUQiUKOcl5N26Bp8YqkS2cIHxV2CxkFfzn8Rekib5Zdv3KHOYSj
-	j3hwKm36Rk5fHaLAAjHWWhBwVYlZMjjxxjd+bcwQbzjfKyWLtwOmBMbKyqo/5+ytiTk6ztFP0+k
-	60LVmMVJxhbc21Z7bcEGPBZITNi5mNkM2/PqC2/2Auc5QJidG+argJiTzeyfpy3LW9c3yjbBzOo
-	CIWzONCQ2ajxi/Q2DqiIfZ9bLvb+jt464ipN5ymgBDt4YOGRbywKNU3A1XNLnQTEGEqSQwhcD87
-	3Uad88Ui2l/g==
-X-Google-Smtp-Source: AGHT+IGkCnh9dqfLUptvpy4PZGXmScqGnHYP3DGjjwJuJ8br2u0RfwesNHaEMQG1tTnLLwW9sFl6GQ==
-X-Received: by 2002:a17:907:7f05:b0:b72:9961:dc04 with SMTP id a640c23a62f3a-b8036f86950mr4237184166b.28.1767233236739;
-        Wed, 31 Dec 2025 18:07:16 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64b910601c7sm39251595a12.14.2025.12.31.18.07.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 31 Dec 2025 18:07:16 -0800 (PST)
-Date: Thu, 1 Jan 2026 02:07:15 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Qi Zheng <qi.zheng@linux.dev>
-Cc: Wei Yang <richard.weiyang@gmail.com>, will@kernel.org,
-	aneesh.kumar@kernel.org, npiggin@gmail.com, peterz@infradead.org,
-	dev.jain@arm.com, akpm@linux-foundation.org, david@kernel.org,
-	ioworker0@gmail.com, linmag7@gmail.com, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH v3 7/7] mm: make PT_RECLAIM depends on
- MMU_GATHER_RCU_TABLE_FREE
-Message-ID: <20260101020715.45wqnjgcklvjcth3@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <cover.1765963770.git.zhengqi.arch@bytedance.com>
- <ac2bdb2a66da1edb24f60d1da1099e2a0b734880.1765963770.git.zhengqi.arch@bytedance.com>
- <20251231094243.zmjs7kgflm7q6k73@master>
- <a3a60bbb-70b7-49ed-abc6-937e6c13d681@linux.dev>
+        d=1e100.net; s=20230601; t=1767238037; x=1767842837;
+        h=content-transfer-encoding:mime-version:references:in-reply-to:from
+         :subject:cc:to:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=URkzJF6KuwnH0SlAYpJCl1hDAluJTaS1mvC2L+e7OI4=;
+        b=btcKLfeQEQnCaaBwnyiBEEc053WOVFVU3armymqODZRRcQTK/NDSCMqLaLUyeummd9
+         /PhOCEVaokBX6L7xFMkIp19Y68D+sCph18fRx0PH6D9XxTEmAXIHW/Lg9eN6J+7tWTmb
+         uk2+bsnqUIBuyiHGGNOTiwPS0/4Xih3CHzwpLe3Ren0ORokT9toW8VFRDoOPDycCrlTu
+         yPLL4gRIKKFQm0fiL8qQgdFtfEsKHqnvQAZCcQrhV+f2lzTUgB6d87wC3yyGdoUchCTe
+         rECIrVxRNkodL+B10JtXN3p+FvA+pFaJ/Su9FM+K/X8C8GR5GbJcBe6Zc3t1RujdNsD+
+         SMdA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3hIESev0ZM0XORjLTHa3rsNpic4TGzVWheifX6UZ4dRmjhK6s03TyXSY2ZEPyb1k/NI5zf+GCy3sd@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaCp4Qoj2VC43+7Kca+0yh3XTE0Ysls2jFZWblFI9XiTP0lQa8
+	2O7LrGE03P9K4D7KAVdwDd+Kb/MR5OeltCk+xsr4GDsc2NAK/fgOM58Y
+X-Gm-Gg: AY/fxX6edMi95hv38VjqmLyBSB0wSP/R2YxF9EgU3ZL3INQonYktzXXSiGFNH/3bnpL
+	sMnk0LVCIi6YHk1BzIIG1o5gRPGZawWV9s4wqjPJj/kcIF9Tlm4KMUgIdWT1yyj5HoZTy7ImzG4
+	uZmGHcGeQ0QNOKuhCdcfgYBvCCTtC2Mc1JSsCfmTuCmrQo0lMcxEdLQQH3CTAbCDPNl/qjPVyL6
+	Secq1ATSlpWeJqKDwnW0EfC83+rziESLjxvvQAOERlMUahFvGPnPm4zyxHv7MGXNp7qPpjUP1XA
+	63AiJxdt24SwWIWfIZHnAv9YViq6laaz5pG36pQz2aRXlsclEKofZnOPYnx9xQPlPRJTcjvxUrS
+	dWN1ZFtu/zlEQDgSF5vr6p/AsRsalbEi8JmkSSQ7tOBLCkJyBoW4akC3pKRE3n34izEmqvfI6T3
+	3d4IkgrXDURChj3lOtEY6LPsFedBzoKBiRsAWKJhaHPY8W/RBg9sqsP6tT4FLHlyeZQ3mZLazpu
+	Ypf9w==
+X-Google-Smtp-Source: AGHT+IH6AF6a1j3gYbiGUaYhPP4PidZgt6F/PO/iHaW4dHygCi0e7n87vvw6c1RFB7wkVjmYs8XEEA==
+X-Received: by 2002:a17:903:b90:b0:29d:7b9b:515b with SMTP id d9443c01a7336-2a2f2527092mr393241735ad.20.1767238037313;
+        Wed, 31 Dec 2025 19:27:17 -0800 (PST)
+Received: from localhost (p5342157-ipxg23901hodogaya.kanagawa.ocn.ne.jp. [180.39.242.157])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c6b7b0sm340978965ad.16.2025.12.31.19.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Dec 2025 19:27:16 -0800 (PST)
+Date: Thu, 01 Jan 2026 12:27:02 +0900 (JST)
+Message-Id: <20260101.122702.1297255764389254863.fujita.tomonori@gmail.com>
+To: gary@garyguo.net
+Cc: fujita.tomonori@gmail.com, boqun.feng@gmail.com, ojeda@kernel.org,
+ a.hindborg@kernel.org, aliceryhl@google.com, bjorn3_gh@protonmail.com,
+ dakr@kernel.org, lossin@kernel.org, tmgross@umich.edu,
+ acourbot@nvidia.com, rust-for-linux@vger.kernel.org,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] Add atomic bool support
+From: FUJITA Tomonori <fujita.tomonori@gmail.com>
+In-Reply-To: <20251231153431.4a48816c.gary@garyguo.net>
+References: <20251230045028.1773445-1-fujita.tomonori@gmail.com>
+	<20251231153431.4a48816c.gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a3a60bbb-70b7-49ed-abc6-937e6c13d681@linux.dev>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 
-On Wed, Dec 31, 2025 at 05:52:57PM +0800, Qi Zheng wrote:
->
->
->On 12/31/25 5:42 PM, Wei Yang wrote:
->> On Wed, Dec 17, 2025 at 05:45:48PM +0800, Qi Zheng wrote:
->> > From: Qi Zheng <zhengqi.arch@bytedance.com>
->> > 
->> > The PT_RECLAIM can work on all architectures that support
->> > MMU_GATHER_RCU_TABLE_FREE, so make PT_RECLAIM depends on
->> > MMU_GATHER_RCU_TABLE_FREE.
->> > 
->> > BTW, change PT_RECLAIM to be enabled by default, since nobody should want
->> > to turn it off.
->> > 
->> > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> > ---
->> > arch/x86/Kconfig | 1 -
->> > mm/Kconfig       | 9 ++-------
->> > 2 files changed, 2 insertions(+), 8 deletions(-)
->> > 
->> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->> > index 80527299f859a..0d22da56a71b0 100644
->> > --- a/arch/x86/Kconfig
->> > +++ b/arch/x86/Kconfig
->> > @@ -331,7 +331,6 @@ config X86
->> > 	select FUNCTION_ALIGNMENT_4B
->> > 	imply IMA_SECURE_AND_OR_TRUSTED_BOOT    if EFI
->> > 	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
->> > -	select ARCH_SUPPORTS_PT_RECLAIM		if X86_64
->> > 	select ARCH_SUPPORTS_SCHED_SMT		if SMP
->> > 	select SCHED_SMT			if SMP
->> > 	select ARCH_SUPPORTS_SCHED_CLUSTER	if SMP
->> > diff --git a/mm/Kconfig b/mm/Kconfig
->> > index bd0ea5454af82..fc00b429b7129 100644
->> > --- a/mm/Kconfig
->> > +++ b/mm/Kconfig
->> > @@ -1447,14 +1447,9 @@ config ARCH_HAS_USER_SHADOW_STACK
->> > 	  The architecture has hardware support for userspace shadow call
->> >            stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
->> > 
->> > -config ARCH_SUPPORTS_PT_RECLAIM
->> > -	def_bool n
->> > -
->> > config PT_RECLAIM
->> > -	bool "reclaim empty user page table pages"
->> > -	default y
->> > -	depends on ARCH_SUPPORTS_PT_RECLAIM && MMU && SMP
->> > -	select MMU_GATHER_RCU_TABLE_FREE
->> > +	def_bool y
->> > +	depends on MMU_GATHER_RCU_TABLE_FREE
->> > 	help
->> > 	  Try to reclaim empty user page table pages in paths other than munmap
->> > 	  and exit_mmap path.
->> 
->> Hi, Qi
->> 
->> I am new to PT_RECLAIM, when reading related code I got one question.
->> 
->> Before this patch,  we could have this config combination:
->> 
->>      CONFIG_MMU_GATHER_RCU_TABLE_FREE & !CONFIG_PT_RECLAIM
->> 
->> This means tlb_remove_table_free() is rcu version while tlb_remove_table_one()
->> is semi rcu version.
->> 
->> I am curious could we use rcu version tlb_remove_table_one() for this case?
->> Use rcu version tlb_remove_table_one() if CONFIG_MMU_GATHER_RCU_TABLE_FREE. Is
->> there some limitation here?
->
->I think there's no problem. The rcu version can also ensure that the
->fast GUP works well.
->
+On Wed, 31 Dec 2025 15:34:31 +0000
+Gary Guo <gary@garyguo.net> wrote:
 
-Thanks for your quick response :-)
-
-And Happy New Year
-
-So my little suggestion is move the definition of __tlb_remove_table_one()
-under CONFIG_MMU_GATHER_RCU_TABLE_FREE. Do you thinks this would be more
-clear?
-
+> On Tue, 30 Dec 2025 13:50:26 +0900
+> FUJITA Tomonori <fujita.tomonori@gmail.com> wrote:
+> 
+>> This adds `bool` support to the Rust LKMM atomics.
 >> 
->> Thanks in advance for your explanation.
+>> Rust specifies that `bool` has size 1 and alignment 1 [1], so it can
+>> be represented using an `i8` backing type.
 >> 
+>> Since `bool` only permits the bit patterns 0x00 and 0x01, the first
+>> patch also documents an additional safety preconditions for unsafe
+>> `Atomic::<T>::from_ptr`.
 >> 
+>> `from_ptr()` exists to operate on C-side storage so I don't think it
+>> makes sense for bool. We could restrict from_ptr() via a marker trait.
+> 
+> The C-side does have `bool` type, too (`_Bool` has been there since C99 and
+> we have typedef'd it to `bool`). User might still want to perform relaxed
+> load/store on these C-side bool storage.
+> 
+> I think it's fine to leave out this line too (given Boqun also points out
+> that the additional safety precondition is not needed for `from_ptr).
 
--- 
-Wei Yang
-Help you, Help me
+I see. I'll drop the description in v2.
+
+Thanks!
 
