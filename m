@@ -1,197 +1,246 @@
-Return-Path: <linux-arch+bounces-15636-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15637-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E490CEEFF3
-	for <lists+linux-arch@lfdr.de>; Fri, 02 Jan 2026 17:42:01 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53D1ACEF359
+	for <lists+linux-arch@lfdr.de>; Fri, 02 Jan 2026 19:58:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 995C630080D0
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Jan 2026 16:41:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05A213016981
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Jan 2026 18:58:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214912C0F79;
-	Fri,  2 Jan 2026 16:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B192BEFFB;
+	Fri,  2 Jan 2026 18:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lr+AoPa/"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="K32N86G0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013009.outbound.protection.outlook.com [40.93.201.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F83291C33;
-	Fri,  2 Jan 2026 16:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767372116; cv=none; b=c+j42hPvT7KSWT64T3LgXrImMDw+srVOaDcsR1/9JV7M+XD+gLpOQjKvEzkbT8nOikqKND0kC7zeEvYpcfdNajOxIc+++ocuXJMe46lrdHBAsj5uxL+NLj2rwaxxiReHYtG0n88DLB3O/mNs7bNsfyKq98MrIa8FPi0NdKI/aQg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767372116; c=relaxed/simple;
-	bh=KFOnUBOvFoPFL+L9c4KvjfxAUSn8fz9Ic3nFbWuYMi0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PG+bSmRaoHIH3M1abRJC0kRdgyEqhcRsxfPrppMWEJ1D1Sp5TMHEoScK0S4tqXEb84JxQEHcbNyDdJIGaQg/bF822luHDR3tcs2yvwSdl6tsdV6NUjd0NlvpQ2AtCAvLVpeAhXXT6Vs622PV0CRUfBPfaWP/hKYTPXQkeiovehQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lr+AoPa/; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767372114; x=1798908114;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KFOnUBOvFoPFL+L9c4KvjfxAUSn8fz9Ic3nFbWuYMi0=;
-  b=lr+AoPa/A9DGOH03tGMl5ExYKVipaOx9H3V30Kztm2T6BiTL7YB8TLvV
-   Pk4IiWosqQs2Q0JR336BNOG0lLTu1acv7yw5fN0xNHOcZ9jTDAJPVDdT1
-   tLc5FeUK0wH+EqLLkgV0r6RIZGxH9G3CZMvKk+QU84fIBjvr8diMLIw80
-   eVWpOFWmQG9XK080koMIWICme9mDQxqugKsu3TZGQZ2lVDikVYlRtZ36Z
-   v7wc5LuqgApWL/L/aRxAn4kWYauY2y6TH/BjLiGSfI4nmxJvAYgVxzxF8
-   ZCNsilh8ZDnK0uwgYN4mYptL7UVrxLJiPRXZIpR7C9W+IpGlykBlR6xUf
-   w==;
-X-CSE-ConnectionGUID: LnWys7YmSBmWNbWJqXi8xw==
-X-CSE-MsgGUID: yUP+kRfyTledJAv2FWs+AQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11659"; a="79495501"
-X-IronPort-AV: E=Sophos;i="6.21,197,1763452800"; 
-   d="scan'208";a="79495501"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2026 08:41:53 -0800
-X-CSE-ConnectionGUID: 9EUcYzkgRXu5VQKNCnjmbw==
-X-CSE-MsgGUID: LWD3MAqzQ7+7gAGN2e+05g==
-X-ExtLoop1: 1
-Received: from dwoodwor-mobl2.amr.corp.intel.com (HELO [10.125.108.222]) ([10.125.108.222])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2026 08:41:51 -0800
-Message-ID: <cea71c01-68e7-4f7f-9931-017109d95ef0@intel.com>
-Date: Fri, 2 Jan 2026 08:41:50 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8DD2BDC19;
+	Fri,  2 Jan 2026 18:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767380327; cv=fail; b=H/9lmp+cCwlOJK3Qo9U+zGIBCTk3APcO3VLFugPzTI1qYKIBb/VDYFx99hiRYp7CW75/IXj+btiuOO82K1OerZJrmtyVX9xHAAQwDUV9iLiKt8TplZvqDjOY09nsvwOq536Ne3gJuBueuyNo/jkO8EbQMDONpEa+Nva9yfA0no4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767380327; c=relaxed/simple;
+	bh=BlLozlqY07HnyayObgmP5T0+x3TxCBBpPNF19X4ZRas=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=P/OLXjk20MnioZBGBn2+oi6Ml7gDbQreQyjqrBtFbY0XJETbkWwyn4tQAxqAz61VJmUdUkdNW3tPyF/jkli5D0qc7OiJuF0jjdOjfpSh7Bvsl6YlodXKifR4X0Id3UgrwZIWaXia2qLC12WmZ1tCvL4Qlma4YQ6HB8EHcA17nsI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=K32N86G0; arc=fail smtp.client-ip=40.93.201.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gli7L9jxepcRZQMhedEH1PVVoYQIrGbkDJrf7eVd3NN0QsHVBONs8DfBguOTroxHR1Yg2dpiX0DL5p8eCS84/rMf1Cm5eKCUT47Kd/JAp0c32ykZUzpkM72FemMIAgc98Jd/dQBCUbduDCUE4ctd4JQ/SJmrf2UNDfB5KzcFaTDrYAxCBUxZf7DRh1lBjULpzPkJCtWNXtY+99JS1Ew2kFEt+VQErV32CcXqf7Tld/36ok1UdkWWOQlXY5Xvg9mP+tslDqsKzjObwY2vsHpmH7XBNv8R1aXFwHIxiC3tTGa2WVAdyGSj66agtye1UNz5kA92K6n4fIDcMqU4a9V7Gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3s4rmC6euQE/0DADKFwWvfzb9ZpCyeKjuzQePEDApiA=;
+ b=aZaqi8/F6n8zqQovsonQC5ssErWGSQutp8aFfw5UlgyYAY4P7DZtDiNaS7xPkeyu/Njxr+hzUYzFSAlTiWrvAl65OqQcjBP8TED2cJVOQwr1Mj3jCBvRBek0r21PGH8NWjGRSOpdLkszkLyWLBXoBtLVF6O9nbL0eLYWmCu0W4WruYRZ2C382IplyC/izwPVhju1ob8t7l6HCiLIfZC0vafDvr5Uqrwpx+ibaJjTA8nWmOfExWt/gf1+argzreP66SxoFJ8l7rCLIoRdTKFUY+Gzhpc/GjbJqd20kNpDt1IE1fXny9g9Ac17QXhnYvtwCjyvkXM+YufaRuoE0vDbXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3s4rmC6euQE/0DADKFwWvfzb9ZpCyeKjuzQePEDApiA=;
+ b=K32N86G0BuAnOhJwZuZPCfcxHIQQ7vlzK116wx+An6tEbvdlRj6ZwpfXFaMcmAuHTsbUnShRzRlAm/lu161K1sDYcVDflqvFMBZDlibli6n5TgueWFwg4opKG2yO3NiILDuyrdKT/3AqjLE7Korkzcbh3W0krar2BHmGxmbIilobCsCRbWLzsy7nxKC3k2DmMOc4Ds+KPaHipb0oQUgnqWuvJTuJdOewy/Eei0mmb1DpFkJ9m+xWEm5JUoTduMdciTSHlmfHwyjBGdD7bCVVUtzhWeTS+VzsB+eWNaedYkLADJ0Bqjx7yc1Ms6x52qdjY7R5L34E9GITV4LoqC5Mbw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by MN0PR12MB6055.namprd12.prod.outlook.com (2603:10b6:208:3cd::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Fri, 2 Jan
+ 2026 18:58:43 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9478.004; Fri, 2 Jan 2026
+ 18:58:43 +0000
+Date: Fri, 2 Jan 2026 14:58:42 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Alexander Graf <graf@amazon.com>, Arnd Bergmann <arnd@arndb.de>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	David Matlack <dmatlack@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Jason Miu <jasonmiu@google.com>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	kexec@lists.infradead.org
+Subject: Re: [RFC PATCH] liveupdate: list all file handler versions in
+ vmlinux section
+Message-ID: <20260102185842.GE125162@nvidia.com>
+References: <20251211042624.175517-1-pratyush@kernel.org>
+ <e4d1c333-7e22-47ee-81a0-2efc4ca6b17c@amazon.com>
+ <86ecod7zb3.fsf@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86ecod7zb3.fsf@kernel.org>
+X-ClientProxiedBy: BL6PEPF00013E0B.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1001:0:10) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] skip redundant TLB sync IPIs
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, akpm@linux-foundation.org
-Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
- peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
- lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
- shy828301@gmail.com, riel@surriel.com, jannh@google.com,
- linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20251229145245.85452-1-lance.yang@linux.dev>
- <f81b98e5-87c0-4c21-9a75-ad5f9b6af6aa@intel.com>
- <1b27a3fa-359a-43d0-bdeb-c31341749367@kernel.org>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <1b27a3fa-359a-43d0-bdeb-c31341749367@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|MN0PR12MB6055:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9657ce3-a3d4-4697-fcb5-08de4a30f317
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?A3YoHCMhg2O4S+fKBhomI+1vOvCqSMFfH2THk5nEdmuuqIXidp6zWkollBWA?=
+ =?us-ascii?Q?FOjztEbqqWV8kkwchEEGxnZM1htDVmngVRGQxtq9F9rzC2QQEXYUQm/f27K1?=
+ =?us-ascii?Q?tPlht9czsO2YVmEPi657h1+jNjy6yc2xMCLgEusXgZZkmmYbwe/1C1yrAO8E?=
+ =?us-ascii?Q?RVnzbkx8XSelfolWmgeYkFm+/Cte4NeWZ5guSQhSG2nSCAkbGu9Zpx2iczj/?=
+ =?us-ascii?Q?YJvEm2eVc9JZY08fP6GltqgCRV4pwWdmELtzhazhw9FZG3Ym/T/J5VBupBOp?=
+ =?us-ascii?Q?PwrskOuYnEpAVioz7dqm6H7kV4VveESaooSUl75S+rdI2CdwCaxvgz8MeIhk?=
+ =?us-ascii?Q?ZyE+VBZqDQ+UK5zUQlJNo1e8zPRn0PX+2lCmejI58Jz8Jp+SUv745BxCZP5Y?=
+ =?us-ascii?Q?YPhGYQxWuCQvOlltobOrNsv+I8f4YA7iYwZHq2osg2sxE4wHnNhRotBiKwgk?=
+ =?us-ascii?Q?5K7Kf4eTgaTa3ACHnC+AkUrW6dtZLwQiYBFPiHnGVDIfdMoYEysyNfhRfwlK?=
+ =?us-ascii?Q?tg91RcminipzGfoGW0Bjzrn8T0+dnvoSmIGofxHshmsqPLjGgr2N3P4To7/D?=
+ =?us-ascii?Q?B0wOU9UfziZpFQ1zcIO8LCx+5znIg2fBkGshjFYGuJxUpfLtiVNrn44onX3G?=
+ =?us-ascii?Q?OgPgIkm0BkZN64M+F/PG8qoNvM6bTLqsPG0iBpsy6pyOr9Y1WqPnsgZmMhf7?=
+ =?us-ascii?Q?H8Ab/d1Cy4R3MLsDz6ITeVFbHHumn63rMViIAton536AIMCJGclxB+T6riNX?=
+ =?us-ascii?Q?EQCHB8x3pEjKqKZikuzUik/X1rbDb+TwsKv557k2o7wx5fAklPhMdk8Z/FPw?=
+ =?us-ascii?Q?4Un6dK/WU5IBXfEIKFd0OVRH1URcG2m5HtzQHblASHP7PQU9ho2ibamZ0KPt?=
+ =?us-ascii?Q?E6xkkn+LGK+lTvTY90sG/dD8UFgibrgIvWYM3UvG4gqCEMsbZp6slLFMlhme?=
+ =?us-ascii?Q?BxK9ZBGHJu0Hx/fS7fDF2CoGaty7DliM0h6FV2VGBc4brFX3rBJq6C4KaE+o?=
+ =?us-ascii?Q?daBSojV/KXL6uB0GPPawQmbvffIEbM5aUTRBoL44p20FkahITPWeMA+YO8d/?=
+ =?us-ascii?Q?8iiMhVzWcd0U27NlijBScfmCA9Ng/TeWpsj2Izp0WQUtNj9zk8X8mBwvIlEf?=
+ =?us-ascii?Q?o6psIwrPXnJu/I8yJP0Dm1rwsJ2DHLzCturTuBA5bESrxXPyUHxaPzaW97fF?=
+ =?us-ascii?Q?6hkLQXoapiJ0iptdt7ZC2KPe4ID10wuAR7KNdaNxz3xJ/Ah6+tP2UrEQuRlb?=
+ =?us-ascii?Q?ifWYSDuZNDOxCyQ5qhcGlevr5NKrMQIcOloLFfqFQO5V6jEK97mSTPbGdVa/?=
+ =?us-ascii?Q?YCvEHZ4DpBdVo8airdge2Q9/unz4/VW2DViJjyPDE44+3bTe+b54Z+XXvkaR?=
+ =?us-ascii?Q?UcMTsZPX0MkEzFGdGcOQ452vgOcj+NFzu1NDtNjrptzoVpoOmFD3vSCxrCts?=
+ =?us-ascii?Q?3ey300q+FwwqC58TUesHDKzpYORElEU7?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?rGc3alB3KuvObve26vNbdB4GxzebVtfN0BA8n5vAwQd12I/zDx2K//zqvoIp?=
+ =?us-ascii?Q?iFcBozY7196QXRHWar1fAOOQvrmQL7jNn+E9RUqBlxbqFGdlOvNOqjop+hlU?=
+ =?us-ascii?Q?9hVmIli/UqY+dp0+cV5Oogqe9Lk1IT9oMUkLeUNwCEaXkB03EN80LUN/vGj4?=
+ =?us-ascii?Q?pbfMO2Ov6J3UCFktdwtjso9HwY7LAVCADT+8k4/GiQZOX8OlJ6SGIfyNJbjE?=
+ =?us-ascii?Q?yInHbs+T04SWF8ZH6W1tTrMPdK/uaTAZ54WLc5YLPYURT7gJLC9co0dTL40r?=
+ =?us-ascii?Q?WW6bCvTl7J3jUurfvwtxdnQXj0QRdAPuQH+eJroZXnoaKD4MrQIknOfp2UtN?=
+ =?us-ascii?Q?25KzD4InTOjvDzrGW9/sntcLyG5YClkSepYEbjs/evDwC9AWYKcswsYCRs7f?=
+ =?us-ascii?Q?R7Uf4Nxpn7RGkZrDAB2gVBw74mdcmkfdl4R/+wQyUUa3/E9Uffu4Ei0RLqKj?=
+ =?us-ascii?Q?uo7XBdQuJFgVodMVTsEu1jfSd8jp4aVv09O5+x1nhZkv4v65TFGO/lGt3+fz?=
+ =?us-ascii?Q?SgvV6GNFnqS6p39YUMG0Rkg7MX/ZyQEzoGACaHg5EMCax+7A7+pimdTdbJu4?=
+ =?us-ascii?Q?qjiZBWZ32v0SKhIRQiM5WaGL2LM/vP0d77eNLqprfeARF4ZTXG/kKZYleQIB?=
+ =?us-ascii?Q?7hRUg6y0+Farf9AsdV1SsANMrXYl2vAjTCbgk+yySAnSV5jtK6fXC/aRaAJc?=
+ =?us-ascii?Q?8p90c50zwXIjJevS36A/YA4luBDcE/hkzL7GWlq8Yl2qPOdhy2vhO2+iZCUU?=
+ =?us-ascii?Q?ZE/y24e0QHQ9bGaWDUy/XppGBKOvnkqBb49RM6FdXBOwFaK55Lbqvf/p69R5?=
+ =?us-ascii?Q?oLr6A7UcX2kg7RKrLl494XXBWHUlVicDPmdSuW84qzK4SD2ptT2FbJe0t7It?=
+ =?us-ascii?Q?6o7hXXlRGHFx3QYkMF6TVv+77AZj2P8AEzxeLHK3QMPy0rGuAUGN37VRtHv+?=
+ =?us-ascii?Q?0spnkG0voa/iE/0OIIayhuLzRUhRQxQr/9f4BWF+MeXq0N09KFZ9gdK/iakx?=
+ =?us-ascii?Q?U6CKtycC7OgKVljM8krhi8L3w/AhYEr7nBbSeVPonsQIrrJSPrJcqZ0Hru+z?=
+ =?us-ascii?Q?nw8pEmQVzWrY+7AMsRrLRthkAfnBptt2UJRv1sLkZtFriLmwcqdf+D4Bk6zG?=
+ =?us-ascii?Q?FMQWNiGRjf/zo+RBuYBAcCgnVgrFHr1s0xITqIgA1hLkn5PnDtcJmiRIvc9u?=
+ =?us-ascii?Q?/gbS7GU2/w7gm7ZBxmHO4JFpzt1V1mSd+lSW7Aqb3sV3HQaRC9ab2c3rZ75b?=
+ =?us-ascii?Q?tVetFQHIwY66T0F26ECaOyqSPLFKSxd1jc8QT39Ok+hGEa4xJZWU8awVyPg8?=
+ =?us-ascii?Q?iujFO66WTm0ISwo5HjuFJZpF+Fn8OEuN/G6Q9VfBFsf3ZMyVFxPYD1RGU9Vi?=
+ =?us-ascii?Q?YxcIv2MR4Thw6fpHB5kxAqCb/WRBxXgEB31ifMBQ/9SOdUYyATBFxWStnMS/?=
+ =?us-ascii?Q?bNvr2+ijCCnYBVTIGwBid3CclFlXOvRAdc0tJWxodDUicAcEkvlIaP8YMlUI?=
+ =?us-ascii?Q?LqENCSEaOxiPW/tCP/VR5+dLEqBqrVhr/RvfvCi6UtmxkApRqho7vhpTnvlo?=
+ =?us-ascii?Q?Eudfpg+ozFh5Q4ZkHpMDQjFOyr/lMzoHMbAQ7Ertz//tjp1qyCIF12YOqofP?=
+ =?us-ascii?Q?pU4zvshCYxQ9EBLAJpAsAYY/VaK6VZTTdCttmJjJcP/yPsfta3U1+F/rUYEj?=
+ =?us-ascii?Q?DomW0VZMVJPVuOk2IjCdno0Vx6vrFseXngQ+EIjfy3aTgeXQ62hD4yTmLH45?=
+ =?us-ascii?Q?JE5RhNBqHA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9657ce3-a3d4-4697-fcb5-08de4a30f317
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2026 18:58:43.2599
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UFJaNsHHJymirIh7jCFWvVeOdLjmtRC6WvIi1aikyG6rJsXg0rzBDIeQYj16LgVg
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6055
 
-On 12/31/25 04:33, David Hildenbrand (Red Hat) wrote:
-> On 12/31/25 05:26, Dave Hansen wrote:
->> On 12/29/25 06:52, Lance Yang wrote:
->> ...
->>> This series introduces a way for architectures to indicate their TLB
->>> flush
->>> already provides full synchronization, allowing the redundant IPI to be
->>> skipped. For now, the optimization is implemented for x86 first and
->>> applied
->>> to all page table operations that free or unshare tables.
->>
->> I really don't like all the complexity here. Even on x86, there are
->> three or more ways of deriving this. Having the pv_ops check the value
->> of another pv op is also a bit unsettling.
+On Mon, Dec 29, 2025 at 10:28:32PM +0100, Pratyush Yadav wrote:
+> On Sat, Dec 13 2025, Alexander Graf wrote:
 > 
-> Right. What I actually meant is that we simply have a property "bool
-> flush_tlb_multi_implies_ipi_broadcast" that we set only to true from the
-> initialization code.
+> > Hi Pratyush,
+> >
+> > On 10.12.25 20:26, Pratyush Yadav wrote:
+> >> As live update evolves, there will be a need to update the serialization
+> >> formats for the different file types. This could be for adding new
+> >> features, for supporting a change in behaviour, or to fix bugs.
+> >>
+> >> If the current kernel does not understand the same set of versions as
+> >> the next kernel, live update will inevitably fail. The next kernel will
+> >> be unable to understand the handed over data and will be unable to
+> >> restore memory, devices, IOMMU page tables, etc.
+> >>
+> >> List the set of versions the kernel understands in a section in vmlinux.
+> >> This can then be used by userspace tooling to make sure the set of file
+> >> descriptors it uses have the same version between both kernels. If there
+> >> is a mismatch, the tooling can catch this early and abort live update
+> >> before it is too late.
+> >>
+> >> The versions are listed in a section called ".liveupdate_versions". The
+> >> section has a header that contains a magic number and the version of the
+> >> data format. The list of version strings directly follow this header.
+> >> Only the version strings are listed, and it is up to userspace to map
+> >> them to file descriptor types.
+> >>
+> >> The format of the section has the same ABI rules as the rest of LUO ABI.
+> >>
+> >> Introduce a LIVEUPDATE_FILE_HANDLER macro that makes it easy to define a
+> >> file handler while also adding its version string to the right section.
+> >>
+> >> Signed-off-by: Pratyush Yadav <pratyush@kernel.org>
+> >
+> > To support multi-version preservation and resume, how about you add a "profile"
+> > hint to the handlers? Then you can tag the handlers with "current" and a
+> > "previous". You then expose one section table with supported versions per
+> > profile. And that means you can from user space select the local profile to
+> > serialize and match that against the target profile of the target system.
+> >
+> > It also allows you to support more "profiles", such as elaborate downstream
+> > version combinations, that upstream will not have to care about.
 > 
-> Without comparing the pv_ops.
+> So in essence you want to tie the versions into a "version set"? If you
+> want to use a new version even for one component, you would create a new
+> version set.
 > 
-> That should reduce the complexity quite a bit IMHO.
+> Interesting idea, but I am curious. Do you see a reason for grouping
+> versions together in this fashion? Why not let each version be changed
+> independently?
 
-Yeah, that sounds promising.
+I don't quite get the point either..
 
-> But maybe you have an even better way on how to indicate support, in a
-> very simple way.
+I think the ELF annotations are intended to give information to the
+userspace, but ultimately I think we should just rely on the userspace
+to implement anything complicated about compatibility policy.
 
-Rather than having some kind of explicit support enumeration, the other
-idea I had would be to actually track the state about what needs to get
-flushed somewhere. For instance, even CPUs with enabled INVLPGB support
-still use IPIs sometimes. That makes the
-tlb_table_flush_implies_ipi_broadcast() check a bit imperfect as is
-because it will for the extra sync IPI even when INVLPGB isn't being
-used for an mm.
+We also have the issue that not all versions *at runtime* are going to
+be supportable. Older versions may be information loosing and cannot
+be emitted based on the current system configuration.
 
-First, we already save some semblance of support for doing different
-flushes when freeing page tables mmu_gather->freed_tables. But, the call
-sites in question here are for a single flush and don't use mmu_gathers.
+So to really make this work you have to dynamically query the current
+kernel, and cross that with the elf data from the next and try to
+cobble together a working set.
 
-The other pretty straightforward thing to do would be to add something
-to mm->context that indicates that page tables need to be freed but
-there might still be wild gup walkers out there that need an IPI. It
-would get set when the page tables are modified and cleared at all the
-sites where an IPIs are sent.
+IMHO most likely real users are going to want to latch onto fixed
+"profiles" and globally bump the profile cluster wide along with
+activating VMMs to consume new features enabled by the newer versions.
 
+There may be an early churn when we bump versions because we are
+messing things up, but the long term steady state will probably be new
+version = required if new features were used by the VMM
 
->> That said, complexity can be worth it with sufficient demonstrated
->> gains. But:
->>
->>> When unsharing hugetlb PMD page tables or collapsing pages in
->>> khugepaged,
->>> we send two IPIs: one for TLB invalidation, and another to synchronize
->>> with concurrent GUP-fast walkers.
->>
->> Those aren't exactly hot paths. khugepaged is fundamentally rate
->> limited. I don't think unsharing hugetlb PMD page tables just is all
->> that common either.
-> 
-> Given that the added IPIs during unsharing broke Oracle DBs rather badly
-> [1], I think this is actually a case worth optimizing.
-...
-> [1] https://lkml.kernel.org/r/20251223214037.580860-1-david@kernel.org
+Thus the version used for serializing and the features active in the
+VMMs should be linked together by the operator.
 
-Gah, that's good context, thanks.
-
-Are there any tests out there that might catch these this case better?
-It might be something good to have 0day watch for.
+Jason
 
