@@ -1,46 +1,44 @@
-Return-Path: <linux-arch+bounces-15666-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15667-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B862CF827A
-	for <lists+linux-arch@lfdr.de>; Tue, 06 Jan 2026 12:52:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F424CF83C1
+	for <lists+linux-arch@lfdr.de>; Tue, 06 Jan 2026 13:10:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 09B363010528
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jan 2026 11:52:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C15E630389A6
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jan 2026 12:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985112EFD86;
-	Tue,  6 Jan 2026 11:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF21314A7A;
+	Tue,  6 Jan 2026 12:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RJK4rD9u"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kdzRBVLv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A461322522
-	for <linux-arch@vger.kernel.org>; Tue,  6 Jan 2026 11:52:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C736C2989B7
+	for <linux-arch@vger.kernel.org>; Tue,  6 Jan 2026 12:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767700322; cv=none; b=hYPP5K2d32wyiwBBqUBxkL8cLrS57A7/CpKByC9QO0kQfpO65XOe7pQFQFboLJG0ddCjVAfm/137Ji7/XLh6oF8KDn3AB2Sa8WZkyuvDYxX4Jm6N1WzKU8SvEMKYoq74lusffI9XNRCgmpWjUonwYTNT4Raa7d+ScALEgs8HXVk=
+	t=1767700998; cv=none; b=d74mHp65mpn3kMIn4Yc2oJBTAnaaT0Pu/FcuY2lh3WtlLUK8oMiUT9xkfM1Q8nrpmvXR+Xfl7O90GGMBiiNW/YJl8ShP0KS6K2QwNvN7o/wM+C/nyVSlxBO0gknEVFbJm7etOY28LUq1TR0Ar4ONlQICboT++9mh9KSfJOsvruo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767700322; c=relaxed/simple;
-	bh=3uE50zhBe9gc4nNAS8O0zcghuzH8rnTg7HpDCKyu5I4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PyoULiplg6JNRsh6D1L2yv4cxd8nry+jQtGg0LZg0kcup1cz6SPmmI1/zE2amxkqhn1la/uLsC5powXlB7EmCO2gtnCgjU4FNMoXzjmmMb34VNGIGogK5BaIDF0bWk3IGGsklzhEBfi4xS5NSehsBWc9erxa793bOJnfNEg1BBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RJK4rD9u; arc=none smtp.client-ip=95.215.58.188
+	s=arc-20240116; t=1767700998; c=relaxed/simple;
+	bh=t7yxb8yntzXFp0tz+JEpK59nILEA49eXL04+zf7TwU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e5xh7q5J+nljlCtYHm85aV2fWOEJCVEEyqCzjYIF+beCj9cuWwyaN8fUOgBw0d7BDLS/gcDq7IS1DnzC30xKsGx9jBcFTS4Xjpc5CjhAvLLAqLbfY5VruK39SAT3BzGA5w/G4MErfuToxP02P7bJ5en3iEeVf9X2bwky4wMMzLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kdzRBVLv; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767700318;
+	t=1767700993;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ASH9sKA9CqH12pO8t+a39xF1o8l7wjDesRLJzYo7jDg=;
-	b=RJK4rD9unB904yjqG7YtH7GMUxlSQosNsESRT1mysjrtG6iWRY3XfoCtx7wfDR1mUmSENh
-	K+7ytPQIYIEbfTgBvfJkgXXfFELO3BA5ZjkqVX7i7ZOvSqJwQPquL2YZYJTGL8V/otYdqC
-	m1zIidafAOa/1RV1YpAD9A5g+Pv1s04=
-From: lance.yang@linux.dev
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iklw0RInONOSh+e9xelR5uEAOvlruMIvuc7amxeOT2I=;
+	b=kdzRBVLvNh8jbNQ59PhwNwBz4pfvxAXmnXMGo9B2oaSAsbzuAsrs+BYB75BRamLHGE8OCb
+	hf1s5SBgskmqMmdkwiWDDkI1Apoa/QMuMicJOLZ/aSx32ijPVk6KHcwfjBgGnwT8S86Amz
+	iUAvdmGMLmr0DxBDKwYjPDSG+VmR+Y8=
+From: Lance Yang <lance.yang@linux.dev>
 To: akpm@linux-foundation.org
 Cc: david@kernel.org,
 	dave.hansen@intel.com,
@@ -69,13 +67,10 @@ Cc: david@kernel.org,
 	linux-arch@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
-	ioworker0@gmail.com,
-	Lance Yang <lance.yang@linux.dev>
-Subject: [PATCH v3 2/2] mm: introduce pmdp_collapse_flush_sync() to skip redundant IPI
-Date: Tue,  6 Jan 2026 19:50:53 +0800
-Message-ID: <20260106115053.32328-3-lance.yang@linux.dev>
-In-Reply-To: <20260106115053.32328-1-lance.yang@linux.dev>
-References: <20260106115053.32328-1-lance.yang@linux.dev>
+	ioworker0@gmail.com
+Subject: [PATCH RESEND v3 0/2] skip redundant TLB sync IPIs
+Date: Tue,  6 Jan 2026 20:03:01 +0800
+Message-ID: <20260106120303.38124-1-lance.yang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -85,163 +80,64 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Lance Yang <lance.yang@linux.dev>
+Hi all,
 
-pmdp_collapse_flush() may already send IPIs to flush TLBs, and then
-callers send another IPI via tlb_remove_table_sync_one() or
-pmdp_get_lockless_sync() to synchronize with concurrent GUP-fast walkers.
+When unsharing hugetlb PMD page tables or collapsing pages in khugepaged,
+we send two IPIs: one for TLB invalidation, and another to synchronize
+with concurrent GUP-fast walkers. However, if the TLB flush already
+reaches all CPUs, the second IPI is redundant. GUP-fast runs with IRQs
+disabled, so when the TLB flush IPI completes, any concurrent GUP-fast
+must have finished.
 
-However, since GUP-fast runs with IRQs disabled, the TLB flush IPI already
-provides the necessary synchronization. We can avoid the redundant second
-IPI.
+We now track whether IPIs were actually sent during TLB flush. We pass
+the mmu_gather context through the flush path, and native_flush_tlb_multi()
+sets a flag when sending IPIs. Works with PV and INVLPGB since only
+native_flush_tlb_multi() sets the flag - no matter what replaces
+pv_ops.mmu.flush_tlb_multi or whether INVLPGB is available.
 
-Introduce pmdp_collapse_flush_sync() which combines flush and sync:
+David Hildenbrand did the initial implementation. I built on his work and
+relied on off-list discussions to push it further - thanks a lot David!
 
-- For architectures using the generic pmdp_collapse_flush() implementation
-  (e.g., x86): Use mmu_gather to track IPI sends. If the TLB flush sent
-  an IPI, tlb_gather_remove_table_sync_one() will skip the redundant one.
+v2 -> v3:
+- Complete rewrite: use dynamic IPI tracking instead of static checks
+  (per Dave Hansen, thanks!)
+- Track IPIs via mmu_gather: native_flush_tlb_multi() sets flag when
+  actually sending IPIs
+- Motivation for skipping redundant IPIs explained by David:
+  https://lore.kernel.org/linux-mm/1b27a3fa-359a-43d0-bdeb-c31341749367@kernel.org/
+- https://lore.kernel.org/linux-mm/20251229145245.85452-1-lance.yang@linux.dev/
 
-- For architectures with custom pmdp_collapse_flush() (s390, riscv,
-  powerpc): Fall back to calling pmdp_collapse_flush() followed by
-  tlb_remove_table_sync_one(). No behavior change.
+v1 -> v2:
+- Fix cover letter encoding to resolve send-email issues. Apologies for
+  any email flood caused by the failed send attempts :(
 
-Update khugepaged to use pmdp_collapse_flush_sync() instead of separate
-flush and sync calls. Remove the now-unused pmdp_get_lockless_sync() macro.
+RFC -> v1:
+- Use a callback function in pv_mmu_ops instead of comparing function
+  pointers (per David)
+- Embed the check directly in tlb_remove_table_sync_one() instead of
+  requiring every caller to check explicitly (per David)
+- Move tlb_table_flush_implies_ipi_broadcast() outside of
+  CONFIG_MMU_GATHER_RCU_TABLE_FREE to fix build error on architectures
+  that don't enable this config.
+  https://lore.kernel.org/oe-kbuild-all/202512142156.cShiu6PU-lkp@intel.com/
+- https://lore.kernel.org/linux-mm/20251213080038.10917-1-lance.yang@linux.dev/
 
-Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
-Signed-off-by: Lance Yang <lance.yang@linux.dev>
----
- include/linux/pgtable.h | 13 +++++++++----
- mm/khugepaged.c         |  9 +++------
- mm/pgtable-generic.c    | 34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 10 deletions(-)
+Lance Yang (2):
+  mm/tlb: skip redundant IPI when TLB flush already synchronized
+  mm: introduce pmdp_collapse_flush_sync() to skip redundant IPI
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index eb8aacba3698..69e290dab450 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -755,7 +755,6 @@ static inline pmd_t pmdp_get_lockless(pmd_t *pmdp)
- 	return pmd;
- }
- #define pmdp_get_lockless pmdp_get_lockless
--#define pmdp_get_lockless_sync() tlb_remove_table_sync_one()
- #endif /* CONFIG_PGTABLE_LEVELS > 2 */
- #endif /* CONFIG_GUP_GET_PXX_LOW_HIGH */
- 
-@@ -774,9 +773,6 @@ static inline pmd_t pmdp_get_lockless(pmd_t *pmdp)
- {
- 	return pmdp_get(pmdp);
- }
--static inline void pmdp_get_lockless_sync(void)
--{
--}
- #endif
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-@@ -1174,6 +1170,8 @@ static inline void pudp_set_wrprotect(struct mm_struct *mm,
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- extern pmd_t pmdp_collapse_flush(struct vm_area_struct *vma,
- 				 unsigned long address, pmd_t *pmdp);
-+extern pmd_t pmdp_collapse_flush_sync(struct vm_area_struct *vma,
-+				 unsigned long address, pmd_t *pmdp);
- #else
- static inline pmd_t pmdp_collapse_flush(struct vm_area_struct *vma,
- 					unsigned long address,
-@@ -1182,6 +1180,13 @@ static inline pmd_t pmdp_collapse_flush(struct vm_area_struct *vma,
- 	BUILD_BUG();
- 	return *pmdp;
- }
-+static inline pmd_t pmdp_collapse_flush_sync(struct vm_area_struct *vma,
-+					unsigned long address,
-+					pmd_t *pmdp)
-+{
-+	BUILD_BUG();
-+	return *pmdp;
-+}
- #define pmdp_collapse_flush pmdp_collapse_flush
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
- #endif
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 9f790ec34400..0a98afc85c50 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1177,10 +1177,9 @@ static enum scan_result collapse_huge_page(struct mm_struct *mm, unsigned long a
- 	 * Parallel GUP-fast is fine since GUP-fast will back off when
- 	 * it detects PMD is changed.
- 	 */
--	_pmd = pmdp_collapse_flush(vma, address, pmd);
-+	_pmd = pmdp_collapse_flush_sync(vma, address, pmd);
- 	spin_unlock(pmd_ptl);
- 	mmu_notifier_invalidate_range_end(&range);
--	tlb_remove_table_sync_one();
- 
- 	pte = pte_offset_map_lock(mm, &_pmd, address, &pte_ptl);
- 	if (pte) {
-@@ -1663,8 +1662,7 @@ static enum scan_result try_collapse_pte_mapped_thp(struct mm_struct *mm, unsign
- 			}
- 		}
- 	}
--	pgt_pmd = pmdp_collapse_flush(vma, haddr, pmd);
--	pmdp_get_lockless_sync();
-+	pgt_pmd = pmdp_collapse_flush_sync(vma, haddr, pmd);
- 	pte_unmap_unlock(start_pte, ptl);
- 	if (ptl != pml)
- 		spin_unlock(pml);
-@@ -1817,8 +1815,7 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
- 		 * races against the prior checks.
- 		 */
- 		if (likely(file_backed_vma_is_retractable(vma))) {
--			pgt_pmd = pmdp_collapse_flush(vma, addr, pmd);
--			pmdp_get_lockless_sync();
-+			pgt_pmd = pmdp_collapse_flush_sync(vma, addr, pmd);
- 			success = true;
- 		}
- 
-diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-index d3aec7a9926a..be2ee82e6fc4 100644
---- a/mm/pgtable-generic.c
-+++ b/mm/pgtable-generic.c
-@@ -233,6 +233,40 @@ pmd_t pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long address,
- 	flush_tlb_range(vma, address, address + HPAGE_PMD_SIZE);
- 	return pmd;
- }
-+
-+pmd_t pmdp_collapse_flush_sync(struct vm_area_struct *vma, unsigned long address,
-+			       pmd_t *pmdp)
-+{
-+	struct mmu_gather tlb;
-+	pmd_t pmd;
-+
-+	VM_BUG_ON(address & ~HPAGE_PMD_MASK);
-+	VM_BUG_ON(pmd_trans_huge(*pmdp));
-+
-+	tlb_gather_mmu(&tlb, vma->vm_mm);
-+	pmd = pmdp_huge_get_and_clear(vma->vm_mm, address, pmdp);
-+
-+	flush_tlb_mm_range(vma->vm_mm, address, address + HPAGE_PMD_SIZE,
-+			   PAGE_SHIFT, true, &tlb);
-+
-+	/*
-+	 * Synchronize with GUP-fast. If the flush sent IPIs, skip the
-+	 * redundant sync IPI.
-+	 */
-+	tlb_gather_remove_table_sync_one(&tlb);
-+	tlb_finish_mmu(&tlb);
-+	return pmd;
-+}
-+#else
-+pmd_t pmdp_collapse_flush_sync(struct vm_area_struct *vma, unsigned long address,
-+			       pmd_t *pmdp)
-+{
-+	pmd_t pmd;
-+
-+	pmd = pmdp_collapse_flush(vma, address, pmdp);
-+	tlb_remove_table_sync_one();
-+	return pmd;
-+}
- #endif
- 
- /* arch define pte_free_defer in asm/pgalloc.h for its own implementation */
+ arch/x86/include/asm/tlb.h      |  3 ++-
+ arch/x86/include/asm/tlbflush.h |  9 +++++----
+ arch/x86/kernel/alternative.c   |  2 +-
+ arch/x86/kernel/ldt.c           |  2 +-
+ arch/x86/mm/tlb.c               | 22 +++++++++++++++------
+ include/asm-generic/tlb.h       | 14 +++++++++-----
+ include/linux/pgtable.h         | 13 +++++++++----
+ mm/khugepaged.c                 |  9 +++------
+ mm/mmu_gather.c                 | 26 ++++++++++++++++++-------
+ mm/pgtable-generic.c            | 34 +++++++++++++++++++++++++++++++++
+ 10 files changed, 99 insertions(+), 35 deletions(-)
+
 -- 
 2.49.0
 
