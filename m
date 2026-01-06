@@ -1,61 +1,46 @@
-Return-Path: <linux-arch+bounces-15674-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15671-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97BD3CF953C
-	for <lists+linux-arch@lfdr.de>; Tue, 06 Jan 2026 17:25:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E008CF9F6A
+	for <lists+linux-arch@lfdr.de>; Tue, 06 Jan 2026 19:09:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 14F7A300D80F
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Jan 2026 16:25:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BABFB31B7B7D
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Jan 2026 17:57:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B1C314A6C;
-	Tue,  6 Jan 2026 16:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C9C033CEAA;
+	Tue,  6 Jan 2026 15:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F2J5zPsU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZzFBdx/W"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE65329378;
-	Tue,  6 Jan 2026 16:25:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117C433D4F0;
+	Tue,  6 Jan 2026 15:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767716702; cv=none; b=rOnHvJpCslHxgpeNrsDatsJlhkAA9z6D+lIA4hQLjMSQuexP58d9O4Ly2r5n/v1AytmWjhy8YAlzGCtVsO6EKNVWdKR0/fxhC8Ft7J71DL7uEJUuRrpLubEGV1IBX+dhqs8z5eQHMA7IRwlSvgmNzbpzfcRHavTP2KfQgSg3juc=
+	t=1767712761; cv=none; b=uqUxY/IbEJvg1miGKjVxShsfb5lTS8/UgPEVcnFu2Eo1RrUx9Q4JeZBfRpsE3NRh72hv/IL0V+XUozOceXOpVq5fQA8efuWmLRfayKr5SiQAHcJnv1gsKrqnIXoaoP/zS2ojbKOrwdmkynAB/Zapcr3svJcCEMjfQ1a+YQEb7z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767716702; c=relaxed/simple;
-	bh=FgbVbjWstxtVReE+uVrnBgSNR1ljBRwNUEeFtwyXQjA=;
+	s=arc-20240116; t=1767712761; c=relaxed/simple;
+	bh=PQWjEY27AuDHc3U5eemh0TiBpvWBZ7jdK/tSG6xBxCE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KiqMGTxLH16FwnkokMy+G5bl6Hus62Iaf1S+GkoVgvNmSPoBayCEY4UEKzLdtvVSNmLAbSXu5zGMQp+CHVmtJ6tlvfrvz7UDM0hIQ/Vl+jEib+L5Dg/jW/oqXVMXCWaw7WMgn08NB/mVthQmPHSvvGvv3GyPNdD7K2iw6O/syJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F2J5zPsU; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767716700; x=1799252700;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FgbVbjWstxtVReE+uVrnBgSNR1ljBRwNUEeFtwyXQjA=;
-  b=F2J5zPsUTQ7FUa2FGKowI/laNL2wNJdCfkKFQh4XkRaRXzEmqZvkSwva
-   aaWJtDA3jKYmh4GkShGqNaqREfqEfhzfRKcLCtdl2c74HP88gPgAOoqXP
-   Lw1Db1JNzzl8q8u2SjCX06V9O3rKUcHy5yZQ5qqa4/3Dtlh8MoPQlDwRv
-   MXOqwvdvHFU7oey7+P1q/gs1qO+85HQ1EjLDQoeAJjazTRw7ZeTK7GNx0
-   8Gym1YmbA+KrTtp7ccZafPv5Xmxw+u7hE6izhdKmGNEdfdey/BUef+CXy
-   8YrcLsmy6T486OfyvjiawKNkPzqFAMdYR230RoqLPcYLhajl/p3o8Kyk2
-   w==;
-X-CSE-ConnectionGUID: 0dzj7e2ISe64j3oziRsI1A==
-X-CSE-MsgGUID: L7AdzeD8RKW6b2iuI1+DGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11663"; a="79717501"
-X-IronPort-AV: E=Sophos;i="6.21,206,1763452800"; 
-   d="scan'208";a="79717501"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2026 08:24:59 -0800
-X-CSE-ConnectionGUID: 4r2XnTedSR661g4k+b1XLQ==
-X-CSE-MsgGUID: GBe/ka8KSW2hj94lXax2Ow==
-X-ExtLoop1: 1
-Received: from cjhill-mobl.amr.corp.intel.com (HELO [10.125.109.89]) ([10.125.109.89])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2026 08:24:57 -0800
-Message-ID: <a20ab449-e6b4-45c7-86df-bb194304503c@intel.com>
-Date: Tue, 6 Jan 2026 08:24:57 -0800
+	 In-Reply-To:Content-Type; b=LKSFCWJ/82BzspAUceHZNWss+PDb0BXTbu8LkhrBWBV49NhortwBXlt6Lc9GDGr7mm9EjP3OUL4QOCTfqpFTm0GSpRBUkUiXyTlLLRZoK64OLM3/1C2jDTFnOKkdub+rjoMjBZGnosm1DWwInAxRJbkXkKlHQAzom1Unet0NfXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZzFBdx/W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C849C116C6;
+	Tue,  6 Jan 2026 15:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767712760;
+	bh=PQWjEY27AuDHc3U5eemh0TiBpvWBZ7jdK/tSG6xBxCE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZzFBdx/WI2GjYmhcvi6yp9/4UwfmyCrys7P4UZIgj9FaT0LKyStePM0eQWcUtCvvD
+	 /V+gKQvG7a5yrjBvfP3OIZyuMzZcMET1RTxKDveQdPqP4J0DZItzZPPXMiwZqRJxTH
+	 ltE0xzEPK4GVmb4gMdVhyH8bNy3BF0lQYPQpov9PLICaPs60edviHqk09OlDoH0xPd
+	 a5h8A4YKZAZYXLg467JE6rI21qfDDc21DmskYYRK8VOMlItxTnVkmGU0o2NZ95NM05
+	 pmZzeKuBl5AVnS7gEx1hfB0qvpQtQU6tW2wcirPpQZSWcVxB4fWJg52P/EadhVBR7F
+	 KN8vizOZoWdiA==
+Message-ID: <da1e8a00-99fe-46d9-b425-c307ea933036@kernel.org>
+Date: Tue, 6 Jan 2026 16:19:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -66,7 +51,7 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH RESEND v3 1/2] mm/tlb: skip redundant IPI when TLB flush
  already synchronized
 To: Lance Yang <lance.yang@linux.dev>, akpm@linux-foundation.org
-Cc: david@kernel.org, dave.hansen@linux.intel.com, will@kernel.org,
+Cc: dave.hansen@intel.com, dave.hansen@linux.intel.com, will@kernel.org,
  aneesh.kumar@kernel.org, npiggin@gmail.com, peterz@infradead.org,
  tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
  hpa@zytor.com, arnd@arndb.de, lorenzo.stoakes@oracle.com, ziy@nvidia.com,
@@ -77,126 +62,100 @@ Cc: david@kernel.org, dave.hansen@linux.intel.com, will@kernel.org,
  linux-kernel@vger.kernel.org, ioworker0@gmail.com
 References: <20260106120303.38124-1-lance.yang@linux.dev>
  <20260106120303.38124-2-lance.yang@linux.dev>
-From: Dave Hansen <dave.hansen@intel.com>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
 In-Reply-To: <20260106120303.38124-2-lance.yang@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/6/26 04:03, Lance Yang wrote:
-> From: Lance Yang <lance.yang@linux.dev>
-> 
-> When unsharing hugetlb PMD page tables, we currently send two IPIs: one
-> for TLB invalidation, and another to synchronize with concurrent GUP-fast
-> walkers via tlb_remove_table_sync_one().
-> 
-> However, if the TLB flush already sent IPIs to all CPUs (when freed_tables
-> or unshared_tables is true), the second IPI is redundant. GUP-fast runs
-> with IRQs disabled, so when the TLB flush IPI completes, any concurrent
-> GUP-fast must have finished.
-> 
-> To avoid the redundant IPI, we add a flag to mmu_gather to track whether
-> the TLB flush sent IPIs. We pass the mmu_gather pointer through the TLB
-> flush path via flush_tlb_info, so native_flush_tlb_multi() can set the
-> flag when it sends IPIs for freed_tables. We also set the flag for
-> local-only flushes, since disabling IRQs provides the same guarantee.
+>   
+>   static void tlb_table_flush(struct mmu_gather *tlb)
+> @@ -367,7 +378,7 @@ void tlb_remove_table(struct mmu_gather *tlb, void *table)
+>   		*batch = (struct mmu_table_batch *)__get_free_page(GFP_NOWAIT);
+>   		if (*batch == NULL) {
+>   			tlb_table_invalidate(tlb);
+> -			tlb_remove_table_one(table);
+> +			tlb_remove_table_one(table, tlb);
+>   			return;
+>   		}
+>   		(*batch)->nr = 0;
+> @@ -427,6 +438,7 @@ static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
+>   	tlb->vma_pfn = 0;
+>   
+>   	tlb->fully_unshared_tables = 0;
+> +	tlb->tlb_flush_sent_ipi = 0;
+>   	__tlb_reset_range(tlb);
+>   	inc_tlb_flush_pending(tlb->mm);
+>   }
 
-The lack of imperative voice is killing me. :)
+But when would we have to reset tlb->tlb_flush_sent_ipi = 0 later? 
+That's where it gets tricky. Just imagine the MMU gather gets reused later.
 
-> diff --git a/arch/x86/include/asm/tlb.h b/arch/x86/include/asm/tlb.h
-> index 866ea78ba156..c5950a92058c 100644
-> --- a/arch/x86/include/asm/tlb.h
-> +++ b/arch/x86/include/asm/tlb.h
-> @@ -20,7 +20,8 @@ static inline void tlb_flush(struct mmu_gather *tlb)
->  		end = tlb->end;
->  	}
->  
-> -	flush_tlb_mm_range(tlb->mm, start, end, stride_shift, tlb->freed_tables);
-> +	flush_tlb_mm_range(tlb->mm, start, end, stride_shift,
-> +			   tlb->freed_tables || tlb->unshared_tables, tlb);
->  }
+Also,
 
-I think this hunk sums up v3 pretty well. Where there was a single boolean, now there are two. To add to that, the structure that contains the booleans is itself being passed in. The boolean is still named 'freed_tables', and is going from:
+	+	if (info->freed_tables && info->tlb)
+	+		info->tlb->tlb_flush_sent_ipi = true;
 
-	tlb->freed_tables
+in native_flush_tlb_multi() misses the fact that we have different 
+flushing types for removed/unshared tables vs. other flush.
 
-which is pretty obviously correct to:
+So this approach more here certainly gets more complicated and error prone.
 
-	tlb->freed_tables || tlb->unshared_tables
+tlb_table_flush_implies_ipi_broadcast() was clearer in that regard: if 
+you flushed the TLB after removing /unsharing tables, the IPI for 
+handling page tables can be skipped. It's on the code flow to assure that.
 
-which is _far_ from obviously correct.
+What could work is tracking "tlb_table_flush_sent_ipi" really when we 
+are flushing the TLB for removed/unshared tables, and maybe resetting it 
+... I don't know when from the top of my head.
 
-I'm at a loss for why the patch wouldn't just do this:
+v2 was simpler IMHO.
 
--	flush_tlb_mm_range(tlb->mm, start, end, stride_shift, tlb->freed_tables);
-+	flush_tlb_mm_range(tlb->mm, start, end, stride_shift, tlb);
+-- 
+Cheers
 
-I suspect these were sent out in a bit of haste, which isn't the first time I've gotten that feeling with this series.
-
-Could we slow down, please?
-
->  static inline void invlpg(unsigned long addr)
-> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-> index 00daedfefc1b..83c260c88b80 100644
-> --- a/arch/x86/include/asm/tlbflush.h
-> +++ b/arch/x86/include/asm/tlbflush.h
-> @@ -220,6 +220,7 @@ struct flush_tlb_info {
->  	 *   will be zero.
->  	 */
->  	struct mm_struct	*mm;
-> +	struct mmu_gather	*tlb;
->  	unsigned long		start;
->  	unsigned long		end;
->  	u64			new_tlb_gen;
-
-This also gives me pause.
-
-There is a *lot* of redundant information between 'struct mmu_gather' and 'struct tlb_flush_info'. There needs to at least be a description of what the relationship is and how these relate to each other. I would have naively thought that the right move here would be to pull the mmu_gather data out at one discrete time rather than store a pointer to it.
-
-What I see here is, I suspect, the most expedient way to do it. I'd _certainly_ have done this myself if I was just hacking something together to play with as quickly as possible.
-
-So, in the end, I don't hate the approach here (yet). But it is almost impossible to evaluate it because the series is taking some rather egregious shortcuts and is lacking any real semblance of a refactoring effort.
+David
 
