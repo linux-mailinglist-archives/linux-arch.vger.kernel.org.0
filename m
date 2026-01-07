@@ -1,66 +1,66 @@
-Return-Path: <linux-arch+bounces-15686-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15689-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBB4ECFD05F
-	for <lists+linux-arch@lfdr.de>; Wed, 07 Jan 2026 10:56:24 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF071CFD4AE
+	for <lists+linux-arch@lfdr.de>; Wed, 07 Jan 2026 12:00:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F3C0B300AB35
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Jan 2026 09:56:23 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 117BA30006DE
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Jan 2026 11:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C73542FFDE3;
-	Wed,  7 Jan 2026 09:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C512F322B7D;
+	Wed,  7 Jan 2026 10:53:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LpLvpO0F"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BrRfds1R"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A842FD1DC;
-	Wed,  7 Jan 2026 09:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F1B2417C3;
+	Wed,  7 Jan 2026 10:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767779226; cv=none; b=kkmBvsrT04QEL/DJNGHoXjfF5G7ATrSVH/wBJyUNBsLtCo++ygHyerC/ofhFZ3Kfl6KyLruitWLB3meDlGV4Q0+DWV/kLGG4iG0WsUznLGtFWTQjlTG1I/btNYdIv0VX7EFDKYRhCpk+c2OqT1Ym46Qd1YoVRKXCkazrbrOtgKg=
+	t=1767783190; cv=none; b=K916UHxd9dWxbUxNehAl3jSUUk/3epPmyktsiryTq9S7oPHEJkuCutsYXcCRujYxsEQYxutBJBAc9ZGDvQp46M/TTe6GEsnr4hasNwhpELVzXUEoNW/DncwvTcSJ4s+t3inwpSwZEChHqugewtIeKcWmveF/CbzgLl+PobOuKLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767779226; c=relaxed/simple;
-	bh=a83o+wX7r90L4ywH9PsTkkN4tbWjpPaE9B8Y5qgLNgE=;
+	s=arc-20240116; t=1767783190; c=relaxed/simple;
+	bh=BvZSuaPuz2QWKv/uboQwgBkx7RyykGPhhK/HVoD4tqg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rLd97EWEwv92ggPQus95aACnnPPWATtKiSfNFqfC05wLXCxVCKcn1btXxeZ8YkOOQPRDVFM/v/86n7/0Cjq9Bm+tO65rniCkiWFVSTgT9xeF6SOgjKlgrUm+07ek0inswsb/ru7g6mcl9hDvetaflHL3rHS6G+/ncC6WeXhula4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LpLvpO0F; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=YP1LLH81FPBys5Lmt8yUU92jRNpZoAbME7y11ujLDfmBVTjTO0OWqe3hv8lVQBJYdtCBB52Oxpzlgf0H9eB/9nqJQmEqaZHa9hQ+HSxAHAnMfDBGvDeeCwy8cfim2eeVw5DxZbuAtEdGKm2XgByhuF1ppk10Nxj9PDtMsWS361o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BrRfds1R; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767779225; x=1799315225;
+  t=1767783187; x=1799319187;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=a83o+wX7r90L4ywH9PsTkkN4tbWjpPaE9B8Y5qgLNgE=;
-  b=LpLvpO0FbMnjCeZG7Y8CiIhwI054s5+GRBtkv4R4Q6N/a/fi/ouXwB2M
-   1nnwBebep1kb/NgYMjGEqrtO5d12/jfTDK0J0L1C2OMqxkafrqYt9fiW9
-   nfGz4gBy/G6qIR0Vhqlhkwy8mnMbd3eCU1g/BNrhAsRjbLTMhlB8s60yT
-   lZDRZV5Dv5DqY6Lu0AW+zm+jIrl+m3A37yAEKjaAyuDny59OpGqa5lXTQ
-   reNYRPW0hmFmUdCMY3hhm5oEWDkwPFaDPd/YVspIkSCwPnmmc8IlIAqZZ
-   Shr3o1dEbs4LgYDtqBgXR01Jw/nkQqfcPJybLMoH9gofMIswHhA8Ge/hx
-   A==;
-X-CSE-ConnectionGUID: 6vH4R3ulRqSl9KGEnhtFHw==
-X-CSE-MsgGUID: BI+Vy6EnQd+K+MVDz5bI8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11663"; a="69194214"
+  bh=BvZSuaPuz2QWKv/uboQwgBkx7RyykGPhhK/HVoD4tqg=;
+  b=BrRfds1RzddIVX8Yv+KqoZ76OpkEJcsQ2crrFBgyTbClRXf8UR7RgxUe
+   ZIclvUqDaNdvs7EaszO4/CZjimTDRLqMIqDxbv8V9Slu0YybfT0AruE3F
+   s2AXr1oLyDOgxPTuFnh4SeA54xJ59wgg2R8cR96py5tL45XkHMAN1iaXd
+   Uaw6Wo6LdivIPzykB5ETnvndfRpjS72fmYY0EnzKGyar2K5ox1AdzZ/vI
+   2t/SW3rXYzXnvTQjb1iFK0gHmUb8+V/5nss72eXupvVpVh0lPlumeoJt2
+   AqGdWj2D+7MAYOPhxuecJJ0R1q5ySVPz9ZTwIZy3/PpFTgnCbOLJ/7jqo
+   g==;
+X-CSE-ConnectionGUID: EcrhfL8MSbGlfxePJSYPfQ==
+X-CSE-MsgGUID: puwghQpgT2menj6lDs2mYA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11663"; a="79453583"
 X-IronPort-AV: E=Sophos;i="6.21,207,1763452800"; 
-   d="scan'208";a="69194214"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 01:47:04 -0800
-X-CSE-ConnectionGUID: jZSHIXi8QfuiQFR7GjwoYQ==
-X-CSE-MsgGUID: tChYKJK2Qp6DUXgcZ++UGg==
+   d="scan'208";a="79453583"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 02:53:05 -0800
+X-CSE-ConnectionGUID: JsXEonzOQh62h1mxBhnXIw==
+X-CSE-MsgGUID: 0ONkis6wRYa2MhyUp6gCWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,207,1763452800"; 
-   d="scan'208";a="202899201"
+   d="scan'208";a="207426387"
 Received: from igk-lkp-server01.igk.intel.com (HELO 92b2e8bd97aa) ([10.211.93.152])
-  by orviesa007.jf.intel.com with ESMTP; 07 Jan 2026 01:46:57 -0800
+  by orviesa004.jf.intel.com with ESMTP; 07 Jan 2026 02:52:58 -0800
 Received: from kbuild by 92b2e8bd97aa with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vdQ7y-000000001Xg-3SbX;
-	Wed, 07 Jan 2026 09:46:54 +0000
-Date: Wed, 7 Jan 2026 10:46:12 +0100
+	id 1vdR9s-000000001Zc-0pw1;
+	Wed, 07 Jan 2026 10:52:56 +0000
+Date: Wed, 7 Jan 2026 11:52:43 +0100
 From: kernel test robot <lkp@intel.com>
 To: Lance Yang <lance.yang@linux.dev>, akpm@linux-foundation.org
 Cc: oe-kbuild-all@lists.linux.dev, david@kernel.org, dave.hansen@intel.com,
@@ -76,7 +76,7 @@ Cc: oe-kbuild-all@lists.linux.dev, david@kernel.org, dave.hansen@intel.com,
 	ioworker0@gmail.com, Lance Yang <lance.yang@linux.dev>
 Subject: Re: [PATCH RESEND v3 2/2] mm: introduce pmdp_collapse_flush_sync()
  to skip redundant IPI
-Message-ID: <202601071005.oEsmtf0J-lkp@intel.com>
+Message-ID: <202601071153.9k8Fm05X-lkp@intel.com>
 References: <20260106120303.38124-3-lance.yang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -94,7 +94,7 @@ kernel test robot noticed the following build errors:
 
 [auto build test ERROR on akpm-mm/mm-everything]
 [also build test ERROR on next-20260107]
-[cannot apply to tip/x86/core tip/x86/mm arnd-asm-generic/master linus/master v6.19-rc4]
+[cannot apply to tip/x86/core tip/x86/mm linus/master v6.16-rc1]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -103,22 +103,31 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Lance-Yang/mm-tlb-skip-re
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
 patch link:    https://lore.kernel.org/r/20260106120303.38124-3-lance.yang%40linux.dev
 patch subject: [PATCH RESEND v3 2/2] mm: introduce pmdp_collapse_flush_sync() to skip redundant IPI
-config: s390-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260107/202601071005.oEsmtf0J-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260107/202601071005.oEsmtf0J-lkp@intel.com/reproduce)
+config: riscv-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260107/202601071153.9k8Fm05X-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260107/202601071153.9k8Fm05X-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601071005.oEsmtf0J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601071153.9k8Fm05X-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
    mm/khugepaged.c: In function 'collapse_huge_page':
->> mm/khugepaged.c:1180:16: error: implicit declaration of function 'pmdp_collapse_flush_sync'; did you mean 'pmdp_collapse_flush'? [-Wimplicit-function-declaration]
+   mm/khugepaged.c:1180:16: error: implicit declaration of function 'pmdp_collapse_flush_sync'; did you mean 'pmdp_collapse_flush'? [-Wimplicit-function-declaration]
     1180 |         _pmd = pmdp_collapse_flush_sync(vma, address, pmd);
          |                ^~~~~~~~~~~~~~~~~~~~~~~~
          |                pmdp_collapse_flush
+>> mm/khugepaged.c:1180:16: error: incompatible types when assigning to type 'pmd_t' from type 'int'
+   mm/khugepaged.c: In function 'try_collapse_pte_mapped_thp':
+   mm/khugepaged.c:1665:19: error: incompatible types when assigning to type 'pmd_t' from type 'int'
+    1665 |         pgt_pmd = pmdp_collapse_flush_sync(vma, haddr, pmd);
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   mm/khugepaged.c: In function 'retract_page_tables':
+   mm/khugepaged.c:1818:35: error: incompatible types when assigning to type 'pmd_t' from type 'int'
+    1818 |                         pgt_pmd = pmdp_collapse_flush_sync(vma, addr, pmd);
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
 
 
 vim +1180 mm/khugepaged.c
