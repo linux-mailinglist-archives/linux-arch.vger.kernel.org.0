@@ -1,241 +1,195 @@
-Return-Path: <linux-arch+bounces-15701-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15700-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDF19D00B8B
-	for <lists+linux-arch@lfdr.de>; Thu, 08 Jan 2026 03:49:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C8C1D00AC6
+	for <lists+linux-arch@lfdr.de>; Thu, 08 Jan 2026 03:29:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7B475300DA56
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jan 2026 02:45:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6D0913065DE9
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jan 2026 02:23:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23BB22727FA;
-	Thu,  8 Jan 2026 02:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B5023EA99;
+	Thu,  8 Jan 2026 02:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCGMhzBe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGb3dmaD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EC71494DB
-	for <linux-arch@vger.kernel.org>; Thu,  8 Jan 2026 02:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1063923D7FD
+	for <linux-arch@vger.kernel.org>; Thu,  8 Jan 2026 02:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767840313; cv=none; b=o4r1TsCDqjAFfCli/cdZnpewll4vitYxYbYG6aix3ShbPKC90xu2uD4/aWX7jIkdrILXAe6MA+KCBgD1AIZmxmioYKlNYayctUSuXZVxd5V03wcSIV2vyuY268BWHod4EUH1B33WxRDYVJp6xyntdxXeHzgQlBIfqpOd4b7jYeY=
+	t=1767839033; cv=none; b=DeLLf3e/B1Vt9BQHhXcfo7IrCY7fgklFNosskHx+2VYC3BXKdUE3l5EmSQRXKyyCxoeMPU2IOCkqQ464OKpw+U3psU+jqQvJ5BVmukbwGaf0RhhyEUQGeY1DoxfSNgknQmY0q1j6SNlLapEcxHvcc15ejUZduHjwE4DTVgmJBGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767840313; c=relaxed/simple;
-	bh=do9l6eGvvyDKINEPSQ7IHQBEOd/mowpyOxaGE0SLNeE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QQE+nxTjrC1vbYT+IdqcJY1nG4pyq8O8SNlaT8iODw0XDUplo4QozTWyeN5qT8uVozG1Zz3FZYIKRc9Sgjy1+LIbqC8p0VDNqm+12zC5lp/RYYWqRfmFvxJN3TYSvwXBKaUCjxdvmQzSaCTW/jzxmdqd0j9HpFdWHGaFahpayt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCGMhzBe; arc=none smtp.client-ip=209.85.219.54
+	s=arc-20240116; t=1767839033; c=relaxed/simple;
+	bh=ZDpPQWr5z3NT2bQ1AQqz7QtzavFPv5XMuiJ4qVKOIms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IT53UAkba+IuF8WEcEnk3dA6MphWPqaYV+LyNczQZPJnb68WE724xd5QabMge/Zp1ExbfXko3UdEJ5fVGeoucu4JfSrApHqgTlwMP7PXF9aHtxXg0+B/IuS5wSjAjhwsI9FpJfIQrEKckfWVB1rWshrN1X3Lec9iG8fHBHqDidk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MGb3dmaD; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8908f5ed4aeso8876206d6.3
-        for <linux-arch@vger.kernel.org>; Wed, 07 Jan 2026 18:45:09 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-78c66bdf675so27815637b3.2
+        for <linux-arch@vger.kernel.org>; Wed, 07 Jan 2026 18:23:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767840308; x=1768445108; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WJ0O3nuDBxLsxoMKJl4tF5zDnnuLWj/3NEIyxU+lc3Y=;
-        b=MCGMhzBeiNO5O3nNA/nwZnxv5zlE16NSWQZ7/ptucNg0HIh/aYWsjqTSo1755dVYk2
-         sNExb0WdPMmPx64ksdNikTv3Zf4M2qKwFecOsOdCIvoKSOayT1rJ6PX2fAoE3167ITGL
-         X4S3xwvkXvnPe/jvhIu0vBq9XSxLaIsqSUydO6ouqLUwwdZw4+BIhP9EsKlBmzwo+WkJ
-         tKyJJHzyj5fa1w4OQHMdr0zmC8cXAs9D1eBlWJvNJakiefIZKhfIUy8VZSV+fR9ogOKX
-         r5gNExvy0vwwovgwC1NhpZWLD/4jQqLBGjWQchtAM9Z2yIuafrd/LxjSIN7DJJXt68t7
-         Odnw==
+        d=gmail.com; s=20230601; t=1767839029; x=1768443829; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6WPMqEgbiq/1nCGoqJgHIPGVbxZP1MvEMarO5Hdi07w=;
+        b=MGb3dmaDQKsX//2UaMn18UEyPEVVOrwpxvgc2plAE81AZgWHrrAgPjTatOAPslaTB5
+         EfQ5rgoTupA4yNHOh7kI082eN62vYdquEf+7Cxn9HonhYZ2JfJOVkG+0GqmUlWz4+R0q
+         NShQVulSEA7CR8bEiX2zr4wBM4g55McgeeGcJbmFP+GlF3NxbnNvA0pz9vdS54zmM5ZY
+         fP2HHaeUXBjYV20GVogADu5n3l11A34uA+a+JZUmfBKNg9s7AtPxn875jkeRmjVgxqWl
+         4QO129EL8ru8/vAukdfLmGvUSTHOsynYrp8RzC4QWYZwB5sFp2xWTbnboRzQofpJDx8p
+         cWVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767840308; x=1768445108;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WJ0O3nuDBxLsxoMKJl4tF5zDnnuLWj/3NEIyxU+lc3Y=;
-        b=ao3rxvxgxDqs4mG6uITJxRJNIJNBZ5sqS05xDw4oWwy6SxTKy+ch5fiwdF9n3Fynbb
-         txQR9g8jnp316ImL1yn/Axb0Ysg1npmlaN6SXG5owTr+Rk0VZMLi7OrNE8YsLVNeMKiq
-         digAS4x+tPD4s0Ed26VhRcdCVxH9Z65Em1ydIknR3P3Z7KK/QDrcbmgMpUjchaioNEqc
-         863tZMvbMlvzasg7kFW6ScBT44oKRDjhObp0xYk5XwuqP5P127BtO6mBkav5tX0jklHD
-         4X2otaW3eLmJPMGqRzoT0H4j0rq+9mRzTtZiFWWiHzyCRQqR3FUHDNUbQB4thHFO5t2M
-         8ZaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgPhXokVmxklAYTRvf1CvtliJbQhwqeyBjtIUuj4UVRqmu483Jn8RyyC7kqi5P1pbydZmOci/PyvSr@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIM0+mmTspib3G3wfG7JmVIr66bd3TFV5OGqgfNe26Gh9Pm8LX
-	1dgHOsTBjioX5ilCE8uo0fSPH+8POfetYrOIIicO9ITPeSAhovzE0wZG
-X-Gm-Gg: AY/fxX7swC+NWry0R6iEmLFyozhJ48QhCypJJ8taBEScyn8TdkIJgQZGvHF2lVJxitg
-	e/q3MC52dEBxVS88YuwpcI6PJwQg8DNqOrHZUGLYapQayNFHHscr+k+U+guf8xfMJAQ7DWVrgg6
-	oSQ/Ummmbo5pfESnKJLqlErgOKlbH89LMsuLUyBIls0r21TmWwoPSAUPLtK6rB7XQxlp0Rr2b19
-	R6OvPQyebUMyR3P8gNtO/Y1kWYbtZApFhVhonxwHN8DL/mYKtNJZQ/5L2ZXGsXGaOCYMeiFyOGY
-	yHmGFVkWkjexfw35i27soYxrSEOBHWyZIbvQukzUyqntim3ZQfUnXMxTVsDuteYRtyCAdM9vcDS
-	bWFWICrkOdzFYMmHIjeWIiU4KVYhAND3VeiTsKKOJML1paZJ0xKdrfeSgYkUI+jHWlzoM98uVZB
-	LUxkrhy9JOsw==
-X-Google-Smtp-Source: AGHT+IFTPsy9VwPhKALWTvLAxLL4YRWKWUiavLYzsq3SmgBSOEcDED2k8hwXyHd77UWp0Yyjdri5kw==
-X-Received: by 2002:a05:690e:1404:b0:644:43f7:11b8 with SMTP id 956f58d0204a3-64716b33a92mr3911696d50.13.1767833919327;
-        Wed, 07 Jan 2026 16:58:39 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:4f::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d80be64sm2714670d50.6.2026.01.07.16.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 16:58:39 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Subject: [PATCH net-next v8 0/5] net: devmem: improve cpu cost of RX token
- management
-Date: Wed, 07 Jan 2026 16:57:34 -0800
-Message-Id: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
+        d=1e100.net; s=20230601; t=1767839029; x=1768443829;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6WPMqEgbiq/1nCGoqJgHIPGVbxZP1MvEMarO5Hdi07w=;
+        b=dmxT7B9qct99H0MGKBcA+XYT+yrxDtKsHj1oPu0JnrL6GDzXsB9w9iXnL5EKcR9VmL
+         uBeCr/aKKW9KZtpmDC3Ez9JYx0S7MOvSSsR89y/V4Z3pSj/ieF2bNVQEc6xcn3Yf/B4D
+         IdPoAi+cRagJLMhKzqEpBUHLmoYRW6iIZfx6zXc2KHqAV0BBd1O07YJAgZOc855rx1vC
+         Jf7xLdcK971YaCQt2mLtWcaQUguiRthkbl7Hz7O1/sWLzWbsp4PoGMAyOlUjbCqetC/f
+         Zzus/oU13h4H0df/FCJhQY1EeUNMVXr3z+sDPDS9aXSwTrBEMHqtJ2Pr6qJIwdIYGPEq
+         AvaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXW/FH5wO69+/7Hs+0YVLZL79VGoVU7JFCnnmITGXRuROkajM1HebP1YZq69kgsL7d06r6sJ+LvhymG@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfkTLA3PRr4hVWwL0qpQ7/PLl7/f3yBx9kgFuP/S7yWS4bPNg9
+	ol1AezbQ3hl41F4e+5m5CQdgkT5j5k0kfzwNgmZofO0t1RbM8Sbs2KJl
+X-Gm-Gg: AY/fxX5IKYd4HGRGM39ryYQfz1O831VqqFTpQTDG5MQyWXB1L3YGGrk1oSTkrtAmZIw
+	uToEMG1A1BP90Q/ZEwGueL7Czq7W6tq5me7LXEvFp90hmZmxNx/8JG2NmSMaaC4k/2HPu1LWDuo
+	OYt2KGHmSid45DgQOj8oJ0BKv01asUq89RHa87MOUpB3hoaF/DAxmqTqRR35LXoxt4CUtLhfVBb
+	fQnLEU0u3akBVJVytaEFOzWCKTnYLQD5/1pkyQCw0cVL0Qf6FrPi3hAhjZMgEVFfdWuyfVGhVKA
+	Nqrdl8u46IaajDF4RKIUenIOzJruAgzyH+gOGk+9SGK//dtRCcBowp4YmK3VPtOJX2XVpUV2gTg
+	GmQJPq/z1m++OL4Kcd2xRyQb6OWyisstbO/Oy/IyZzKpyeXwa32LtaNoeeVvUoqaLmqql6EpIM2
+	w3NhEZYwdvJeCXi6OXbjnGVh9gmDJIPU5tQznixg==
+X-Google-Smtp-Source: AGHT+IGgMpL+kZMdvF4ADTgetvjR8KjnRPwe3Xe2CKlVvJLk69qHA2NQZ4MxPPVQYhnVGWyKjWzQjw==
+X-Received: by 2002:a05:690e:1c06:b0:644:6b68:f126 with SMTP id 956f58d0204a3-64716cacb29mr3927712d50.77.1767839028925;
+        Wed, 07 Jan 2026 18:23:48 -0800 (PST)
+Received: from [192.168.2.226] (104.194.78.75.16clouds.com. [104.194.78.75])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-790ae603282sm21321087b3.13.2026.01.07.18.23.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jan 2026 18:23:48 -0800 (PST)
+Message-ID: <1d110134-89ab-474b-bca6-cfbfd4b5057f@gmail.com>
+Date: Thu, 8 Jan 2026 10:23:19 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAABX2kC/5XSS2rEMAyA4asEr0dFfsixZ9V7lC78UJrQJhliN
- 8xQ5u6FLNqQXdaC7xdCP6LwMnAR1+ZHLLwOZZgncW3cpRGpD9MHw5DFtREKFaFTHkpaQk09xDn
- GB5f+i8cwQeZ15BFqukGdP3mC71upC4cRlFeRZWsyoRaXRtwW7ob7VnwTE1eY+F7F+6UR/VDqv
- Dy2VVa5zbeqR3W6ukpAyN5YaX0kInwduYaXNI9balU7XsrzvAKE5DC3mmI2pA+83vHKnuc1IKA
- z0diYg3Pdgac/XqLS53kCBNOm6KgjRZ4PvP3nJZrzvAUEDt6lzmSD8XicdsfL8w+1toAgQ0zO2
- FaTSTv++Xz+AkyAtcrSAgAA
-X-Change-ID: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
- David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Shuah Khan <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
- Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
- asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/pgtable: convert pgtable_t to ptdesc pointer
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Mike Rapoport <rppt@kernel.org>, alexs@kernel.org,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
+ Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>,
+ Brian Cain <bcain@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Michal Simek <monstr@monstr.eu>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+ Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+ Stafford Horne <shorne@gmail.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Yoshinori Sato
+ <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Richard Weinberger <richard@nod.at>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>,
+ "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:SYNOPSYS ARC ARCHITECTURE" <linux-snps-arc@lists.infradead.org>,
+ "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+ "open list:MMU GATHER AND TLB INVALIDATION" <linux-arch@vger.kernel.org>,
+ "open list:MMU GATHER AND TLB INVALIDATION" <linux-mm@kvack.org>,
+ "open list:C-SKY ARCHITECTURE" <linux-csky@vger.kernel.org>,
+ "open list:QUALCOMM HEXAGON ARCHITECTURE" <linux-hexagon@vger.kernel.org>,
+ "open list:LOONGARCH" <loongarch@lists.linux.dev>,
+ "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+ "open list:MIPS" <linux-mips@vger.kernel.org>,
+ "open list:OPENRISC ARCHITECTURE" <linux-openrisc@vger.kernel.org>,
+ "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+ "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+ "open list:SUPERH" <linux-sh@vger.kernel.org>,
+ "open list:USER-MODE LINUX (UML)" <linux-um@lists.infradead.org>
+References: <20260107064642.15771-1-alexs@kernel.org>
+ <aV4h5vQUNXn5cpMY@kernel.org>
+ <080e493a-e4f1-4c97-a3e1-f76f126b5213@gmail.com>
+ <aV5yIuGi9Ni5YP5E@casper.infradead.org>
+Content-Language: en-US
+From: Alex Shi <seakeel@gmail.com>
+In-Reply-To: <aV5yIuGi9Ni5YP5E@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-This series improves the CPU cost of RX token management by adding an
-attribute to NETDEV_CMD_BIND_RX that configures sockets using the
-binding to avoid the xarray allocator and instead use a per-binding niov
-array and a uref field in niov.
 
-Improvement is ~13% cpu util per RX user thread.
 
-Using kperf, the following results were observed:
+On 2026/1/7 22:48, Matthew Wilcox wrote:
+> On Wed, Jan 07, 2026 at 05:28:36PM +0800, Alex Shi wrote:
+>> Right, I will fix this. and sent the 2nd version.
+> No, the patch is stupid and wrong.  Don't send a v2.  You seem to have a
+> hairtrigger resend, so I'm trying to prevent a v2 being sent instead of
+> sending a patient reply.
 
-Before:
-	Average RX worker idle %: 13.13, flows 4, test runs 11
-After:
-	Average RX worker idle %: 26.32, flows 4, test runs 11
+Hi Matthew,
 
-Two other approaches were tested, but with no improvement. Namely, 1)
-using a hashmap for tokens and 2) keeping an xarray of atomic counters
-but using RCU so that the hotpath could be mostly lockless. Neither of
-these approaches proved better than the simple array in terms of CPU.
+I hear you—no v2 will be sent.
+but sorry for a bit confusing, what's your expected fix? is the too 
+quick resenting? or the direction to alignment pgtable_t with ptdesc is 
+wrong?
 
-The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
-optimization. It is an optional attribute and defaults to 0 (i.e.,
-optimization on).
+If it's the first. the new change for review address Mike's concern.
+diff --git a/arch/arm/include/asm/pgalloc.h b/arch/arm/include/asm/pgalloc.h
+index a17f01235c29..a204c3ac800a 100644
+--- a/arch/arm/include/asm/pgalloc.h
++++ b/arch/arm/include/asm/pgalloc.h
+@@ -94,13 +94,13 @@ pte_alloc_one_kernel(struct mm_struct *mm)
+  static inline pgtable_t
+  pte_alloc_one(struct mm_struct *mm)
+  {
+-       struct page *pte;
++       struct ptdesc *pte;
 
-To: David S. Miller <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Simon Horman <horms@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-To: Willem de Bruijn <willemb@google.com>
-To: Neal Cardwell <ncardwell@google.com>
-To: David Ahern <dsahern@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-To: Arnd Bergmann <arnd@arndb.de>
-To: Jonathan Corbet <corbet@lwn.net>
-To: Andrew Lunn <andrew+netdev@lunn.ch>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Stanislav Fomichev <sdf@fomichev.me>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: asml.silence@gmail.com
-Cc: matttbe@kernel.org
-Cc: skhawaja@google.com
+         pte = __pte_alloc_one(mm, GFP_PGTABLE_USER | PGTABLE_HIGHMEM);
+         if (!pte)
+                 return NULL;
+-       if (!PageHighMem(pte))
+-               clean_pte_table(page_address(pte));
++       if (!PageHighMem(ptdesc_page(pte)))
++               clean_pte_table(ptdesc_address(pte));
+         return pte;
+  }
 
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+@@ -141,7 +141,7 @@ pmd_populate(struct mm_struct *mm, pmd_t *pmdp, 
+pgtable_t ptep)
+         else
+                 prot = _PAGE_USER_TABLE;
 
-Changes in v8:
-- change static branch logic (only set when enabled, otherwise just
-  always revert back to disabled)
-- fix missing tests
-- Link to v7: https://lore.kernel.org/r/20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com
+-       __pmd_populate(pmdp, page_to_phys(ptep), prot);
++       __pmd_populate(pmdp, page_to_phys(ptdesc_page(ptep)), prot);
+  }
 
-Changes in v7:
-- use netlink instead of sockopt (Stan)
-- restrict system to only one mode, dmabuf bindings can not co-exist
-  with different modes (Stan)
-- use static branching to enforce single system-wide mode (Stan)
-- Link to v6: https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com
-
-Changes in v6:
-- renamed 'net: devmem: use niov array for token management' to refer to
-  optionality of new config
-- added documentation and tests
-- make autorelease flag per-socket sockopt instead of binding
-  field / sysctl
-- many per-patch changes (see Changes sections per-patch)
-- Link to v5: https://lore.kernel.org/r/20251023-scratch-bobbyeshleman-devmem-tcp-token-upstream-v5-0-47cb85f5259e@meta.com
-
-Changes in v5:
-- add sysctl to opt-out of performance benefit, back to old token release
-- Link to v4: https://lore.kernel.org/all/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v4-0-39156563c3ea@meta.com
-
-Changes in v4:
-- rebase to net-next
-- Link to v3: https://lore.kernel.org/r/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v3-0-084b46bda88f@meta.com
-
-Changes in v3:
-- make urefs per-binding instead of per-socket, reducing memory
-  footprint
-- fallback to cleaning up references in dmabuf unbind if socket
-  leaked tokens
-- drop ethtool patch
-- Link to v2: https://lore.kernel.org/r/20250911-scratch-bobbyeshleman-devmem-tcp-token-upstream-v2-0-c80d735bd453@meta.com
-
-Changes in v2:
-- net: ethtool: prevent user from breaking devmem single-binding rule
-  (Mina)
-- pre-assign niovs in binding->vec for RX case (Mina)
-- remove WARNs on invalid user input (Mina)
-- remove extraneous binding ref get (Mina)
-- remove WARN for changed binding (Mina)
-- always use GFP_ZERO for binding->vec (Mina)
-- fix length of alloc for urefs
-- use atomic_set(, 0) to initialize sk_user_frags.urefs
-- Link to v1: https://lore.kernel.org/r/20250902-scratch-bobbyeshleman-devmem-tcp-token-upstream-v1-0-d946169b5550@meta.com
-
----
-Bobby Eshleman (5):
-      net: devmem: rename tx_vec to vec in dmabuf binding
-      net: devmem: refactor sock_devmem_dontneed for autorelease split
-      net: devmem: implement autorelease token management
-      net: devmem: document NETDEV_A_DMABUF_AUTORELEASE netlink attribute
-      selftests: drv-net: devmem: add autorelease test
-
- Documentation/netlink/specs/netdev.yaml           |  12 +++
- Documentation/networking/devmem.rst               |  70 +++++++++++++
- include/net/netmem.h                              |   1 +
- include/net/sock.h                                |   7 +-
- include/uapi/linux/netdev.h                       |   1 +
- net/core/devmem.c                                 | 114 ++++++++++++++++++----
- net/core/devmem.h                                 |  13 ++-
- net/core/netdev-genl-gen.c                        |   5 +-
- net/core/netdev-genl.c                            |  10 +-
- net/core/sock.c                                   | 103 ++++++++++++++-----
- net/ipv4/tcp.c                                    |  76 ++++++++++++---
- net/ipv4/tcp_ipv4.c                               |  11 ++-
- net/ipv4/tcp_minisocks.c                          |   3 +-
- tools/include/uapi/linux/netdev.h                 |   1 +
- tools/testing/selftests/drivers/net/hw/devmem.py  |  21 +++-
- tools/testing/selftests/drivers/net/hw/ncdevmem.c |  19 ++--
- 16 files changed, 389 insertions(+), 78 deletions(-)
----
-base-commit: 627f8a2588139ec699cda5d548c6d4733d2682ca
-change-id: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
-
-Best regards,
--- 
-Bobby Eshleman <bobbyeshleman@meta.com>
-
+  #endif /* CONFIG_MMU */
 
