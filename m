@@ -1,66 +1,66 @@
-Return-Path: <linux-arch+bounces-15715-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15716-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19D6D05D5F
-	for <lists+linux-arch@lfdr.de>; Thu, 08 Jan 2026 20:28:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C114D0607A
+	for <lists+linux-arch@lfdr.de>; Thu, 08 Jan 2026 21:22:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0779E301064C
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Jan 2026 19:20:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2967E301D312
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Jan 2026 20:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D03313272;
-	Thu,  8 Jan 2026 19:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3300328614;
+	Thu,  8 Jan 2026 20:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O2mY2EJM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dE30YEXF"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DD416EB42;
-	Thu,  8 Jan 2026 19:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CB81A23A0;
+	Thu,  8 Jan 2026 20:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767900019; cv=none; b=c1GzZQzxx0TKAw+8xUp2Lwwm9jn+R6f8qlWn7B5N+fO8FbLbhuxzpBmeRDBQMXnp4YfxqXhGB2m1qY6N1gdVDynDsmSe0fXWsmxxoAun+iFTnoHRIb6ZTpiJPtyKoJXBs3KrqeZYG4OwCCMr34QFrMINN+MDxAqli+rlFQjIpfk=
+	t=1767903747; cv=none; b=lrizul+YAzEEBQp4jJZh4tH8HEK4IE6o5IbGJW/RS86iJgFJ+9HOZMzI90ARf6hqjhNrZudXmCVtiE4PMlaL5ILS41kd1OQi39CuLZmyEduK4sZwLT/xJaqD6nLsFDVKJn4/IENqvwIG9xLcyP7O5zeNhNH1X29U1NTn9vaaeg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767900019; c=relaxed/simple;
-	bh=FBaPQlSoTU5UHUYndbWv1nQt4mmWHgIdDAUljiKLbro=;
+	s=arc-20240116; t=1767903747; c=relaxed/simple;
+	bh=GdQrN+ZQRYM/rEQoK2EVWRblOIHzv0OWm75G2cMva8I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RUyVtqyEYTXxOb/zmEecsVAU1i27FTwbayUdK1eLHig/84+e01tYyAljJy5Wxjmndtr2m2L+lDL48qnQ68AgSlRLhRQe1GpShQ2Mi7+4SJWolDrea8cMF0pwfL3hkhfBo9X0HmNhcOhSHqPJFZKWnru9IUET381NetMDTf58dBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O2mY2EJM; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y2CTnUDap8OQLdJGhg0c8XnmA2aaMXacvyGcLjXmRJMavN746olJrENe3wo6+npup+h6nmWVNS0lOc0GatbV/DC1BUvCxKdCk6u11C6LGrqtL+/6C7n5v8XUYjGvzw0JPfMpFqEXEh08WrR8nR63afs+gaCATIEYHrZqw2gHa8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dE30YEXF; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767900018; x=1799436018;
+  t=1767903745; x=1799439745;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FBaPQlSoTU5UHUYndbWv1nQt4mmWHgIdDAUljiKLbro=;
-  b=O2mY2EJM8BABzGWqpu/7Mx60a3H3X1UMcfjO2X2l6147HNJztNdibzQG
-   i38wt+g8hFRlwP80XKDYwd3+CylS9GtGfHZApYwPInzd01iKUWPE7MRfP
-   IhrdKktwcCdq2pgkzKdNZ4vYmKJdmQoXgRtNJdOY8/9ju1grkzRUTbCp/
-   IXaCd1eHp+q/Fn8vcEweJaLRrDh9vNgHR3pBlIwhwUdnTelAX7YEhL2aE
-   b91T0kCG+NkO1LXNbegstUYIFRe3AduYI7FNew93p1p0aNZ3KWXZydnDF
-   8pwljU9LYL9obZGhnceOMpCTMj8QgHqNp23wQBwOj7BDeIdk5EViYW7Jx
-   g==;
-X-CSE-ConnectionGUID: lNCDdACnTT2K4Ylh86U1tQ==
-X-CSE-MsgGUID: h+uJI4oBR4qM/MJgSaCuJA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="86702597"
+  bh=GdQrN+ZQRYM/rEQoK2EVWRblOIHzv0OWm75G2cMva8I=;
+  b=dE30YEXFh3VEApy4TgVlRzkFD/nPBeEPmUVYU++6EcDdO/24Nze2pMTn
+   g5546nm5IBWeeUNnlYRIwXcr5GCv6yYt1u9i0j9UT78f4tWE0gQXD2+d6
+   dBy/fB22b0NJGhZo/EmU80m0KRM0jFxvLBMvzXwN1bqdYwqJ7heuZQ765
+   8QaUsuHBlpQv+oHngD+QFdvK6oJ20uwVXgbcjUcwuIGiGqq1aqiuBPFkp
+   R35IjPP8yrlPfv3G5TAAYxs7JQHElMkJiid5sL47Oz5fObJsAMJrz2fQ+
+   aEciOsxP/4UP0Fq4sOJIL1qhK2KGO+c2g308PnCaY+YMHGIvCrHNohioX
+   w==;
+X-CSE-ConnectionGUID: XCzTnsmwRr+biRUy5KXhgA==
+X-CSE-MsgGUID: 2iJ8O99CTOqdy7Z5RWYnVQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="86706514"
 X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
-   d="scan'208";a="86702597"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 11:20:16 -0800
-X-CSE-ConnectionGUID: JN1S6bCYR3WKLjz2HSm2wg==
-X-CSE-MsgGUID: WywU1gmIRreo/ZIK9+auZQ==
+   d="scan'208";a="86706514"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 12:22:24 -0800
+X-CSE-ConnectionGUID: HKw0EADDT9S18G4SjpZ19Q==
+X-CSE-MsgGUID: SCDiEARCQYSm/ua3y5cAtg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
-   d="scan'208";a="203197976"
+   d="scan'208";a="207775745"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Jan 2026 11:20:08 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 08 Jan 2026 12:22:18 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vdvYC-00000000568-2Bfv;
-	Thu, 08 Jan 2026 19:20:04 +0000
-Date: Fri, 9 Jan 2026 03:19:52 +0800
+	id 1vdwWO-0000000058K-1XXv;
+	Thu, 08 Jan 2026 20:22:16 +0000
+Date: Fri, 9 Jan 2026 04:21:38 +0800
 From: kernel test robot <lkp@intel.com>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -76,15 +76,16 @@ To: Bobby Eshleman <bobbyeshleman@gmail.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Donald Hunter <donald.hunter@gmail.com>,
 	Mina Almasry <almasrymina@google.com>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	Stanislav Fomichev <sdf@fomichev.me>, asml.silence@gmail.com,
 	matttbe@kernel.org, skhawaja@google.com,
 	Bobby Eshleman <bobbyeshleman@meta.com>
 Subject: Re: [PATCH net-next v8 3/5] net: devmem: implement autorelease token
  management
-Message-ID: <202601090223.Ygqrrc5p-lkp@intel.com>
+Message-ID: <202601090411.LCEg5Rem-lkp@intel.com>
 References: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-3-92c968631496@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -106,25 +107,28 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/net-devmem
 base:   net-next/main
 patch link:    https://lore.kernel.org/r/20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-3-92c968631496%40meta.com
 patch subject: [PATCH net-next v8 3/5] net: devmem: implement autorelease token management
-config: openrisc-defconfig (https://download.01.org/0day-ci/archive/20260109/202601090223.Ygqrrc5p-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260109/202601090223.Ygqrrc5p-lkp@intel.com/reproduce)
+config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20260109/202601090411.LCEg5Rem-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260109/202601090411.LCEg5Rem-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601090223.Ygqrrc5p-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601090411.LCEg5Rem-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   net/ipv4/tcp.c: In function 'tcp_recvmsg_dmabuf':
->> net/ipv4/tcp.c:2600:41: error: implicit declaration of function 'net_devmem_dmabuf_binding_get'; did you mean 'net_devmem_dmabuf_binding_put'? [-Wimplicit-function-declaration]
+>> net/ipv4/tcp.c:2600:6: error: call to undeclared function 'net_devmem_dmabuf_binding_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
     2600 |                                         net_devmem_dmabuf_binding_get(binding);
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                         net_devmem_dmabuf_binding_put
+         |                                         ^
+   net/ipv4/tcp.c:2600:6: note: did you mean 'net_devmem_dmabuf_binding_put'?
+   net/ipv4/../core/devmem.h:163:1: note: 'net_devmem_dmabuf_binding_put' declared here
+     163 | net_devmem_dmabuf_binding_put(struct net_devmem_dmabuf_binding *binding)
+         | ^
+   1 error generated.
 
 
-vim +2600 net/ipv4/tcp.c
+vim +/net_devmem_dmabuf_binding_get +2600 net/ipv4/tcp.c
 
   2498	
   2499	/* On error, returns the -errno. On success, returns number of bytes sent to the
