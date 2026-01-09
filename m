@@ -1,118 +1,113 @@
-Return-Path: <linux-arch+bounces-15725-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15726-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2CA1D0A996
-	for <lists+linux-arch@lfdr.de>; Fri, 09 Jan 2026 15:22:47 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11B39D0AFC4
+	for <lists+linux-arch@lfdr.de>; Fri, 09 Jan 2026 16:42:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9DFCA307CA54
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Jan 2026 14:17:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6D8503019496
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jan 2026 15:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E103535E537;
-	Fri,  9 Jan 2026 14:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257E750094C;
+	Fri,  9 Jan 2026 15:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VF2XfVts"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xOPnIlh5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE6523D7F0;
-	Fri,  9 Jan 2026 14:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AA126ED41
+	for <linux-arch@vger.kernel.org>; Fri,  9 Jan 2026 15:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767968263; cv=none; b=Eq9x7nR5Vk/fwFQn0fPDF67cyI6fM5yoymxkdFzrrFq/e31ceeECqGsP0vj+rVMLgbhSfXq5rxnxQvFShyNQ6aENPNEx/7wpK4oIEtnn/lOrU7GdMnepGNDCGs/iGJz2lTJfzrjSzTwOoKuQtlHQPkag8ReUBMwvgXt6NjtQ53A=
+	t=1767972674; cv=none; b=F6gybx2ZfPpZ3kWHefg0Vhb+14/Oo4HWyw4HD28uNoqyTY+atfG9t+gjtSW24Xv4T41h+VSzl4qozzWqe4yJux0DCPKozl/ugBb9pe4zolVi3GrhhK8ZOFUy2WSnWokWgsunh3L4zwK7EPYiBKfFeyr0mGasmbWQZXZDSSEQBiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767968263; c=relaxed/simple;
-	bh=vd6qb39sTCFIUF7Ocpe41fwG41sMttVN9wEPA6KuLdQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M1193g285H/0fsYxiORr+aYT5hd7Ee3m8w1sjKKkl8cLFwfkGKMhksJtsg4EMu2RUlY+TfOk7E46alMCTlQhx/YG4mf8uB+lB6kdg9xDS/5snmc3PUy17uxMxmhxSEhLppGmgwIciG8b1oDikDv/oQ8obxB+YV2Mx0gfrwco9xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VF2XfVts; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 557A6C4CEF1;
-	Fri,  9 Jan 2026 14:17:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767968263;
-	bh=vd6qb39sTCFIUF7Ocpe41fwG41sMttVN9wEPA6KuLdQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VF2XfVtsVmxwgr7tNzF6S0PyJO39O2U1i8oLEPbI9UicTnmj3CA3DCV/TKVdUCS64
-	 ZkHCVp44eV2grPDXSkPW0Z8aG9vRddVH/p63dPSSd1ph33FncCIEKGEERzrS+UCV0p
-	 Hnz3RKFUrv5pBvfPwvMQ+T+r1fBA5T34KRTqeumkeQbSZJxmj4YF7VJ5f3n8LlDkMc
-	 C6giBS8IyHow7R+YXARHYsLkXqbK9nuhk/uqP05QmbfwJzU2AkePgc/+aUvppcqSXY
-	 rvyubWUR7Z93PsF2dmIviy3JmsFvfdonb57CEtEhrYqRj+k1Ez9FiXjjOTHgNwrIEz
-	 TbSJm+pyb+0+w==
-Date: Fri, 9 Jan 2026 14:17:36 +0000
-From: Will Deacon <will@kernel.org>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-	peterz@infradead.org, akpm@linux-foundation.org,
-	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
-	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v8 04/12] arm64: support WFET in
- smp_cond_relaxed_timeout()
-Message-ID: <aWEOALG07jHC_oHC@willie-the-truck>
-References: <20251215044919.460086-1-ankur.a.arora@oracle.com>
- <20251215044919.460086-5-ankur.a.arora@oracle.com>
+	s=arc-20240116; t=1767972674; c=relaxed/simple;
+	bh=27j3KTMjIrvUYknQmCp2x40gZBrYwJ1ntB6W4hJffi0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TrBJcfGCjhnCiPxOFkV86XEBxXexhzHUBS0m14ff0w68g6eiRhCp5cxCXpM+RC9NictOt8+aCqcp2Q8he625tJq0nvoZepRgstk38qyRWlgNW17GrEw/wvL8I3XAb97yzv2MhXKLnR8xlDkbu0PG2+3ScNClsYbA/L28DFupPfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xOPnIlh5; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <f45a1760-7fa6-4e2c-ba5a-90e250a5792a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767972669;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4FEO03nU3lunGBMTB9f9/hv+IjcT/lwasWMosM27ke0=;
+	b=xOPnIlh5FqZsn91jKIxYC3Z9+oplXNrgqQGMxNCC3FOU27HuGA1Z2ZkeHqpwes8Ix0X83b
+	1Cc8jM7UiW2qVphjJvQ/sLfoFRJuCx8uRcnzejAuOkdZkfP00BzrlsMX/fY4ropVVhslz+
+	E7HqBxXQUW6higVM/BLRB9wyeIn1DY0=
+Date: Fri, 9 Jan 2026 23:30:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251215044919.460086-5-ankur.a.arora@oracle.com>
+Subject: Re: [PATCH RESEND v3 1/2] mm/tlb: skip redundant IPI when TLB flush
+ already synchronized
+Content-Language: en-US
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>, dave.hansen@intel.com
+Cc: dave.hansen@linux.intel.com, will@kernel.org, aneesh.kumar@kernel.org,
+ npiggin@gmail.com, peterz@infradead.org, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+ arnd@arndb.de, akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
+ ziy@nvidia.com, baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com,
+ npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
+ baohua@kernel.org, shy828301@gmail.com, riel@surriel.com, jannh@google.com,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, ioworker0@gmail.com
+References: <20260106120303.38124-1-lance.yang@linux.dev>
+ <20260106120303.38124-2-lance.yang@linux.dev>
+ <da1e8a00-99fe-46d9-b425-c307ea933036@kernel.org>
+ <7472056a-3919-429a-845d-c2076496d537@linux.dev>
+ <4d94363b-5b3b-4401-a9d8-da136d71f8c3@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <4d94363b-5b3b-4401-a9d8-da136d71f8c3@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Dec 14, 2025 at 08:49:11PM -0800, Ankur Arora wrote:
-> Extend __cmpwait_relaxed() to __cmpwait_relaxed_timeout() which takes
-> an additional timeout value in ns.
+
+
+On 2026/1/9 22:13, David Hildenbrand (Red Hat) wrote:
 > 
-> Lacking WFET, or with zero or negative value of timeout we fallback
-> to WFE.
+>>> What could work is tracking "tlb_table_flush_sent_ipi" really when we
+>>> are flushing the TLB for removed/unshared tables, and maybe resetting
+>>> it ... I don't know when from the top of my head.
+>>
+>> Not sure what's the best way forward here :(
+>>
+>>>
+>>> v2 was simpler IMHO.
+>>
+>> The main concern Dave raised was that with PV hypercalls or when
+>> INVLPGB is available, we can't tell from a static check whether IPIs
+>> were actually sent.
 > 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
->  arch/arm64/include/asm/barrier.h |  8 ++--
->  arch/arm64/include/asm/cmpxchg.h | 72 ++++++++++++++++++++++----------
->  2 files changed, 55 insertions(+), 25 deletions(-)
+> Why can't we set the boolean at runtime when initializing the pv_ops 
+> structure, when we are sure that it is allowed?
 
-Sorry, just spotted something else on this...
+Yes, thanks, that sounds like a reasonable trade-off :)
 
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 6190e178db51..fbd71cd4ef4e 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -224,8 +224,8 @@ do {									\
->  extern bool arch_timer_evtstrm_available(void);
->  
->  /*
-> - * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()
-> - * for the ptr value to change.
-> + * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()/
-> + * __cmpwait_relaxed_timeout() for the ptr value to change.
->   *
->   * Since this period is reasonably long, choose SMP_TIMEOUT_POLL_COUNT
->   * to be 1, so smp_cond_load_{relaxed,acquire}_timeout() does a
-> @@ -234,7 +234,9 @@ extern bool arch_timer_evtstrm_available(void);
->  #define SMP_TIMEOUT_POLL_COUNT	1
->  
->  #define cpu_poll_relax(ptr, val, timeout_ns) do {			\
-> -	if (arch_timer_evtstrm_available())				\
-> +	if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))		\
-> +		__cmpwait_relaxed_timeout(ptr, val, timeout_ns);	\
-> +	else if (arch_timer_evtstrm_available())			\
->  		__cmpwait_relaxed(ptr, val);				\
+As you mentioned:
 
-Don't you want to make sure that we have the event stream available for
-__cmpwait_relaxed_timeout() too? Otherwise, a large timeout is going to
-cause problems.
+"this lifetime stuff in core-mm ends up getting more complicated than
+v2 without a clear benefit".
 
-Will
+I totally agree that v3 is too complicated :(
+
+But Dave's concern about v2 was that we can't accurately tell whether
+IPIs were actually sent in PV environments or with INVLPGB, which
+misses optimization opportunities. The INVLPGB+no_global_asid case
+also sends IPIs during TLB flush.
+
+Anyway, yeah, I'd rather start with a simple approach, even if it's
+not perfect. We can always improve it later ;)
+
+Any ideas on how to move forward?
 
