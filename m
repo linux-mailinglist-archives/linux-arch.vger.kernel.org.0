@@ -1,46 +1,45 @@
-Return-Path: <linux-arch+bounces-15727-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15728-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C011ED0B069
-	for <lists+linux-arch@lfdr.de>; Fri, 09 Jan 2026 16:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B59CFD0BE59
+	for <lists+linux-arch@lfdr.de>; Fri, 09 Jan 2026 19:42:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C15D6305BC02
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Jan 2026 15:40:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E25F2307446D
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jan 2026 18:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DEB2882A9;
-	Fri,  9 Jan 2026 15:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5221A29D29E;
+	Fri,  9 Jan 2026 18:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K11C6Tgv"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="XoCTjqjf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1085927465C;
-	Fri,  9 Jan 2026 15:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8989529AB11;
+	Fri,  9 Jan 2026 18:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767973230; cv=none; b=YLhGkSK9erDa5drf4favCNViHk+4IPW0hgkli+qy5cSSf5KFQuOxnNsiqdjQpnNLkEH6APXg2/K6UfAjgCZodkHFl6txuA3CfrBC8+gV9goBTnYTWMamLsfRtwPbo5L9ZXe6gsoBF8O3zz0EDbG7R8AqLK3lp5G7BGsYVDgW2gA=
+	t=1767984059; cv=none; b=ZwLB0n4XbRVTiYTfFwQJl4RLooi477fkQP0KUW1Qg56RwXZeOBQy/nsQ4sWbhnblra2DB9CgMkhSaCs2x9Aqr2V0WbnHN8FqIGpDa3S9zh4sg6paxd1n9cnF6ll9YLyX3oPnFQiV+4RgMBH0lGfw1Xj6L6HC+0IfWZmRyx4g7Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767973230; c=relaxed/simple;
-	bh=MClLfcW/LlA2fAjKxgewmcykTxQMbVVC8RBgYHlNmE4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nez8+TNlFqIlwlj32lJ+K6JU1L1vdNDwUpuVWZwbH+UTxGJ6BUNuFVrhCe7whluiRoG/2pcLv/tSUvzjUuu4TQcUX/GfCmjh96E32/cm87QyG1ffn6LbfiYKE80CtBxvjDLbjecH9Z0gY4GztgFnPenhQqJRa80cB/AcunC2Wpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K11C6Tgv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3379C4CEF1;
-	Fri,  9 Jan 2026 15:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767973229;
-	bh=MClLfcW/LlA2fAjKxgewmcykTxQMbVVC8RBgYHlNmE4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K11C6TgvxC8lsO0GRbqPjDBs0iDEYVVrnJ9KHwUsxL4dFqHYpSfmz2qn8S1nwvtS2
-	 TqRxYkFkIdC4lOBszkOcY9dmC8sBAUaCanbxtGAW0Tu4Qb/3OZd/rVMKhgoti9NdVp
-	 Uo1FoJNzVH6K2/DQ9O/AnIfl7x16z73RqMb565AtUaaMDru6CUZwdHcB0gbrn5KMta
-	 LuM7SVgKVjSXmVfyU7KWxLUnyxx1zAVY3sbea0QBgfZoJnIKNhcy9ad75bGaoASXUn
-	 3L5LfheloI+TrzIbPYDnbDmjuw43JcK4oQ0mN411rebJExnd+4WrP/4oVNEV06Uy5y
-	 zqGxX7ux9jmKQ==
-Message-ID: <bbfdf226-4660-4949-b17b-0d209ee4ef8c@kernel.org>
-Date: Fri, 9 Jan 2026 16:40:19 +0100
+	s=arc-20240116; t=1767984059; c=relaxed/simple;
+	bh=DVq+iGiTpsM0PMC6tUEaMCxyeanmPJ7pPH4Fuz4eSW4=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=NvMmgqPR338CuBFVqGkTkTHeL583/u68jWoPr7jk+/5LQfYeHVjhewFMbgvEGp6qFhrWaa+gi1NLS33bqNjcyk0exKvbYDuUTFoDqOW0f9HaFsYPFOMfjaKumk/0GEHWpP7DAdfuO653/eO2ZcHKs7O4wp4OCEv530QE+m7aMTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=XoCTjqjf; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.201.246] (unknown [4.194.122.144])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 33C37201AC63;
+	Fri,  9 Jan 2026 10:40:37 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 33C37201AC63
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1767984048;
+	bh=kAjbPy112sQr9pnjoL+tUHNQcw11KZSGpWO64sBkgeE=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=XoCTjqjf+0cTQ6+NtsMwPbX50/W1KMFtwywbDEjthV4ZPrQ3/CmR7oiAwy21nY7rJ
+	 Y2odzPK/fEx7S4+CSSS5DZS4wC4zfamvChcOdOiGiDhUTiF/DzCeaYKBZqseFb96HY
+	 s0nYe32guvtm4GRcc3F0wToZT7BPJK4ayFHtHr/w=
+Message-ID: <162c901f-69a7-420a-9148-a469d5a8ca4f@linux.microsoft.com>
+Date: Fri, 9 Jan 2026 10:40:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -48,151 +47,131 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 1/2] mm/tlb: skip redundant IPI when TLB flush
- already synchronized
-To: Lance Yang <lance.yang@linux.dev>, dave.hansen@intel.com
-Cc: dave.hansen@linux.intel.com, will@kernel.org, aneesh.kumar@kernel.org,
- npiggin@gmail.com, peterz@infradead.org, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
- arnd@arndb.de, akpm@linux-foundation.org, lorenzo.stoakes@oracle.com,
- ziy@nvidia.com, baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com,
- npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com,
- baohua@kernel.org, shy828301@gmail.com, riel@surriel.com, jannh@google.com,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, ioworker0@gmail.com
-References: <20260106120303.38124-1-lance.yang@linux.dev>
- <20260106120303.38124-2-lance.yang@linux.dev>
- <da1e8a00-99fe-46d9-b425-c307ea933036@kernel.org>
- <7472056a-3919-429a-845d-c2076496d537@linux.dev>
- <4d94363b-5b3b-4401-a9d8-da136d71f8c3@kernel.org>
- <f45a1760-7fa6-4e2c-ba5a-90e250a5792a@linux.dev>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: Yu Zhang <zhangyu1@linux.microsoft.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+ "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+ easwar.hariharan@linux.microsoft.com, "kys@microsoft.com"
+ <kys@microsoft.com>, "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+ "kwilczynski@kernel.org" <kwilczynski@kernel.org>,
+ "mani@kernel.org" <mani@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+ "bhelgaas@google.com" <bhelgaas@google.com>, "arnd@arndb.de"
+ <arnd@arndb.de>, "joro@8bytes.org" <joro@8bytes.org>,
+ "will@kernel.org" <will@kernel.org>,
+ "robin.murphy@arm.com" <robin.murphy@arm.com>,
+ "jacob.pan@linux.microsoft.com" <jacob.pan@linux.microsoft.com>,
+ "nunodasneves@linux.microsoft.com" <nunodasneves@linux.microsoft.com>,
+ "mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [RFC v1 1/5] PCI: hv: Create and export hv_build_logical_dev_id()
+To: Michael Kelley <mhklinux@outlook.com>
+References: <20251209051128.76913-1-zhangyu1@linux.microsoft.com>
+ <20251209051128.76913-2-zhangyu1@linux.microsoft.com>
+ <SN6PR02MB41570FC0D7EA1364FB48CD1ED485A@SN6PR02MB4157.namprd02.prod.outlook.com>
+From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
-In-Reply-To: <f45a1760-7fa6-4e2c-ba5a-90e250a5792a@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <SN6PR02MB41570FC0D7EA1364FB48CD1ED485A@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 1/9/26 16:30, Lance Yang wrote:
-> 
-> 
-> On 2026/1/9 22:13, David Hildenbrand (Red Hat) wrote:
+On 1/8/2026 10:46 AM, Michael Kelley wrote:
+> From: Yu Zhang <zhangyu1@linux.microsoft.com> Sent: Monday, December 8, 2025 9:11 PM
 >>
->>>> What could work is tracking "tlb_table_flush_sent_ipi" really when we
->>>> are flushing the TLB for removed/unshared tables, and maybe resetting
->>>> it ... I don't know when from the top of my head.
->>>
->>> Not sure what's the best way forward here :(
->>>
->>>>
->>>> v2 was simpler IMHO.
->>>
->>> The main concern Dave raised was that with PV hypercalls or when
->>> INVLPGB is available, we can't tell from a static check whether IPIs
->>> were actually sent.
+>> From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
 >>
->> Why can't we set the boolean at runtime when initializing the pv_ops
->> structure, when we are sure that it is allowed?
+>> Hyper-V uses a logical device ID to identify a PCI endpoint device for
+>> child partitions. This ID will also be required for future hypercalls
+>> used by the Hyper-V IOMMU driver.
+>>
+>> Refactor the logic for building this logical device ID into a standalone
+>> helper function and export the interface for wider use.
+>>
+>> Signed-off-by: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
+>> Signed-off-by: Yu Zhang <zhangyu1@linux.microsoft.com>
+>> ---
+>>  drivers/pci/controller/pci-hyperv.c | 28 ++++++++++++++++++++--------
+>>  include/asm-generic/mshyperv.h      |  2 ++
+>>  2 files changed, 22 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+>> index 146b43981b27..4b82e06b5d93 100644
+>> --- a/drivers/pci/controller/pci-hyperv.c
+>> +++ b/drivers/pci/controller/pci-hyperv.c
+>> @@ -598,15 +598,31 @@ static unsigned int hv_msi_get_int_vector(struct irq_data *data)
+>>
+>>  #define hv_msi_prepare		pci_msi_prepare
+>>
+>> +/**
+>> + * Build a "Device Logical ID" out of this PCI bus's instance GUID and the
+>> + * function number of the device.
+>> + */
+>> +u64 hv_build_logical_dev_id(struct pci_dev *pdev)
+>> +{
+>> +	struct pci_bus *pbus = pdev->bus;
+>> +	struct hv_pcibus_device *hbus = container_of(pbus->sysdata,
+>> +						struct hv_pcibus_device, sysdata);
+>> +
+>> +	return (u64)((hbus->hdev->dev_instance.b[5] << 24) |
+>> +		     (hbus->hdev->dev_instance.b[4] << 16) |
+>> +		     (hbus->hdev->dev_instance.b[7] << 8)  |
+>> +		     (hbus->hdev->dev_instance.b[6] & 0xf8) |
+>> +		     PCI_FUNC(pdev->devfn));
+>> +}
+>> +EXPORT_SYMBOL_GPL(hv_build_logical_dev_id);
 > 
-> Yes, thanks, that sounds like a reasonable trade-off :)
+> This change is fine for hv_irq_retarget_interrupt(), it doesn't help for the
+> new IOMMU driver because pci-hyperv.c can (and often is) built as a module.
+> The new Hyper-V IOMMU driver in this patch series is built-in, and so it can't
+> use this symbol in that case -- you'll get a link error on vmlinux when building
+> the kernel. Requiring pci-hyperv.c to *not* be built as a module would also
+> require that the VMBus driver not be built as a module, so I don't think that's
+> the right solution.
 > 
-> As you mentioned:
-> 
-> "this lifetime stuff in core-mm ends up getting more complicated than
-> v2 without a clear benefit".
-> 
-> I totally agree that v3 is too complicated :(
-> 
-> But Dave's concern about v2 was that we can't accurately tell whether
-> IPIs were actually sent in PV environments or with INVLPGB, which
-> misses optimization opportunities. The INVLPGB+no_global_asid case
-> also sends IPIs during TLB flush.
-> 
-> Anyway, yeah, I'd rather start with a simple approach, even if it's
-> not perfect. We can always improve it later ;)
-> 
-> Any ideas on how to move forward?
+> This is a messy problem. The new IOMMU driver needs to start with a generic
+> "struct device" for the PCI device, and somehow find the corresponding VMBus
+> PCI pass-thru device from which it can get the VMBus instance ID. I'm thinking
+> about ways to do this that don't depend on code and data structures that are
+> private to the pci-hyperv.c driver, and will follow-up if I have a good suggestion.
 
-I'd hope Dave can comment :)
+Thank you, Michael. FWIW, I did try to pull out the device ID components out of 
+pci-hyperv into include/linux/hyperv.h and/or a new include/linux/pci-hyperv.h
+but it was just too messy as you say.
 
-In general, I saw the whole thing as a two step process:
+> I was wondering if this "logical device id" is actually parsed by the hypervisor,
+> or whether it is just a unique ID that is opaque to the hypervisor. From the
+> usage in the hypercalls in pci-hyperv.c and this new IOMMU driver, it appears
+> to be the former. Evidently the hypervisor is taking this logical device ID and
+> and matching against bytes 4 thru 7 of the instance GUIDs of PCI pass-thru
+> devices offered to the guest, so as to identify a particular PCI pass-thru device.
+> If that's the case, then Linux doesn't have the option of choosing some other
+> unique ID that is easier to generate and access. 
 
-1) Avoid IPIs completely when the TLB flush sent them. We can achieve
-    that through v2 or v3, one-way or the other, I don't particularly
-    care as long as it is clean and simple.
+Yes, the device ID is actually used by the hypervisor to find the corresponding PCI
+pass-thru device and the physical IOMMUs the device is behind and execute the
+requested operation for those IOMMUs.
 
-2) For other configs/arch, send IPIs only to CPUs that are actually in
-    GUP-fast etc. That would resolve some RT headake with broadcast IPIs.
+> There's a uniqueness issue with this kind of logical device ID that has been
+> around for years, but I had never thought about before. In hv_pci_probe()
+> instance GUID bytes 4 and 5 are used to generate the PCI domain number for
+> the "fake" PCI bus that the PCI pass-thru device resides on. The issue is the
+> lack of guaranteed uniqueness of bytes 4 and 5, so there's code to deal with
+> a collision. (The full GUID is unique, but not necessarily some subset of the
+> GUID.) It seems like the same kind of uniqueness issue could occur here. Does
+> the Hyper-V host provide any guarantees about the uniqueness of bytes 4 thru
+> 7 as a unit, and if not, what happens if there is a collision? Again, this
+> uniqueness issue has existed for years, so it's not new to this patch set, but
+> with new uses of the logical device ID, it seems relevant to consider.
+ 
+Thank you for bringing that up, I was aware of the uniqueness workaround but, like you,
+I had not considered that the workaround could prevent matching the device ID with the
+record the hypervisor has of the PCI pass-thru device assigned to us. I will work with
+the hypervisor folks to resolve this before this patch series is posted for merge.
 
-
-Regarding 2), it obviously only applies to setups where 1) does not 
-apply: like x86 with INVLPGB or arm64.
-
-I once had the idea of letting CPUs that enter/exit GUP-fast (and 
-similar) to indicate in a global cpumask (or per-CPU variables) that 
-they are in that context. Then, we can just collect these CPUs and limit 
-the IPIs to them (usually, not a lot ...).
-
-The trick here is to not slowdown GUP-fast too much. And one person 
-(Yair in RT context) who played with that was not able to reduce the 
-overhead sufficiently enough.
-
-I guess the options are
-
-a) Per-MM CPU mask we have to update atomically when entering/leaving 
-GUP-fast
-
-b) Global mask we have to update atomically when entering/leaving GUP-fast
-
-c) Per-CPU variable we have to update when entering-leaving GUP-fast. 
-Interrupts are disabled, so we don't have to worry about reschedule etc.
-
-Maybe someone reading along has other thoughts.
-
--- 
-Cheers
-
-David
+Thanks,
+Easwar (he/him)
 
