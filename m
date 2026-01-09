@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-15722-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15723-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A56CCD0A93E
-	for <lists+linux-arch@lfdr.de>; Fri, 09 Jan 2026 15:15:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D9B0D0A960
+	for <lists+linux-arch@lfdr.de>; Fri, 09 Jan 2026 15:17:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0EC6C3065E0B
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Jan 2026 14:11:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 46D3C309A6E9
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Jan 2026 14:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C72F35CBCD;
-	Fri,  9 Jan 2026 14:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67DD35BDC4;
+	Fri,  9 Jan 2026 14:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FH//Tu3D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1AHF+d1"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5911B35CB60;
-	Fri,  9 Jan 2026 14:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826A133438D;
+	Fri,  9 Jan 2026 14:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767967911; cv=none; b=BigCZNN0rkkQceYJMK2vJDyBfcIgqjpQW+0TzdPW0EvVDUwlsyEkL8T3sC0gSb/tVd2Plxs/qWYejfUa22rp+Q/MNQZmTrjswTdZfCU8lsuXmeaYLjRbbmEAkv1YGZuwTSuuHn0upZbWPmuEapEWEa7lj6Cl6Hs5nTBftfhZHyc=
+	t=1767967994; cv=none; b=UwWLNntCFBloc+zrWW9pnP/BzbM34J1jjiCLvnYAXfX71vC3YIXamOJ/7PuIoCaR+OCc400DEMNs+aAqIopk+y5d7mk89HtYI97Nq7CL3hKxd/7+Y/JBc9bhb4QtcQ7+uMLC0s48p7suHEUoxamSMSwLcfMBZbrNSdbYM/vfJw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767967911; c=relaxed/simple;
-	bh=CdGScel+GqgAXknTQg/2/WjRhWNPeJQzkNl75YgQGmk=;
+	s=arc-20240116; t=1767967994; c=relaxed/simple;
+	bh=zfTrIma4u2eTRFK2jPd6kgFySsJEA/u5aLMa3tKAV2c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UMP4hmhaVbiYYOPcaigDUcCEbVXzjblTChSHw/OJ5LhyZyB5cyEZYY9v6o5da4g6upiMxBAQxGldpnqge3p7hRtbVaO1LV5PfwnXCYHKfyeCNLaY7lqUVF2EnUzBgxUBqh/QMimswl+hJTfDpMYazfG3woJgAPJdOo5zpgE5Ea0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FH//Tu3D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7695C4CEF1;
-	Fri,  9 Jan 2026 14:11:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=aXbI2O37UQr3F8tk9w+8a8vaqC1USwZqPlBJVn6RZdz8Yv2hp6XmABZdQPyBLO90+XUmJQkgcFF/PjHKEwwWXpFcBg79BvI2KHNCOiAqgVzjjVu4YunSg7Lxrx44V0Oo2uRYN3tc6IsnZl92DgkC3SvPj7Ybf1hSpHhxw7JoVMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1AHF+d1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8359C4CEF1;
+	Fri,  9 Jan 2026 14:13:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767967911;
-	bh=CdGScel+GqgAXknTQg/2/WjRhWNPeJQzkNl75YgQGmk=;
+	s=k20201202; t=1767967994;
+	bh=zfTrIma4u2eTRFK2jPd6kgFySsJEA/u5aLMa3tKAV2c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FH//Tu3DNmjALm9gWWlfNBdkLe455FVzeLixSksG8giXEOXMPuhYyrfm2Wbx8fzud
-	 qE54HHMhjm0yb7vQAwMKbx07D6NX3pFJDjezm1taKkwgnKZaAMCfF4e17RIKnwiac+
-	 DrjxTNlUcwV2tDrXqXydinJyPXU6jm0L/VAOq8KQlS/SAzwsP91VPBk9KyQb1v0Igj
-	 ATLVeu5ttie+rfclDmQCnmegLLbaShWERe3T19ODmVhAOHUz1WW2Yr1SThfNa7CysB
-	 U67T8zGku2JgOrCv6S4TrMQY8g2SSgAwMQqyIbDEKnBMlnGGoB2H7ULorOVdCJFm+n
-	 Ei7WBzkYC52EA==
-Message-ID: <253140b0-c9b9-4ef0-8b36-af307296519b@kernel.org>
-Date: Fri, 9 Jan 2026 15:11:40 +0100
+	b=r1AHF+d1hLsa/qRNBXVzWxoX8nfLtX6asrbvdwVLhPc2yU0u1dnhdAnfH+rJQPPSh
+	 WB6i9K28hd6WwOEiKSERiESyR6hbSwjR0TgNnonOaasdFuZGy6eSM4Tv6klSdavMGk
+	 M5X3psDCH5aqO/uoD0Hf9W7f9tkHj7N31MdpByBdYhcCNmZMWJEnnBrEQsNNRw3JiP
+	 1cOMZYTdEeY2kApQxbs5Z874kf/n78tLWpIROCuafDnqIKFGvYv67ATprzishHzrfl
+	 RY0vegzRUMy3pFvkjPX65p1gakoT+H+U8+eqvaAZbLsFWBhxAn4rciU42PC8+mKvlw
+	 rGENQuxdown3Q==
+Message-ID: <4d94363b-5b3b-4401-a9d8-da136d71f8c3@kernel.org>
+Date: Fri, 9 Jan 2026 15:13:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,7 +64,6 @@ References: <20260106120303.38124-1-lance.yang@linux.dev>
  <20260106120303.38124-2-lance.yang@linux.dev>
  <da1e8a00-99fe-46d9-b425-c307ea933036@kernel.org>
  <7472056a-3919-429a-845d-c2076496d537@linux.dev>
- <9b1cb571-99df-44f8-8c0e-8e9bc3f6e8d5@linux.dev>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -110,119 +109,26 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <9b1cb571-99df-44f8-8c0e-8e9bc3f6e8d5@linux.dev>
+In-Reply-To: <7472056a-3919-429a-845d-c2076496d537@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 1/7/26 07:37, Lance Yang wrote:
-> Hi David,
+
+>> What could work is tracking "tlb_table_flush_sent_ipi" really when we
+>> are flushing the TLB for removed/unshared tables, and maybe resetting
+>> it ... I don't know when from the top of my head.
 > 
-> On 2026/1/7 00:10, Lance Yang wrote:
-> [..]
->>> What could work is tracking "tlb_table_flush_sent_ipi" really when we
->>> are flushing the TLB for removed/unshared tables, and maybe resetting
->>> it ... I don't know when from the top of my head.
+> Not sure what's the best way forward here :(
+> 
 >>
+>> v2 was simpler IMHO.
 > 
-> Seems like we could fix the issue that the flag lifetime was broken
-> if the MMU gather gets reused by splitting the flush and reset. This
-> ensures the flag stays valid between flush and sync.
-> 
-> Now tlb_flush_unshared_tables() does:
->     1) __tlb_flush_mmu_tlbonly() - flush only, keeps flags alive
->     2) tlb_gather_remove_table_sync_one() - can check the flag
->     3) __tlb_reset_range() - reset everything after sync
-> 
-> Something like this:
-> 
-> ---8<---
-> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-> index 3975f7d11553..a95b054dfcca 100644
-> --- a/include/asm-generic/tlb.h
-> +++ b/include/asm-generic/tlb.h
-> @@ -415,6 +415,7 @@ static inline void __tlb_reset_range(struct
-> mmu_gather *tlb)
->    	tlb->cleared_puds = 0;
->    	tlb->cleared_p4ds = 0;
->    	tlb->unshared_tables = 0;
-> +	tlb->tlb_flush_sent_ipi = 0;
+> The main concern Dave raised was that with PV hypercalls or when
+> INVLPGB is available, we can't tell from a static check whether IPIs
+> were actually sent.
 
-
-As raised, the "tlb_flush_sent_ipi" is confusing when we sent to 
-different CPUs based on whether we are removing page tables or not.
-
-I think you would really want to track that explicitly 
-"tlb_table_flush_sent_ipi" ?
-
->    	/*
->    	 * Do not reset mmu_gather::vma_* fields here, we do not
->    	 * call into tlb_start_vma() again to set them if there is an
-> @@ -492,7 +493,7 @@ tlb_update_vma_flags(struct mmu_gather *tlb, struct
-> vm_area_struct *vma)
->    	tlb->vma_pfn |= !!(vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP));
->    }
-> 
-> -static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
-> +static inline void __tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
->    {
->    	/*
->    	 * Anything calling __tlb_adjust_range() also sets at least one of
-> @@ -503,6 +504,11 @@ static inline void tlb_flush_mmu_tlbonly(struct
-> mmu_gather *tlb)
->    		return;
-> 
->    	tlb_flush(tlb);
-> +}
-> +
-> +static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
-> +{
-> +	__tlb_flush_mmu_tlbonly(tlb);
->    	__tlb_reset_range(tlb);
->    }
-> 
-> @@ -824,7 +830,7 @@ static inline void tlb_flush_unshared_tables(struct
-> mmu_gather *tlb)
->    	 * flush the TLB for the unsharer now.
->    	 */
->    	if (tlb->unshared_tables)
-> -		tlb_flush_mmu_tlbonly(tlb);
-> +		__tlb_flush_mmu_tlbonly(tlb);
-> 
->    	/*
->    	 * Similarly, we must make sure that concurrent GUP-fast will not
-> @@ -834,14 +840,16 @@ static inline void
-> tlb_flush_unshared_tables(struct mmu_gather *tlb)
->    	 * We only perform this when we are the last sharer of a page table,
->    	 * as the IPI will reach all CPUs: any GUP-fast.
->    	 *
-> -	 * Note that on configs where tlb_remove_table_sync_one() is a NOP,
-> -	 * the expectation is that the tlb_flush_mmu_tlbonly() would have issued
-> -	 * required IPIs already for us.
-> +	 * Use tlb_gather_remove_table_sync_one() instead of
-> +	 * tlb_remove_table_sync_one() to skip the redundant IPI if the
-> +	 * TLB flush above already sent one.
->    	 */
->    	if (tlb->fully_unshared_tables) {
-> -		tlb_remove_table_sync_one();
-> +		tlb_gather_remove_table_sync_one(tlb);
->    		tlb->fully_unshared_tables = false;
->    	}
-> +
-> +	__tlb_reset_range(tlb);
->    }
->    #endif /* CONFIG_HUGETLB_PMD_PAGE_TABLE_SHARING */
-> ---
-> 
-> For khugepaged, it should be fine - it uses a local mmu_gather that
-> doesn't get reused. The lifetime is simply:
-> 
->     tlb_gather_mmu() → flush → sync → tlb_finish_mmu()
-> 
-> Let me know if this addresses your concern :)
-
-I'll probably have to see the full picture. But this lifetime stuff in 
-core-mm ends up getting more complicated than v2 without a clear benefit 
-to me (except maybe handling some x86 oddities better ;) )
+Why can't we set the boolean at runtime when initializing the pv_ops 
+structure, when we are sure that it is allowed?
 
 -- 
 Cheers
