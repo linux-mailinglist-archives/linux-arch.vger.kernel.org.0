@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-15740-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15741-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DDE2D0CF56
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Jan 2026 06:07:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84181D0D01C
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Jan 2026 06:39:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 962CC300DB2F
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Jan 2026 05:07:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 41513302BAB0
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Jan 2026 05:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02086248867;
-	Sat, 10 Jan 2026 05:07:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06EFD33ADBA;
+	Sat, 10 Jan 2026 05:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="C74SC47v"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GqdhVuZw"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B832AEE1;
-	Sat, 10 Jan 2026 05:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188F02E3AF1;
+	Sat, 10 Jan 2026 05:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768021624; cv=none; b=Nqrayuw0so6BiVY3L50/tUaaEeAQdXW+8Ic6PEoc8wAtN6y+EjaUERetZorxmA0oDycCojl4muLfroCF/z4tVDv4hK2CsDoP+n6aD7Ron87jfrdHYIey0EH6h7GJr6oFct3hGmJ54TAzgvUrClQZC0gTiXn3ks/EM7ExUMxtY4E=
+	t=1768023568; cv=none; b=rIo6UnUvvTj/vU+JyPpozVz1ULIuNDS+4YOoDsv6FwcwHXGB4Cx/QOdHrQecs7kyuz2KiLHtER0paLPnspShBnV6loDPNGtGlQRI29EwD72tbVt+IjMfOqv9HYSUPzeA+6tfZPDi2adMFgJ+HiA1oPTNCJx9W4CZKHRebOSzdLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768021624; c=relaxed/simple;
-	bh=H9sP3OuduopwwfkgZnqCplKd7Uw7oudWDC+SRAthous=;
+	s=arc-20240116; t=1768023568; c=relaxed/simple;
+	bh=2BHcjtIMLvlJmmOCTiTVp0+PLNbzIbX2st/yYOaJOqE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DAjyArsK5QfnRDkPyIRKnihwZQxfqcylBbXpUGH6dSdwhfwQEHdHZ6+jbcG+MVnc1DHOQaJmm0jSNSaUA2DQq/61ccDFU2e5CDMSRcOw+FlZY9qezXiHCLslNzJkee1o8lNNLK8yjEWcyrhioM/YbC9Lk0Giy3R08A3yS/aQ9JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=C74SC47v; arc=none smtp.client-ip=13.77.154.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=j40N+1eQth095R77ytRFZRT8k9WL+gDGfVMyZOWPQDWz7NXGIfY4xVjsfpGc1ER6ZPPlRXoqtBhuAle8t4o84eR5ZKuQV+vHTxwUgs/qJLSiL7yY71QPDE6P0l+OB/YQ3ACw21FE/sI2DF+4m8nl8L/sEzpzugt9j+QK2uAnc2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GqdhVuZw; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from localhost (unknown [167.220.232.230])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 44F97201AC7E;
-	Fri,  9 Jan 2026 21:07:02 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 44F97201AC7E
+	by linux.microsoft.com (Postfix) with ESMTPSA id 1EBA8201AC7F;
+	Fri,  9 Jan 2026 21:39:20 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1EBA8201AC7F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1768021622;
-	bh=8LDRrRcWPAQ/JM0ulR7Cmo3AX3HSBKt9ssdkQit4fZ8=;
+	s=default; t=1768023560;
+	bh=KWtDmLvDpKCPNcDWUK2m8f4j92ZR5hgvsVRpqpbilTs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C74SC47v/fG9cBx+G9rSDmaT3PUXefUfqblHqSXIXFtD91RKQH1jXzFHRw2eXLqCO
-	 RE/wVcJv2dYVCEU3g6AmDBpSveCVqhg4/9YIBhgC1ZFpp8sRFci2fpKU1IKBi48X7c
-	 wBUKrY4EigDJ5oH/ycm2aJzLVAMzRiwsxTHQPi3k=
-Date: Sat, 10 Jan 2026 13:07:00 +0800
+	b=GqdhVuZwQQMoWIQy6Oyte9YIXPRt1Uy36KcoGZ6oXhIoc9+Vqhl+BIaxLVigIn6fB
+	 5YJ84aon8u5Ml2qYEaD7kM7pazyNBaZ8a/7tN7S5HfkH/Hh1HY9z+cMAanl+V2rHeL
+	 tfaC/wVaXBT/RgGnh9NMDjm0LkmPbsHImQwudGAo=
+Date: Sat, 10 Jan 2026 13:39:18 +0800
 From: Yu Zhang <zhangyu1@linux.microsoft.com>
 To: Michael Kelley <mhklinux@outlook.com>
 Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
@@ -53,12 +53,11 @@ Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"easwar.hariharan@linux.microsoft.com" <easwar.hariharan@linux.microsoft.com>, "jacob.pan@linux.microsoft.com" <jacob.pan@linux.microsoft.com>, 
 	"nunodasneves@linux.microsoft.com" <nunodasneves@linux.microsoft.com>, "mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>, 
 	"peterz@infradead.org" <peterz@infradead.org>, "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [RFC v1 4/5] hyperv: allow hypercall output pages to be
- allocated for child partitions
-Message-ID: <4xjdq3js7w4qxcev727ujedpcujvzgrhf4xsfn3plfrn7fskxu@2qwxljanz3i6>
+Subject: Re: [RFC v1 0/5] Hyper-V: Add para-virtualized IOMMU support for
+ Linux guests
+Message-ID: <engj6x3koovijgbh6vvmki3xbd4dtetejenlcgu4bqg7bwi762@h2ovu62se4ee>
 References: <20251209051128.76913-1-zhangyu1@linux.microsoft.com>
- <20251209051128.76913-5-zhangyu1@linux.microsoft.com>
- <SN6PR02MB4157C3EF6617A7BA4CA9E432D485A@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157342641D173ABE9B4F1FED485A@SN6PR02MB4157.namprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -67,59 +66,33 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SN6PR02MB4157C3EF6617A7BA4CA9E432D485A@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To: <SN6PR02MB4157342641D173ABE9B4F1FED485A@SN6PR02MB4157.namprd02.prod.outlook.com>
 
-On Thu, Jan 08, 2026 at 06:47:44PM +0000, Michael Kelley wrote:
+On Thu, Jan 08, 2026 at 06:45:52PM +0000, Michael Kelley wrote:
 > From: Yu Zhang <zhangyu1@linux.microsoft.com> Sent: Monday, December 8, 2025 9:11 PM
 > > 
+> > This patch series introduces a para-virtualized IOMMU driver for
+> > Linux guests running on Microsoft Hyper-V. The primary objective
+> > is to enable hardware-assisted DMA isolation and scalable device
 > 
-> The "Subject:" line prefix for this patch should probably be "Drivers: hv:"
-> to be consistent with most other changes to this source code file.
-> 
-> > Previously, the allocation of per-CPU output argument pages was restricted
-> > to root partitions or those operating in VTL mode.
-> > 
-> > Remove this restriction to support guest IOMMU related hypercalls, which
-> > require valid output pages to function correctly.
-> 
-> The thinking here isn't quite correct. Just because a hypercall produces output
-> doesn't mean that Linux needs to allocate a page for the output that is separate
-> from the input. It's perfectly OK to use the same page for both input and output,
-> as long as the two areas don't overlap. Yes, the page is called
-> "hyperv_pcpu_input_arg", but that's a historical artifact from before the time
-> it was realized that the same page can be used for both input and output.
-> 
-> Of course, if there's ever a hypercall that needs lots of input and lots of output
-> such that the combined size doesn't fit in a single page, then separate input
-> and output pages will be needed. But I'm skeptical that will ever happen. Rep
-> hypercalls could have large amounts of input and/or output, but I'd venture
-> that the rep count can always be managed so everything fits in a single page.
+> Is there any particular meaning for the qualifier "scalable" vs. just
+> "device assignment"? I just want to understand what you are getting
+> at.
 > 
 
-Thanks, Michael.
+Sorry for the ambiguity.
+I intended to highlight two primary use cases for pvIOMMU:
+- to enable in-kernel DMA protection within the guest.
+- to allow device assignment to guest user space (e.g., via VFIO).
 
-Is there an existing hypercall precedent that reuses the input page for output?
-I believe reusing the input page should be acceptable, at least for pvIOMMU's
-hypercalls, but I will confirm these interfaces with the Hyper-V team.
+I avoided using the phrase "device assignment" alone, because people may be
+confused if the main purpose of introducing pvIOMMU is for device assignment
+to a L1 guest(which actually does not depend on any virtual IOMMU) or to a
+L2 nested guest(altough I guess w/ pvIOMMU, it should work but we've never
+tested that case and are not aware any such requirement).
 
-> > 
-> > While unconditionally allocating per-CPU output pages scales with the number
-> > of vCPUs, and potentially adding overhead for guests that may not utilize the
-> > IOMMU, this change anticipates that future hypercalls from child partitions
-> > may also require these output pages.
-> 
-> I've heard the argument that the amount of overhead is modest relative to the
-> overall amount of memory that is typically in a VM, particularly VMs with high
-> vCPU counts. And I don't disagree. But on the flip side, why tie up memory when
-> there's no need to do so? I'd argue for dropping this patch, and changing the
-> two hypercall call sites in Patch 5 to just use part of the so-called hypercall input
-> page for the output as well. It's only a one-line change in each hypercall call site.
-> 
-
-I share your concern about unconditionally allocating a separate output page
-for each vCPU. And if reusing the input page isn't accepted by the Hyper-V team,
-perhaps we could gate the allocation by checking IS_ENABLED(CONFIG_HYPERV_PVIOMMU)
-in hv_output_page_exist()?
+And you are right, simply adding "scalable" didn't help clarify this.
+I will rephrase the commit message. Thanks!
 
 B.R.
 Yu
