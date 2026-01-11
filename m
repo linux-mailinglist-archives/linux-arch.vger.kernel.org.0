@@ -1,401 +1,1119 @@
-Return-Path: <linux-arch+bounces-15745-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15746-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5741DD0F845
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 18:36:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 595CCD0F9E4
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 20:12:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 16807300119D
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 17:36:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DB8833062CDE
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 19:12:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A5E34C13D;
-	Sun, 11 Jan 2026 17:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E714352C40;
+	Sun, 11 Jan 2026 19:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="UUfxnj8x"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2sRLOXpV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazolkn19012052.outbound.protection.outlook.com [52.103.20.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC3121ABBB;
-	Sun, 11 Jan 2026 17:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.20.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F453352C47
+	for <linux-arch@vger.kernel.org>; Sun, 11 Jan 2026 19:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768152989; cv=fail; b=NwW1nz949chJwZ4p42vLWMNqtrg1KfiK2AoAPa1/xeNno6WGciim74bIDcbImBgyWdgR+qpShSTCKDpgCkzrOvhX90QFTKKt8X7hbz7oyL6PTobU0UD4GvQgMisHkTERE918XdQcvqI1KNLVu2Cw7JsTsEFCv5gNqtDuFEBHfmY=
+	t=1768158757; cv=pass; b=gEwWQLt23FeAn/1iMFllslIaGE/RR9Z82Q0UXygMF+/3rjGkeZqWEbLqaEFSmqgPGApOM7Nn3kMGvcDAvjXcB6ByEB/jrBr3oqnwXXiG7fSPF2zkwsVgZxSjcLkmU4CDGzDXzhq/ygYP7TSiyA/nQXp6MZYeQrsto22JqIVQTMU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768152989; c=relaxed/simple;
-	bh=E7K8Kedddi9BDtAATTivQ02LzKFeIAh/LHb4o3YxR9E=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=fPiDPWwPG9BV/shS3+8KYuG6gpQ1Inyf56oyOxVrMYN24VkPY6Sb097xXBg1VcyeL3W6/+sPiqOEM/8ZNDLGx440HRPTbEwZoKdF+SVt2mEZ3BG2WtqR2kMoDYhpnEyW2P9EjhiR2g8qilkkmxA99+C2c+WUQOfcdz7mlYOB/PQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=UUfxnj8x; arc=fail smtp.client-ip=52.103.20.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jmWxey49N/QwWkRGnOC6vj+H9hOi46chTw/0ayh7T/NoCQpjhvJV+B0grkBiU+riOrjX4oUsgcyd5aFjba+e8QosEvO3N8XqNKMx1DYXht3hZALV3XEMh0aYc4aoDeksDtcuvtbGU9/VNkztws+dcM+TS0E4axLySKPQt0VSGDOyKQct53reW/LIrCqIQBhNyMWRzoSu+nXxE3Pl7+vc9MYGeQ/qP1TYXNi4j6tnJStMITq+Kajeb3sL2+i5nprMrAPE/buyYCDzfMjJnL7+ZghA5Vg7R5X0Z9bcMBpc2rFi74NW1StHS1aWnBSUl5DBEc1c8PWplUD5CeQm69O1ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rSvB5mP0NlQfOGkMDYnhgRUojx6rp4WNqxYBGWk9S+A=;
- b=FY2T0IS10LLJjKlS7FZCVWjlIwahgVwDZcAPjpwWd8+7tXiQ/64UFa8Is6M7PLZg5IWwovRGEbXS+FMXFU3tqDUIf/IhDeYD/hIpqSCmWqCuZmmjflAh741k1BzHIjL1Aih8m1GRQlxhxqeKRITm5GcnETB03mlisDh2+u8IWkoJnBQVPUca0mt5jIeqUVJIYq4ZTUFlb0kwaVG2StyxgIaoJaGxBG5LXkSvaCG821KOaQYvCc+ypwunLAe4e3pSqbsU8O/O4cXfxpmqAs3mPxRdhq5RHn3rWYqKGFOKnE1LDieK92cEt1vmv8ylp3+vqu6ej1qdznrdMVtgs93VAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rSvB5mP0NlQfOGkMDYnhgRUojx6rp4WNqxYBGWk9S+A=;
- b=UUfxnj8x8O4359h4b4s6yG+42LV4j7YVQk20DPFN0jskCxjS3U59M0yLNWP0MqY+Ty5dCs3ReNRDUvoiFEGtr8uFeXPh6l3e+m8Nd+bxUSTYEJyokph6zuovbo2eWTMRlbYchvgoPftAs+DgYKTCA37yMl5bZPzAJcWvQVZVg5Q8k8L7zAXseVDe5ir2ymGDhABaiR0z5rBTFym7+Chquydn5ELrAr3R15c5Xv2wak7uHEDl7H0a3bLuOvhLoWYoQEXwLB3pXKx0m3OpsbxK7RNt6j5rzbXhDcAfBqeDa4A4538F+83HPTgoyd2VkI6VsJ7QRgrz3D1DxlMKf75rzQ==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by CH3PR02MB10247.namprd02.prod.outlook.com (2603:10b6:610:1c2::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.7; Sun, 11 Jan
- 2026 17:36:25 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::900:1ccf:2b1e:52b6]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::900:1ccf:2b1e:52b6%6]) with mapi id 15.20.9499.005; Sun, 11 Jan 2026
- 17:36:25 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
-CC: Yu Zhang <zhangyu1@linux.microsoft.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-hyperv@vger.kernel.org"
-	<linux-hyperv@vger.kernel.org>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, "linux-pci@vger.kernel.org"
-	<linux-pci@vger.kernel.org>, "kys@microsoft.com" <kys@microsoft.com>,
-	"haiyangz@microsoft.com" <haiyangz@microsoft.com>, "wei.liu@kernel.org"
-	<wei.liu@kernel.org>, "decui@microsoft.com" <decui@microsoft.com>,
-	"lpieralisi@kernel.org" <lpieralisi@kernel.org>, "kwilczynski@kernel.org"
-	<kwilczynski@kernel.org>, "mani@kernel.org" <mani@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>, "bhelgaas@google.com"
-	<bhelgaas@google.com>, "arnd@arndb.de" <arnd@arndb.de>, "joro@8bytes.org"
-	<joro@8bytes.org>, "will@kernel.org" <will@kernel.org>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"jacob.pan@linux.microsoft.com" <jacob.pan@linux.microsoft.com>,
-	"nunodasneves@linux.microsoft.com" <nunodasneves@linux.microsoft.com>,
-	"mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
-	"peterz@infradead.org" <peterz@infradead.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>
-Subject: RE: [RFC v1 1/5] PCI: hv: Create and export hv_build_logical_dev_id()
-Thread-Topic: [RFC v1 1/5] PCI: hv: Create and export
- hv_build_logical_dev_id()
-Thread-Index: AQHcaMpPt/satBkNIUW6NoagzPaHTbVImcPwgAHDjQCAAlbvMA==
-Date: Sun, 11 Jan 2026 17:36:25 +0000
-Message-ID:
- <SN6PR02MB4157098A14BE63FCA8C0A70ED480A@SN6PR02MB4157.namprd02.prod.outlook.com>
-References: <20251209051128.76913-1-zhangyu1@linux.microsoft.com>
- <20251209051128.76913-2-zhangyu1@linux.microsoft.com>
- <SN6PR02MB41570FC0D7EA1364FB48CD1ED485A@SN6PR02MB4157.namprd02.prod.outlook.com>
- <162c901f-69a7-420a-9148-a469d5a8ca4f@linux.microsoft.com>
-In-Reply-To: <162c901f-69a7-420a-9148-a469d5a8ca4f@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|CH3PR02MB10247:EE_
-x-ms-office365-filtering-correlation-id: 760c5592-859d-4ff2-1f9a-08de5137f1e3
-x-microsoft-antispam:
- BCL:0;ARA:14566002|8022599003|19110799012|8060799015|8062599012|15080799012|41001999006|13091999003|461199028|31061999003|56899033|3412199025|440099028|102099032|12091999003;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?SJJfkhDr2YvgTkcy4G1IShPiMtLliuTf88RC7XJDG6YTa4i5m9ZUZUDPPV28?=
- =?us-ascii?Q?U7Nepg3TE7OaFGvH3euS8+ekJ4alK3l5I5LOulgzufVoIYZEaoonC0Wzrbb9?=
- =?us-ascii?Q?/eAY15UXd5SASG9/X6cu6pSGLNiUjyanv1EueGzfyEbUKzPMkmX7mJwLY0nq?=
- =?us-ascii?Q?MxqTIX43WM6kK8KxAojfcJPaJOr0p4Sm4zAHo4R1CNLZ2eWApXXkxj03sQ9B?=
- =?us-ascii?Q?dbmjj701h0+60brLi7/JSPmPnalJhzwh7S+BlSQqEx8RAf0cBXOGOn+qYo/m?=
- =?us-ascii?Q?G0UX/pNZWkv2tGLFHyOzUmanzHw7S4sY440f9sq5QCyNiyGZTAK61ldiL+9c?=
- =?us-ascii?Q?oiGvcZ+mTgmOHr5/KKICyOKefSnSXC0QExs0YcUmo7U51b7e8CIEwKqz/irZ?=
- =?us-ascii?Q?TYq9PciWq6zgD/cYLY61aJG6yItxPrlYw8Q57rSCMgRuwj2HFsK1/0nEeH6O?=
- =?us-ascii?Q?z0pa9TJvFlnImnsBmlWLYqMzLphg8W/UMQgIPScDfHUDW/WF88i/+jUTi47L?=
- =?us-ascii?Q?NycPYOY2TbGXA6dOrGjR/5B0ELun9Idoi9Ita10iPZ36EP5MhMRJRVPrOmBN?=
- =?us-ascii?Q?oapQZZCw73u2Ga3g5yhcdobFMSJkgoVQkHm5irCrYH4snz7UfbDTxpyakaye?=
- =?us-ascii?Q?9IyMxiZdUBEu4IkwJVeqJJrO+MsAPFEDQTsSbsLDAxyxrqIzG5aFbr8+Qi6L?=
- =?us-ascii?Q?tpy4WJ6e8/8qRC+r0Gb7al2oICmaaUjmc1866bKMMihMWM0ZFbrmwZX5AUeS?=
- =?us-ascii?Q?6/fO/+KQrd958rIWQl17/4d07/BYwiBLbfg9SbtlTnDEsYGgX+JLL3kYv/Q0?=
- =?us-ascii?Q?fcxLevh9OYInLf1Es0ts6OVR2sQ+6akTq9z0JC48VKYa0c8w5tWXlO4eSfO4?=
- =?us-ascii?Q?vZxSJ78QDLOXczjacflDnMyx+Utu0lp9eiUDgEInS7VJvYhN+NBTUXMCaKLs?=
- =?us-ascii?Q?4ookfk9A1YJQVDQqPjRimKHrDmBVHS6dIUYbl8fAraZNBOvsJ5MbJuvP7UcC?=
- =?us-ascii?Q?MCXPzjSjei2qzfxyd2vJskRkTc27gXcKac4k7hANKEFoCL5/Y42TB3ZcLeMt?=
- =?us-ascii?Q?dUt7iEo0KTFi875OtmX25TH5mqfO3yBvGUNsDhy+pUZe6uTx29mghKDmNApK?=
- =?us-ascii?Q?dl/CgnjN1Itk0rcBUZ6bxr20DWvOJmWXhEC6N23xYvc+lCMXefMhaJpYyGxV?=
- =?us-ascii?Q?3Ri35reuIVuRDh78b8r3zE6f4Jm7GrPr25OrPrmS3gYkdi0mBkHRXcMepes?=
- =?us-ascii?Q?=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?RlJDVmFMlARkY1B9AB+UIrFnxIacGdEx9tI4vwOrWQTvbqtE+KuWHeLkcG+8?=
- =?us-ascii?Q?9Z0oDQkckPf+VstH+bUnOzTtkPEJLSGkgcvqcG1HoUV/xQck0BRbTc8yI/23?=
- =?us-ascii?Q?mJlUD1jrQkzfzlKLCdqHrj+qsiGWi50d1MJFRnri8Y6aFL5/JCDPuydVxTB+?=
- =?us-ascii?Q?rx4Gj7NmCyhqRdoSNPbdblxAN880rVByJiCZTeJsFi5rJGFX1pmpEc41EMsk?=
- =?us-ascii?Q?rAN2uRr0WMARVUIRq2NdupKRD73zPnBp8ITBj/w3CYGlvOlxcVnsXPIiT/18?=
- =?us-ascii?Q?WQphivUF9OJ4ksS4+AVYJuRcbUHmmwOrQq9pytuorlU5Jwls/i5xTw87XXe9?=
- =?us-ascii?Q?LTRfcnzcfKM7XYVeH9YrHxYsc2qrbx1MQKU3zTiCoySpfuvOCfa1HqMyT7zL?=
- =?us-ascii?Q?+ljxkMpI9Hodfrd7CKALbsIul7fxn5eppVgP7x5MVkkpMDzmq2eV2MeHnZHf?=
- =?us-ascii?Q?vASM0oDYAwoWkb9iJY0QRPGZwlCCmhpcmftyskhzl18JUpGfG/seR+ZjQM9W?=
- =?us-ascii?Q?RAuzd+danUQHCjMLQk35V064CiiLbddGk2YM9f7+Pz8WRZgsuUe8KvpSNEO0?=
- =?us-ascii?Q?0NV0eAm5WSvVb2Os9bp0uBmi87KIx09qsoOmROhA0QpzJ8D3LGK48C7/tuh7?=
- =?us-ascii?Q?d/ptM8IJ9kTmGK/3DhNzWDxDS48o9Hgk02V3duji2cWsn/z6n5gy8exbbFEG?=
- =?us-ascii?Q?y2kU8Mo87enSL+NUcrf7uRHiD/mWFvT8DtXTdu3aUJu6C1tljqRjWzJRLmYh?=
- =?us-ascii?Q?v9ru+G92d6SRAIHnLYkezyUSI1N1CJCotI2155H4312M4U5QXP45Cf+zy0Lk?=
- =?us-ascii?Q?+Sepiuyp3ouRKADRT25LbAZyj6j3zMmP1tFhTVUDw+gcBJ07I6oYNP9k91M3?=
- =?us-ascii?Q?rxWGKop4emWjGa06lBTpxPWPEaVO+p6p2838oq+C988bqy2cnDwEiTAv7PSd?=
- =?us-ascii?Q?tua7Wt+yHl8w9ZNY5TFbYaBxSKa0wEhLcaE7On6UZU+RwwrspUSGmK3GwrOl?=
- =?us-ascii?Q?Yt6WmLQpGbImwmgQxw4BreUYNJxgBDtpGsH+9z23pzJXmXvoIHk2jFM0qjSL?=
- =?us-ascii?Q?tvQaz6DTayqhBuXU2a6u18+xt+Ur8zjTrI3RjeBbprYJhhl8CO5FPOINpmEN?=
- =?us-ascii?Q?jPh23zgrSGHpX4gBKeGkVMjUartGl90fGTTiPMb08rSFgj2BgIUcuzLq5l4m?=
- =?us-ascii?Q?JhV6GA4vI3twZ2WyomdAF6NyxO9ZA6f6ZjTXTj+Rz0h0gaItE4eDKCrceqgv?=
- =?us-ascii?Q?/Y48aM3IXH67duj+NM39EBWmBO4MAjM3AQt0je2cpTZnOKS0Z3bnH1DkPsPk?=
- =?us-ascii?Q?mpGOumtXce5un8x9EVVoQry0PnRADILszSHYpBoN4v19hMMf/2DKH1LDTou4?=
- =?us-ascii?Q?oL0iTNg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1768158757; c=relaxed/simple;
+	bh=ePDzDH6TeyDi7KCsR7THoGSph38OKS8BM1Eb+Kw40u4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lvXfV1ewmSGySLx+wKQCELs4clt+jhG6enrz3MOePBuy7qKk6WrZN2wqcEhaBiMN+Xq3t+nSOD3XXeOblw7pAjYC0PAoraRR72A7qHlFazKR81a+Dn3rM1GcWZSo6MwS/kF2mhlz1Cqh3IMA6dVtB5qR0q3tBvxQEIdHkcwoxGg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2sRLOXpV; arc=pass smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59b30269328so4744e87.0
+        for <linux-arch@vger.kernel.org>; Sun, 11 Jan 2026 11:12:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768158752; cv=none;
+        d=google.com; s=arc-20240605;
+        b=bjCH28s+buV5Zaunx+Ro/9wVqtGYblS0l2Guh+KcpRD7ZZDJsu5KWXGm+bEUCrD1R4
+         YjaZkr7NncaBl9fq+bWK0bpAnt307YHeZ6YdJ4xKBlD8OKL9kLXZtNwmvx9kzCjXGJNT
+         fFgYm9zxIrInKS9NWNnuAeT1lbxBGqOs8Y+V/gSX7VA92mwYicUbR+FdFbKyQGvniwfl
+         HkcXRZx+HAMDm1xWW45TaWThpkqsGgaS2Lh0XlBQCos+jf1jhFvjE13DhDXV+YvkHcIV
+         ZtFvH/0Q10KRIH3YLL0m+3OorMVdOLvAKl9DWdkNOtJbDYRIGsjUTAA8c1DTg5Aguhmx
+         1PsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TfQN1grJBvxtzGoPkiKTxgMgVBhaK52DyOvfzBiFPrE=;
+        fh=ipKofUsznx/gxM6gANlBn37dVnVU1nvBMMp32mu3OGw=;
+        b=J9SoArgsjxrExRSICh4lib1k9FX7gmU3h+yuU8l1PSOfwFxKRsj7z1Y4PAZVTRxuYH
+         25qAsAjZS7y9VI+XInKV439YJ9dZH/zkh/bPtvM+w1ytkmNa1WGmswHnw9nzTcW1fih0
+         8KK7AekZQXNnzJotb0Ze84SbsiZ2GPkidIBjGrTL7GM8700n6CqEH3gLTYhJeVK49eq+
+         3QZHDgSQHGXSvjITDLjmMKLoLghOfwjyTpeNkPPaQSNPChv5Dxi1mO/XxyxO/9S9u5YG
+         rlYgScTltQuWDXrk2RNLOno1ANY4+uhRQuJR9DvNW9P+wkyTCjhEmv5n5eSnXQCmVbVm
+         WIJw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768158752; x=1768763552; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TfQN1grJBvxtzGoPkiKTxgMgVBhaK52DyOvfzBiFPrE=;
+        b=2sRLOXpV4rIEFYHXgCdFZk6UxMKmMbBy730pIYtFVNEKN5/XWTgxntUkzIPLNn3Gmy
+         wjzD9cMpt/DxeNcXW8UhC3YAppheMGFYYi920ZmJ00VhLJJmJOfaOwI4BiNBk2mlbFvr
+         USFZ3cs14I1nzFPl91iCF06BWlHD/IORrs6e4XnKGSuY4ldoYNuI+W8J3xuV53Dt0mYJ
+         Bw0pOSPm50qvPEy8btg8zVkhizpCoBK6YU7ccYv38a3FbGOq6Hp8dqfQZYuXyaQNlyeA
+         L0ZLav39hiIsAOfVS+8OAh2HTmAlddEUwxA9vf+gYo7Y+d9TKxok8ld0PsxZJS84SArt
+         R+oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768158752; x=1768763552;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TfQN1grJBvxtzGoPkiKTxgMgVBhaK52DyOvfzBiFPrE=;
+        b=mJRL5Sth1LNDzjcc0gVnMgOS1pEHj4iFI8IhouLOth81dWwMS8jhlT2eTAHXnDu6jY
+         LwxXaXMHkT177X6EhwEuX84jcw7DFxNg88d+QJNklb117WtLHh+/nnWo8+8+OIJZnxJ7
+         4arj+cMHTgDGwNHsQpxhwmBL+E3LFhTtJJS4YwmLBVB9CVrpRZuw6UvF4DKIa4zP9jRV
+         0Ks6RBRI1W0iGDHssgsnHEWo1a8Gp5w10HqUx6EgS9/1j2qMv74jBgd6g/ymAJxvmAHY
+         V3YdZ1+W6zRa3wdF1I0+mAErez9mIs7a3IOTTvWi85+f9UJrGR7UypfPC7iYU+bmI/ZB
+         6FuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUW+elwxyRIc85RFL5Q+dcmtwZF6f28DNmOksBWtPYrplKKXNl2jnnDuV8CMHeMXmIxH6YPfeRMNjU4@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPJ3KV0zGbYSP3WzU1XJaOsbxhibkptS7XLvwXn24/BPviZns9
+	QijVxlaEuqg36pZGZ7i5GIrhr7dPwp3vA3kMmzF++EiQuO1IWxtcaxIChLrgzOuQPVyhhZLykTP
+	OsaCMFIOX9YHey+hTqOQLwIaVoT+/ZFkKDZVoLw2B
+X-Gm-Gg: AY/fxX4KFI9IVkgtQsMjl8WzmXDrC2iGxpeBCv7fFxo9juOJtVMyUQZ7r6GVbnl9KAa
+	WCJbA/Sz1PYfxeUoCRlOwBjU6uHGo2bDtqdfitSHWC/10bs1geB8h2udwci0gXVyiGbdmsCBnxy
+	NwjBdX2KBpHoVbmCssYJF0yovYDQfdtV9HoV65bAXeaHQQSv4NBA8m7Sn0FCc3VT836fkYEkzjX
+	7raxJu5ffzRfKLUvicpbn8M1a5ZsFBI+r6WUPuuEHBqaQfMFEoEDM36X6rm/fB1foOldwT6yljf
+	QYAaYA==
+X-Received: by 2002:ac2:5a1a:0:b0:596:9b1c:95da with SMTP id
+ 2adb3069b0e04-59b87d64594mr64617e87.17.1768158751978; Sun, 11 Jan 2026
+ 11:12:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 760c5592-859d-4ff2-1f9a-08de5137f1e3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2026 17:36:25.6172
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR02MB10247
+References: <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-0-8042930d00d7@meta.com>
+ <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-3-8042930d00d7@meta.com>
+In-Reply-To: <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-3-8042930d00d7@meta.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Sun, 11 Jan 2026 11:12:19 -0800
+X-Gm-Features: AZwV_QjK3HIWm7Q180O8z8X2xzbydCS355tgfCF9shAHzqjPfYTAaFKExnZ6hjY
+Message-ID: <CAHS8izO=kddnYW_Z7s=zgbV5vJyc1A0Aqbx4pnkAz=dtbstWNw@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 3/5] net: devmem: implement autorelease token management
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com> Sent: Friday,=
- January 9, 2026 10:41 AM
->=20
-> On 1/8/2026 10:46 AM, Michael Kelley wrote:
-> > From: Yu Zhang <zhangyu1@linux.microsoft.com> Sent: Monday, December 8,=
- 2025 9:11 PM
-> >>
-> >> From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
-> >>
-> >> Hyper-V uses a logical device ID to identify a PCI endpoint device for
-> >> child partitions. This ID will also be required for future hypercalls
-> >> used by the Hyper-V IOMMU driver.
-> >>
-> >> Refactor the logic for building this logical device ID into a standalo=
-ne
-> >> helper function and export the interface for wider use.
-> >>
-> >> Signed-off-by: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
-> >> Signed-off-by: Yu Zhang <zhangyu1@linux.microsoft.com>
-> >> ---
-> >>  drivers/pci/controller/pci-hyperv.c | 28 ++++++++++++++++++++--------
-> >>  include/asm-generic/mshyperv.h      |  2 ++
-> >>  2 files changed, 22 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/control=
-ler/pci-hyperv.c
-> >> index 146b43981b27..4b82e06b5d93 100644
-> >> --- a/drivers/pci/controller/pci-hyperv.c
-> >> +++ b/drivers/pci/controller/pci-hyperv.c
-> >> @@ -598,15 +598,31 @@ static unsigned int hv_msi_get_int_vector(struct=
- irq_data *data)
-> >>
-> >>  #define hv_msi_prepare		pci_msi_prepare
-> >>
-> >> +/**
-> >> + * Build a "Device Logical ID" out of this PCI bus's instance GUID an=
-d the
-> >> + * function number of the device.
-> >> + */
-> >> +u64 hv_build_logical_dev_id(struct pci_dev *pdev)
-> >> +{
-> >> +	struct pci_bus *pbus =3D pdev->bus;
-> >> +	struct hv_pcibus_device *hbus =3D container_of(pbus->sysdata,
-> >> +						struct hv_pcibus_device, sysdata);
-> >> +
-> >> +	return (u64)((hbus->hdev->dev_instance.b[5] << 24) |
-> >> +		     (hbus->hdev->dev_instance.b[4] << 16) |
-> >> +		     (hbus->hdev->dev_instance.b[7] << 8)  |
-> >> +		     (hbus->hdev->dev_instance.b[6] & 0xf8) |
-> >> +		     PCI_FUNC(pdev->devfn));
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(hv_build_logical_dev_id);
-> >
-> > This change is fine for hv_irq_retarget_interrupt(), it doesn't help fo=
-r the
-> > new IOMMU driver because pci-hyperv.c can (and often is) built as a mod=
-ule.
-> > The new Hyper-V IOMMU driver in this patch series is built-in, and so i=
-t can't
-> > use this symbol in that case -- you'll get a link error on vmlinux when=
- building
-> > the kernel. Requiring pci-hyperv.c to *not* be built as a module would =
-also
-> > require that the VMBus driver not be built as a module, so I don't thin=
-k that's
-> > the right solution.
-> >
-> > This is a messy problem. The new IOMMU driver needs to start with a gen=
-eric
-> > "struct device" for the PCI device, and somehow find the corresponding =
-VMBus
-> > PCI pass-thru device from which it can get the VMBus instance ID. I'm t=
-hinking
-> > about ways to do this that don't depend on code and data structures tha=
-t are
-> > private to the pci-hyperv.c driver, and will follow-up if I have a good=
- suggestion.
->=20
-> Thank you, Michael. FWIW, I did try to pull out the device ID components =
-out of
-> pci-hyperv into include/linux/hyperv.h and/or a new include/linux/pci-hyp=
-erv.h
-> but it was just too messy as you say.
+On Fri, Jan 9, 2026 at 6:19=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmail.=
+com> wrote:
+>
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
+>
+> Add support for autorelease toggling of tokens using a static branch to
+> control system-wide behavior. This allows applications to choose between
+> two memory management modes:
+>
+> 1. Autorelease on: Leaked tokens are automatically released when the
+>    socket closes.
+>
+> 2. Autorelease off: Leaked tokens are released during dmabuf unbind.
+>
+> The autorelease mode is requested via the NETDEV_A_DMABUF_AUTORELEASE
+> attribute of the NETDEV_CMD_BIND_RX message. Having separate modes per
+> binding is disallowed and is rejected by netlink. The system will be
+> "locked" into the mode that the first binding is set to. It can only be
+> changed again once there are zero bindings on the system.
+>
+> Disabling autorelease offers ~13% improvement in CPU utilization.
+>
+> Static branching is used to limit the system to one mode or the other.
+>
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> ---
+> Changes in v9:
+> - Add missing stub for net_devmem_dmabuf_binding_get() when NET_DEVMEM=3D=
+n
+> - Add wrapper around tcp_devmem_ar_key accesses so that it may be
+>   stubbed out when NET_DEVMEM=3Dn
+> - only dec rx binding count for rx bindings in free (v8 did not exclude
+>   TX bindings)
+>
+> Changes in v8:
+> - Only reset static key when bindings go to zero, defaulting back to
+>   disabled (Stan).
+> - Fix bad usage of xarray spinlock for sleepy static branch switching,
+>   use mutex instead.
+> - Access pp_ref_count via niov->desc instead of niov directly.
+> - Move reset of static key to __net_devmem_dmabuf_binding_free() so that
+>   the static key can not be changed while there are outstanding tokens
+>   (free is only called when reference count reaches zero).
+> - Add net_devmem_dmabuf_rx_bindings_count because tokens may be active
+>   even after xa_erase(), so static key changes must wait until all
+>   RX bindings are finally freed (not just when xarray is empty). A
+>   counter is a simple way to track this.
+> - socket takes reference on the binding, to avoid use-after-free on
+>   sk_devmem_info.binding in the case that user releases all tokens,
+>   unbinds, then issues SO_DEVMEM_DONTNEED again (with bad token).
+> - removed some comments that were unnecessary
+>
+> Changes in v7:
+> - implement autorelease with static branch (Stan)
+> - use netlink instead of sockopt (Stan)
+> - merge uAPI and implementation patches into one patch (seemed less
+>   confusing)
+>
+> Changes in v6:
+> - remove sk_devmem_info.autorelease, using binding->autorelease instead
+> - move binding->autorelease check to outside of
+>   net_devmem_dmabuf_binding_put_urefs() (Mina)
+> - remove overly defensive net_is_devmem_iov() (Mina)
+> - add comment about multiple urefs mapping to a single netmem ref (Mina)
+> - remove overly defense netmem NULL and netmem_is_net_iov checks (Mina)
+> - use niov without casting back and forth with netmem (Mina)
+> - move the autorelease flag from per-binding to per-socket (Mina)
+> - remove the batching logic in sock_devmem_dontneed_manual_release()
+>   (Mina)
+> - move autorelease check inside tcp_xa_pool_commit() (Mina)
+> - remove single-binding restriction for autorelease mode (Mina)
+> - unbind always checks for leaked urefs
+>
+> Changes in v5:
+> - remove unused variables
+> - introduce autorelease flag, preparing for future patch toggle new
+>   behavior
+>
+> Changes in v3:
+> - make urefs per-binding instead of per-socket, reducing memory
+>   footprint
+> - fallback to cleaning up references in dmabuf unbind if socket leaked
+>   tokens
+> - drop ethtool patch
+>
+> Changes in v2:
+> - always use GFP_ZERO for binding->vec (Mina)
+> - remove WARN for changed binding (Mina)
+> - remove extraneous binding ref get (Mina)
+> - remove WARNs on invalid user input (Mina)
+> - pre-assign niovs in binding->vec for RX case (Mina)
+> - use atomic_set(, 0) to initialize sk_user_frags.urefs
+> - fix length of alloc for urefs
+> ---
+>  Documentation/netlink/specs/netdev.yaml |  12 ++++
+>  include/net/netmem.h                    |   1 +
+>  include/net/sock.h                      |   7 ++-
+>  include/uapi/linux/netdev.h             |   1 +
+>  net/core/devmem.c                       | 104 ++++++++++++++++++++++++++=
+++----
+>  net/core/devmem.h                       |  27 ++++++++-
+>  net/core/netdev-genl-gen.c              |   5 +-
+>  net/core/netdev-genl.c                  |  10 ++-
+>  net/core/sock.c                         |  57 +++++++++++++++--
+>  net/ipv4/tcp.c                          |  76 ++++++++++++++++++-----
+>  net/ipv4/tcp_ipv4.c                     |  11 +++-
+>  net/ipv4/tcp_minisocks.c                |   3 +-
+>  tools/include/uapi/linux/netdev.h       |   1 +
+>  13 files changed, 269 insertions(+), 46 deletions(-)
+>
+> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netl=
+ink/specs/netdev.yaml
+> index 596c306ce52b..7cbe9e7b9ee5 100644
+> --- a/Documentation/netlink/specs/netdev.yaml
+> +++ b/Documentation/netlink/specs/netdev.yaml
+> @@ -562,6 +562,17 @@ attribute-sets:
+>          type: u32
+>          checks:
+>            min: 1
+> +      -
+> +        name: autorelease
+> +        doc: |
+> +          Token autorelease mode. If true (1), leaked tokens are automat=
+ically
+> +          released when the socket closes. If false (0), leaked tokens a=
+re only
+> +          released when the dmabuf is unbound. Once a binding is created=
+ with a
+> +          specific mode, all subsequent bindings system-wide must use th=
+e same
+> +          mode.
+> +
+> +          Optional. Defaults to false if not specified.
+> +        type: u8
+>
+>  operations:
+>    list:
+> @@ -769,6 +780,7 @@ operations:
+>              - ifindex
+>              - fd
+>              - queues
+> +            - autorelease
+>          reply:
+>            attributes:
+>              - id
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index 9e10f4ac50c3..80d2263ba4ed 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+> @@ -112,6 +112,7 @@ struct net_iov {
+>         };
+>         struct net_iov_area *owner;
+>         enum net_iov_type type;
+> +       atomic_t uref;
+>  };
+>
+>  struct net_iov_area {
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index aafe8bdb2c0f..9d3d5bde15e9 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -352,7 +352,7 @@ struct sk_filter;
+>    *    @sk_scm_rights: flagged by SO_PASSRIGHTS to recv SCM_RIGHTS
+>    *    @sk_scm_unused: unused flags for scm_recv()
+>    *    @ns_tracker: tracker for netns reference
+> -  *    @sk_user_frags: xarray of pages the user is holding a reference o=
+n.
+> +  *    @sk_devmem_info: the devmem binding information for the socket
+>    *    @sk_owner: reference to the real owner of the socket that calls
+>    *               sock_lock_init_class_and_name().
+>    */
+> @@ -584,7 +584,10 @@ struct sock {
+>         struct numa_drop_counters *sk_drop_counters;
+>         struct rcu_head         sk_rcu;
+>         netns_tracker           ns_tracker;
+> -       struct xarray           sk_user_frags;
+> +       struct {
+> +               struct xarray                           frags;
+> +               struct net_devmem_dmabuf_binding        *binding;
+> +       } sk_devmem_info;
+>
+>  #if IS_ENABLED(CONFIG_PROVE_LOCKING) && IS_ENABLED(CONFIG_MODULES)
+>         struct module           *sk_owner;
+> diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+> index e0b579a1df4f..1e5c209cb998 100644
+> --- a/include/uapi/linux/netdev.h
+> +++ b/include/uapi/linux/netdev.h
+> @@ -207,6 +207,7 @@ enum {
+>         NETDEV_A_DMABUF_QUEUES,
+>         NETDEV_A_DMABUF_FD,
+>         NETDEV_A_DMABUF_ID,
+> +       NETDEV_A_DMABUF_AUTORELEASE,
+>
+>         __NETDEV_A_DMABUF_MAX,
+>         NETDEV_A_DMABUF_MAX =3D (__NETDEV_A_DMABUF_MAX - 1)
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index 05a9a9e7abb9..05c16df657c7 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/genalloc.h>
+>  #include <linux/mm.h>
+>  #include <linux/netdevice.h>
+> +#include <linux/skbuff_ref.h>
+>  #include <linux/types.h>
+>  #include <net/netdev_queues.h>
+>  #include <net/netdev_rx_queue.h>
+> @@ -28,6 +29,19 @@
+>
+>  static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
+>
+> +/* If the user unbinds before releasing all tokens, the static key must =
+not
+> + * change until all tokens have been released (to avoid calling the wron=
+g
+> + * SO_DEVMEM_DONTNEED handler). We prevent this by making static key cha=
+nges
+> + * and binding alloc/free atomic with regards to each other, using the
+> + * devmem_ar_lock. This works because binding free does not occur until =
+all of
+> + * the outstanding token's references on the binding are dropped.
+> + */
+> +static DEFINE_MUTEX(devmem_ar_lock);
+> +
+> +DEFINE_STATIC_KEY_FALSE(tcp_devmem_ar_key);
+> +EXPORT_SYMBOL(tcp_devmem_ar_key);
+> +static int net_devmem_dmabuf_rx_bindings_count;
+> +
+>  static const struct memory_provider_ops dmabuf_devmem_ops;
+>
+>  bool net_is_devmem_iov(struct net_iov *niov)
+> @@ -60,6 +74,14 @@ void __net_devmem_dmabuf_binding_free(struct work_stru=
+ct *wq)
+>
+>         size_t size, avail;
+>
+> +       if (binding->direction =3D=3D DMA_FROM_DEVICE) {
+> +               mutex_lock(&devmem_ar_lock);
+> +               net_devmem_dmabuf_rx_bindings_count--;
+> +               if (net_devmem_dmabuf_rx_bindings_count =3D=3D 0)
+> +                       static_branch_disable(&tcp_devmem_ar_key);
+> +               mutex_unlock(&devmem_ar_lock);
+> +       }
+> +
 
-Yes, the current approach for getting the device ID wanders through struct
-hv_pcibus_device (which is private to the pci-hyperv driver), and through
-struct hv_device (which is a VMBus data structure). That makes the linkage
-between the PV IOMMU driver and the pci-hyperv and VMBus drivers rather
-substantial, which is not good.
+I find this loging with devmem_ar_lock and
+net_devmem_dmabuf_rx_bindigs_count a bit complicated. I wonder if we
+can do another simplification here? Can we have it such that the first
+binding sets the system in autorelease on or autorelease off mode, and
+all future bindings maintain this state? We already don't support
+autorelease on/off mix.
 
-But here's an idea for an alternate approach. The PV IOMMU driver doesn't
-have to generate the logical device ID on-the-fly by going to the dev_insta=
-nce
-field of struct hv_device. Instead, the pci-hyperv driver can generate the =
-logical
-device ID in hv_pci_probe(), and put it somewhere that's easy for the IOMMU
-driver to access. The logical device ID doesn't change while Linux is runni=
-ng, so
-stashing another copy somewhere isn't a problem.
 
-So have the Hyper-V PV IOMMU driver provide an EXPORTed function to accept
-a PCI domain ID and the related logical device ID. The PV IOMMU driver is
-responsible for storing this data in a form that it can later search. hv_pc=
-i_probe()
-calls this new function when it instantiates a new PCI pass-thru device. Th=
-en when
-the IOMMU driver needs to attach a new device, it can get the PCI domain ID
-from the struct pci_dev (or struct pci_bus), search for the related logical=
- device
-ID in its own data structure, and use it. The pci-hyperv driver has a depen=
-dency
-on the IOMMU driver, but that's a dependency in the desired direction. The
-PCI domain ID and logical device ID are just integers, so no data structure=
-s are
-shared.
+>         gen_pool_for_each_chunk(binding->chunk_pool,
+>                                 net_devmem_dmabuf_free_chunk_owner, NULL)=
+;
+>
+> @@ -116,6 +138,24 @@ void net_devmem_free_dmabuf(struct net_iov *niov)
+>         gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
+>  }
+>
+> +static void
+> +net_devmem_dmabuf_binding_put_urefs(struct net_devmem_dmabuf_binding *bi=
+nding)
+> +{
+> +       int i;
+> +
+> +       for (i =3D 0; i < binding->dmabuf->size / PAGE_SIZE; i++) {
+> +               struct net_iov *niov;
+> +               netmem_ref netmem;
+> +
+> +               niov =3D binding->vec[i];
+> +               netmem =3D net_iov_to_netmem(niov);
+> +
+> +               /* Multiple urefs map to only a single netmem ref. */
+> +               if (atomic_xchg(&niov->uref, 0) > 0)
+> +                       WARN_ON_ONCE(!napi_pp_put_page(netmem));
+> +       }
+> +}
+> +
+>  void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  {
+>         struct netdev_rx_queue *rxq;
+> @@ -143,6 +183,7 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabu=
+f_binding *binding)
+>                 __net_mp_close_rxq(binding->dev, rxq_idx, &mp_params);
+>         }
+>
+> +       net_devmem_dmabuf_binding_put_urefs(binding);
 
-Note that the pci-hyperv must inform the PV IOMMU driver of the logical
-device ID *before* create_root_hv_pci_bus() calls pci_scan_root_bus_bridge(=
-).
-The latter function eventually invokes hv_iommu_attach_dev(), which will
-need the logical device ID. See example stack trace. [1]
+Sigh, I think what you're trying to do here is very complicated. You
+need to think about this scenario:
 
-I don't think the pci-hyperv driver even needs to tell the IOMMU driver to
-remove the information if a PCI pass-thru device is unbound or removed, as
-the logical device ID will be the same if the device ever comes back. At wo=
-rst,
-the IOMMU driver can simply replace an existing logical device ID if a new =
-one
-is provided for the same PCI domain ID.
+1. user binds dmabuf and opens a autorelease=3Doff socket.
+2. Data arrives on these sockets, and sits in the receive queues,
+recvmsg has not been called yet by the user.
+3. User unbinds the dma-buff, netmems are still in the receive queues.
+4. User calls recvmsg on one of these sockets, which obtains a uref on
+the netmems in the receive queues.
+5. user closes the socket.
 
-An include file must provide a stub for the new function if
-CONFIG_HYPERV_PVIOMMU is not defined, so that the pci-hyperv driver still
-builds and works.
+With autorelease=3Don, this works, because the binding remains alive
+until step 5 (even though it's unbound from the queue,
+..._binding_free has not been called yet) and step 5 cleans up all
+references, even if the binding is unbound but alive, and
 
-I haven't coded this up, but it seems like it should be pretty clean.
+calling net_devmem_dmabuf_binding_put_urefs here is weird.
+Autorelease=3Doff implies the user must clean their urefs themselves,
+but we have this here in the unbind path, and it doesn't even
+guarantee that the urefs are free at this point because it may race
+with a recvmsg.
 
-Michael
+Should we delete this uref cleanup here, and enforce that
+autorelease=3Doff means that the user cleans up the references (the
+kernel never cleans them up on unbind or socket close)? The dontneed
+path needs to work whether the binding is active or unbound.
 
-[1] Example stack trace, starting with vmbus_add_channel_work() as a
-result of Hyper-V offering the PCI pass-thru device to the guest.
-hv_pci_probe() runs, and ends up in the generic Linux code for adding
-a PCI device, which in turn sets up the IOMMU.
+>         net_devmem_dmabuf_binding_put(binding);
+>  }
+>
+> @@ -179,8 +220,10 @@ struct net_devmem_dmabuf_binding *
+>  net_devmem_bind_dmabuf(struct net_device *dev,
+>                        struct device *dma_dev,
+>                        enum dma_data_direction direction,
+> -                      unsigned int dmabuf_fd, struct netdev_nl_sock *pri=
+v,
+> -                      struct netlink_ext_ack *extack)
+> +                      unsigned int dmabuf_fd,
+> +                      struct netdev_nl_sock *priv,
+> +                      struct netlink_ext_ack *extack,
+> +                      bool autorelease)
+>  {
+>         struct net_devmem_dmabuf_binding *binding;
+>         static u32 id_alloc_next;
+> @@ -231,14 +274,12 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>                 goto err_detach;
+>         }
+>
+> -       if (direction =3D=3D DMA_TO_DEVICE) {
+> -               binding->vec =3D kvmalloc_array(dmabuf->size / PAGE_SIZE,
+> -                                             sizeof(struct net_iov *),
+> -                                             GFP_KERNEL);
+> -               if (!binding->vec) {
+> -                       err =3D -ENOMEM;
+> -                       goto err_unmap;
+> -               }
+> +       binding->vec =3D kvmalloc_array(dmabuf->size / PAGE_SIZE,
+> +                                     sizeof(struct net_iov *),
+> +                                     GFP_KERNEL | __GFP_ZERO);
+> +       if (!binding->vec) {
+> +               err =3D -ENOMEM;
+> +               goto err_unmap;
+>         }
+>
+>         /* For simplicity we expect to make PAGE_SIZE allocations, but th=
+e
+> @@ -292,25 +333,62 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>                         niov =3D &owner->area.niovs[i];
+>                         niov->type =3D NET_IOV_DMABUF;
+>                         niov->owner =3D &owner->area;
+> +                       atomic_set(&niov->uref, 0);
+>                         page_pool_set_dma_addr_netmem(net_iov_to_netmem(n=
+iov),
+>                                                       net_devmem_get_dma_=
+addr(niov));
+> -                       if (direction =3D=3D DMA_TO_DEVICE)
+> -                               binding->vec[owner->area.base_virtual / P=
+AGE_SIZE + i] =3D niov;
+> +                       binding->vec[owner->area.base_virtual / PAGE_SIZE=
+ + i] =3D niov;
+>                 }
+>
+>                 virtual +=3D len;
+>         }
+>
+> +       mutex_lock(&devmem_ar_lock);
+> +
+> +       if (direction =3D=3D DMA_FROM_DEVICE) {
+> +               if (net_devmem_dmabuf_rx_bindings_count > 0) {
+> +                       bool mode;
+> +
+> +                       mode =3D static_key_enabled(&tcp_devmem_ar_key);
+> +
+> +                       /* When bindings exist, enforce that the mode doe=
+s not
+> +                        * change.
+> +                        */
+> +                       if (mode !=3D autorelease) {
+> +                               NL_SET_ERR_MSG_FMT(extack,
+> +                                                  "System already config=
+ured with autorelease=3D%d",
+> +                                                  mode);
+> +                               err =3D -EINVAL;
+> +                               goto err_unlock_mutex;
+> +                       }
+> +               } else if (autorelease) {
+> +                       /* First binding with autorelease enabled sets th=
+e
+> +                        * mode.  If autorelease is false, the key is alr=
+eady
+> +                        * disabled by default so no action is needed.
+> +                        */
+> +                       static_branch_enable(&tcp_devmem_ar_key);
+> +               }
+> +
+> +               net_devmem_dmabuf_rx_bindings_count++;
+> +       }
+> +
+>         err =3D xa_alloc_cyclic(&net_devmem_dmabuf_bindings, &binding->id=
+,
+>                               binding, xa_limit_32b, &id_alloc_next,
+>                               GFP_KERNEL);
+>         if (err < 0)
+> -               goto err_free_chunks;
+> +               goto err_dec_binding_count;
+> +
+> +       mutex_unlock(&devmem_ar_lock);
+>
+>         list_add(&binding->list, &priv->bindings);
+>
+>         return binding;
+>
+> +err_dec_binding_count:
+> +       if (direction =3D=3D DMA_FROM_DEVICE)
+> +               net_devmem_dmabuf_rx_bindings_count--;
+> +
+> +err_unlock_mutex:
+> +       mutex_unlock(&devmem_ar_lock);
+>  err_free_chunks:
+>         gen_pool_for_each_chunk(binding->chunk_pool,
+>                                 net_devmem_dmabuf_free_chunk_owner, NULL)=
+;
+> diff --git a/net/core/devmem.h b/net/core/devmem.h
+> index 1ea6228e4f40..8c586f30e371 100644
+> --- a/net/core/devmem.h
+> +++ b/net/core/devmem.h
+> @@ -12,9 +12,13 @@
+>
+>  #include <net/netmem.h>
+>  #include <net/netdev_netlink.h>
+> +#include <linux/jump_label.h>
+>
+>  struct netlink_ext_ack;
+>
+> +/* static key for TCP devmem autorelease */
+> +extern struct static_key_false tcp_devmem_ar_key;
+> +
+>  struct net_devmem_dmabuf_binding {
+>         struct dma_buf *dmabuf;
+>         struct dma_buf_attachment *attachment;
+> @@ -61,7 +65,7 @@ struct net_devmem_dmabuf_binding {
+>
+>         /* Array of net_iov pointers for this binding, sorted by virtual
+>          * address. This array is convenient to map the virtual addresses=
+ to
+> -        * net_iovs in the TX path.
+> +        * net_iovs.
+>          */
+>         struct net_iov **vec;
+>
+> @@ -88,7 +92,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>                        struct device *dma_dev,
+>                        enum dma_data_direction direction,
+>                        unsigned int dmabuf_fd, struct netdev_nl_sock *pri=
+v,
+> -                      struct netlink_ext_ack *extack);
+> +                      struct netlink_ext_ack *extack, bool autorelease);
+>  struct net_devmem_dmabuf_binding *net_devmem_lookup_dmabuf(u32 id);
+>  void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)=
+;
+>  int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> @@ -138,6 +142,11 @@ net_devmem_dmabuf_binding_put(struct net_devmem_dmab=
+uf_binding *binding)
+>         schedule_work(&binding->unbind_w);
+>  }
+>
+> +static inline bool net_devmem_autorelease_enabled(void)
+> +{
+> +       return static_branch_unlikely(&tcp_devmem_ar_key);
+> +}
+> +
+>  void net_devmem_get_net_iov(struct net_iov *niov);
+>  void net_devmem_put_net_iov(struct net_iov *niov);
+>
+> @@ -155,6 +164,12 @@ net_devmem_get_niov_at(struct net_devmem_dmabuf_bind=
+ing *binding, size_t addr,
+>  #else
+>  struct net_devmem_dmabuf_binding;
+>
+> +static inline bool
+> +net_devmem_dmabuf_binding_get(struct net_devmem_dmabuf_binding *binding)
+> +{
+> +       return false;
+> +}
+> +
+>  static inline void
+>  net_devmem_dmabuf_binding_put(struct net_devmem_dmabuf_binding *binding)
+>  {
+> @@ -174,7 +189,8 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>                        enum dma_data_direction direction,
+>                        unsigned int dmabuf_fd,
+>                        struct netdev_nl_sock *priv,
+> -                      struct netlink_ext_ack *extack)
+> +                      struct netlink_ext_ack *extack,
+> +                      bool autorelease)
+>  {
+>         return ERR_PTR(-EOPNOTSUPP);
+>  }
+> @@ -241,6 +257,11 @@ net_devmem_iov_binding(const struct net_iov *niov)
+>  {
+>         return NULL;
+>  }
+> +
+> +static inline bool net_devmem_autorelease_enabled(void)
+> +{
+> +       return false;
+> +}
+>  #endif
+>
+>  #endif /* _NET_DEVMEM_H */
+> diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
+> index ba673e81716f..01b7765e11ec 100644
+> --- a/net/core/netdev-genl-gen.c
+> +++ b/net/core/netdev-genl-gen.c
+> @@ -86,10 +86,11 @@ static const struct nla_policy netdev_qstats_get_nl_p=
+olicy[NETDEV_A_QSTATS_SCOPE
+>  };
+>
+>  /* NETDEV_CMD_BIND_RX - do */
+> -static const struct nla_policy netdev_bind_rx_nl_policy[NETDEV_A_DMABUF_=
+FD + 1] =3D {
+> +static const struct nla_policy netdev_bind_rx_nl_policy[NETDEV_A_DMABUF_=
+AUTORELEASE + 1] =3D {
+>         [NETDEV_A_DMABUF_IFINDEX] =3D NLA_POLICY_MIN(NLA_U32, 1),
+>         [NETDEV_A_DMABUF_FD] =3D { .type =3D NLA_U32, },
+>         [NETDEV_A_DMABUF_QUEUES] =3D NLA_POLICY_NESTED(netdev_queue_id_nl=
+_policy),
+> +       [NETDEV_A_DMABUF_AUTORELEASE] =3D { .type =3D NLA_U8, },
+>  };
+>
+>  /* NETDEV_CMD_NAPI_SET - do */
+> @@ -188,7 +189,7 @@ static const struct genl_split_ops netdev_nl_ops[] =
+=3D {
+>                 .cmd            =3D NETDEV_CMD_BIND_RX,
+>                 .doit           =3D netdev_nl_bind_rx_doit,
+>                 .policy         =3D netdev_bind_rx_nl_policy,
+> -               .maxattr        =3D NETDEV_A_DMABUF_FD,
+> +               .maxattr        =3D NETDEV_A_DMABUF_AUTORELEASE,
+>                 .flags          =3D GENL_ADMIN_PERM | GENL_CMD_CAP_DO,
+>         },
+>         {
+> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+> index 470fabbeacd9..c742bb34865e 100644
+> --- a/net/core/netdev-genl.c
+> +++ b/net/core/netdev-genl.c
+> @@ -939,6 +939,7 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struc=
+t genl_info *info)
+>         struct netdev_nl_sock *priv;
+>         struct net_device *netdev;
+>         unsigned long *rxq_bitmap;
+> +       bool autorelease =3D false;
+>         struct device *dma_dev;
+>         struct sk_buff *rsp;
+>         int err =3D 0;
+> @@ -952,6 +953,10 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, stru=
+ct genl_info *info)
+>         ifindex =3D nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
+>         dmabuf_fd =3D nla_get_u32(info->attrs[NETDEV_A_DMABUF_FD]);
+>
+> +       if (info->attrs[NETDEV_A_DMABUF_AUTORELEASE])
+> +               autorelease =3D
+> +                       !!nla_get_u8(info->attrs[NETDEV_A_DMABUF_AUTORELE=
+ASE]);
+> +
+>         priv =3D genl_sk_priv_get(&netdev_nl_family, NETLINK_CB(skb).sk);
+>         if (IS_ERR(priv))
+>                 return PTR_ERR(priv);
+> @@ -1002,7 +1007,8 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, str=
+uct genl_info *info)
+>         }
+>
+>         binding =3D net_devmem_bind_dmabuf(netdev, dma_dev, DMA_FROM_DEVI=
+CE,
+> -                                        dmabuf_fd, priv, info->extack);
+> +                                        dmabuf_fd, priv, info->extack,
+> +                                        autorelease);
+>         if (IS_ERR(binding)) {
+>                 err =3D PTR_ERR(binding);
+>                 goto err_rxq_bitmap;
+> @@ -1097,7 +1103,7 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, str=
+uct genl_info *info)
+>
+>         dma_dev =3D netdev_queue_get_dma_dev(netdev, 0);
+>         binding =3D net_devmem_bind_dmabuf(netdev, dma_dev, DMA_TO_DEVICE=
+,
+> -                                        dmabuf_fd, priv, info->extack);
+> +                                        dmabuf_fd, priv, info->extack, f=
+alse);
+>         if (IS_ERR(binding)) {
+>                 err =3D PTR_ERR(binding);
+>                 goto err_unlock_netdev;
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index f6526f43aa6e..6355c2ccfb8a 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -87,6 +87,7 @@
+>
+>  #include <linux/unaligned.h>
+>  #include <linux/capability.h>
+> +#include <linux/dma-buf.h>
+>  #include <linux/errno.h>
+>  #include <linux/errqueue.h>
+>  #include <linux/types.h>
+> @@ -151,6 +152,7 @@
+>  #include <uapi/linux/pidfd.h>
+>
+>  #include "dev.h"
+> +#include "devmem.h"
+>
+>  static DEFINE_MUTEX(proto_list_mutex);
+>  static LIST_HEAD(proto_list);
+> @@ -1081,6 +1083,44 @@ static int sock_reserve_memory(struct sock *sk, in=
+t bytes)
+>  #define MAX_DONTNEED_TOKENS 128
+>  #define MAX_DONTNEED_FRAGS 1024
+>
+> +static noinline_for_stack int
+> +sock_devmem_dontneed_manual_release(struct sock *sk,
+> +                                   struct dmabuf_token *tokens,
+> +                                   unsigned int num_tokens)
+> +{
+> +       struct net_iov *niov;
+> +       unsigned int i, j;
+> +       netmem_ref netmem;
+> +       unsigned int token;
+> +       int num_frags =3D 0;
+> +       int ret =3D 0;
+> +
+> +       if (!sk->sk_devmem_info.binding)
+> +               return -EINVAL;
+> +
+> +       for (i =3D 0; i < num_tokens; i++) {
+> +               for (j =3D 0; j < tokens[i].token_count; j++) {
+> +                       size_t size =3D sk->sk_devmem_info.binding->dmabu=
+f->size;
+> +
+> +                       token =3D tokens[i].token_start + j;
+> +                       if (token >=3D size / PAGE_SIZE)
+> +                               break;
+> +
+> +                       if (++num_frags > MAX_DONTNEED_FRAGS)
+> +                               return ret;
+> +
+> +                       niov =3D sk->sk_devmem_info.binding->vec[token];
+> +                       if (atomic_dec_and_test(&niov->uref)) {
+> +                               netmem =3D net_iov_to_netmem(niov);
+> +                               WARN_ON_ONCE(!napi_pp_put_page(netmem));
+> +                       }
+> +                       ret++;
+> +               }
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+>  static noinline_for_stack int
+>  sock_devmem_dontneed_autorelease(struct sock *sk, struct dmabuf_token *t=
+okens,
+>                                  unsigned int num_tokens)
+> @@ -1089,32 +1129,33 @@ sock_devmem_dontneed_autorelease(struct sock *sk,=
+ struct dmabuf_token *tokens,
+>         int ret =3D 0, num_frags =3D 0;
+>         netmem_ref netmems[16];
+>
+> -       xa_lock_bh(&sk->sk_user_frags);
+> +       xa_lock_bh(&sk->sk_devmem_info.frags);
+>         for (i =3D 0; i < num_tokens; i++) {
+>                 for (j =3D 0; j < tokens[i].token_count; j++) {
+>                         if (++num_frags > MAX_DONTNEED_FRAGS)
+>                                 goto frag_limit_reached;
+>
+>                         netmem_ref netmem =3D (__force netmem_ref)__xa_er=
+ase(
+> -                               &sk->sk_user_frags, tokens[i].token_start=
+ + j);
+> +                               &sk->sk_devmem_info.frags,
+> +                               tokens[i].token_start + j);
+>
+>                         if (!netmem || WARN_ON_ONCE(!netmem_is_net_iov(ne=
+tmem)))
+>                                 continue;
+>
+>                         netmems[netmem_num++] =3D netmem;
+>                         if (netmem_num =3D=3D ARRAY_SIZE(netmems)) {
+> -                               xa_unlock_bh(&sk->sk_user_frags);
+> +                               xa_unlock_bh(&sk->sk_devmem_info.frags);
+>                                 for (k =3D 0; k < netmem_num; k++)
+>                                         WARN_ON_ONCE(!napi_pp_put_page(ne=
+tmems[k]));
+>                                 netmem_num =3D 0;
+> -                               xa_lock_bh(&sk->sk_user_frags);
+> +                               xa_lock_bh(&sk->sk_devmem_info.frags);
+>                         }
+>                         ret++;
+>                 }
+>         }
+>
+>  frag_limit_reached:
+> -       xa_unlock_bh(&sk->sk_user_frags);
+> +       xa_unlock_bh(&sk->sk_devmem_info.frags);
+>         for (k =3D 0; k < netmem_num; k++)
+>                 WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+>
+> @@ -1145,7 +1186,11 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t op=
+tval, unsigned int optlen)
+>                 return -EFAULT;
+>         }
+>
+> -       ret =3D sock_devmem_dontneed_autorelease(sk, tokens, num_tokens);
+> +       if (net_devmem_autorelease_enabled())
+> +               ret =3D sock_devmem_dontneed_autorelease(sk, tokens, num_=
+tokens);
+> +       else
+> +               ret =3D sock_devmem_dontneed_manual_release(sk, tokens,
+> +                                                         num_tokens);
+>
+>         kvfree(tokens);
+>         return ret;
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index d5319ebe2452..a8a4af552909 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -260,6 +260,7 @@
+>  #include <linux/memblock.h>
+>  #include <linux/highmem.h>
+>  #include <linux/cache.h>
+> +#include <linux/dma-buf.h>
+>  #include <linux/err.h>
+>  #include <linux/time.h>
+>  #include <linux/slab.h>
+> @@ -492,7 +493,8 @@ void tcp_init_sock(struct sock *sk)
+>
+>         set_bit(SOCK_SUPPORT_ZC, &sk->sk_socket->flags);
+>         sk_sockets_allocated_inc(sk);
+> -       xa_init_flags(&sk->sk_user_frags, XA_FLAGS_ALLOC1);
+> +       xa_init_flags(&sk->sk_devmem_info.frags, XA_FLAGS_ALLOC1);
+> +       sk->sk_devmem_info.binding =3D NULL;
+>  }
+>  EXPORT_IPV6_MOD(tcp_init_sock);
+>
+> @@ -2424,11 +2426,12 @@ static void tcp_xa_pool_commit_locked(struct sock=
+ *sk, struct tcp_xa_pool *p)
+>
+>         /* Commit part that has been copied to user space. */
+>         for (i =3D 0; i < p->idx; i++)
+> -               __xa_cmpxchg(&sk->sk_user_frags, p->tokens[i], XA_ZERO_EN=
+TRY,
+> -                            (__force void *)p->netmems[i], GFP_KERNEL);
+> +               __xa_cmpxchg(&sk->sk_devmem_info.frags, p->tokens[i],
+> +                            XA_ZERO_ENTRY, (__force void *)p->netmems[i]=
+,
+> +                            GFP_KERNEL);
+>         /* Rollback what has been pre-allocated and is no longer needed. =
+*/
+>         for (; i < p->max; i++)
+> -               __xa_erase(&sk->sk_user_frags, p->tokens[i]);
+> +               __xa_erase(&sk->sk_devmem_info.frags, p->tokens[i]);
+>
+>         p->max =3D 0;
+>         p->idx =3D 0;
+> @@ -2436,14 +2439,18 @@ static void tcp_xa_pool_commit_locked(struct sock=
+ *sk, struct tcp_xa_pool *p)
+>
+>  static void tcp_xa_pool_commit(struct sock *sk, struct tcp_xa_pool *p)
+>  {
+> +       /* Skip xarray operations if autorelease is disabled (manual mode=
+) */
+> +       if (!net_devmem_autorelease_enabled())
+> +               return;
+> +
+>         if (!p->max)
+>                 return;
+>
+> -       xa_lock_bh(&sk->sk_user_frags);
+> +       xa_lock_bh(&sk->sk_devmem_info.frags);
+>
+>         tcp_xa_pool_commit_locked(sk, p);
+>
+> -       xa_unlock_bh(&sk->sk_user_frags);
+> +       xa_unlock_bh(&sk->sk_devmem_info.frags);
+>  }
+>
+>  static int tcp_xa_pool_refill(struct sock *sk, struct tcp_xa_pool *p,
+> @@ -2454,24 +2461,41 @@ static int tcp_xa_pool_refill(struct sock *sk, st=
+ruct tcp_xa_pool *p,
+>         if (p->idx < p->max)
+>                 return 0;
+>
+> -       xa_lock_bh(&sk->sk_user_frags);
+> +       xa_lock_bh(&sk->sk_devmem_info.frags);
+>
+>         tcp_xa_pool_commit_locked(sk, p);
+>
+>         for (k =3D 0; k < max_frags; k++) {
+> -               err =3D __xa_alloc(&sk->sk_user_frags, &p->tokens[k],
+> +               err =3D __xa_alloc(&sk->sk_devmem_info.frags, &p->tokens[=
+k],
+>                                  XA_ZERO_ENTRY, xa_limit_31b, GFP_KERNEL)=
+;
+>                 if (err)
+>                         break;
+>         }
+>
+> -       xa_unlock_bh(&sk->sk_user_frags);
+> +       xa_unlock_bh(&sk->sk_devmem_info.frags);
+>
+>         p->max =3D k;
+>         p->idx =3D 0;
+>         return k ? 0 : err;
+>  }
+>
+> +static void tcp_xa_pool_inc_pp_ref_count(struct tcp_xa_pool *tcp_xa_pool=
+,
+> +                                        skb_frag_t *frag)
+> +{
+> +       struct net_iov *niov;
+> +
+> +       niov =3D skb_frag_net_iov(frag);
+> +
+> +       if (net_devmem_autorelease_enabled()) {
+> +               atomic_long_inc(&niov->desc.pp_ref_count);
+> +               tcp_xa_pool->netmems[tcp_xa_pool->idx++] =3D
+> +                       skb_frag_netmem(frag);
+> +       } else {
+> +               if (atomic_inc_return(&niov->uref) =3D=3D 1)
+> +                       atomic_long_inc(&niov->desc.pp_ref_count);
+> +       }
+> +}
+> +
+>  /* On error, returns the -errno. On success, returns number of bytes sen=
+t to the
+>   * user. May not consume all of @remaining_len.
+>   */
+> @@ -2533,6 +2557,7 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, cons=
+t struct sk_buff *skb,
+>                  * sequence of cmsg
+>                  */
+>                 for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
+> +                       struct net_devmem_dmabuf_binding *binding =3D NUL=
+L;
+>                         skb_frag_t *frag =3D &skb_shinfo(skb)->frags[i];
+>                         struct net_iov *niov;
+>                         u64 frag_offset;
+> @@ -2568,13 +2593,35 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, co=
+nst struct sk_buff *skb,
+>                                               start;
+>                                 dmabuf_cmsg.frag_offset =3D frag_offset;
+>                                 dmabuf_cmsg.frag_size =3D copy;
+> -                               err =3D tcp_xa_pool_refill(sk, &tcp_xa_po=
+ol,
+> -                                                        skb_shinfo(skb)-=
+>nr_frags - i);
+> -                               if (err)
+> +
+> +                               binding =3D net_devmem_iov_binding(niov);
+> +
+> +                               if (!sk->sk_devmem_info.binding) {
+> +                                       net_devmem_dmabuf_binding_get(bin=
+ding);
+> +                                       sk->sk_devmem_info.binding =3D bi=
+nding;
+> +                               }
+> +
+> +                               if (sk->sk_devmem_info.binding !=3D bindi=
+ng) {
+> +                                       err =3D -EFAULT;
+>                                         goto out;
+> +                               }
+> +
+> +                               if (net_devmem_autorelease_enabled()) {
+> +                                       err =3D tcp_xa_pool_refill(sk,
+> +                                                                &tcp_xa_=
+pool,
+> +                                                                skb_shin=
+fo(skb)->nr_frags - i);
+> +                                       if (err)
+> +                                               goto out;
+> +
+> +                                       dmabuf_cmsg.frag_token =3D
+> +                                               tcp_xa_pool.tokens[tcp_xa=
+_pool.idx];
+> +                               } else {
+> +                                       dmabuf_cmsg.frag_token =3D
+> +                                               net_iov_virtual_addr(niov=
+) >> PAGE_SHIFT;
+> +                               }
+> +
+>
+>                                 /* Will perform the exchange later */
+> -                               dmabuf_cmsg.frag_token =3D tcp_xa_pool.to=
+kens[tcp_xa_pool.idx];
+>                                 dmabuf_cmsg.dmabuf_id =3D net_devmem_iov_=
+binding_id(niov);
+>
+>                                 offset +=3D copy;
+> @@ -2587,8 +2634,7 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, cons=
+t struct sk_buff *skb,
+>                                 if (err)
+>                                         goto out;
+>
+> -                               atomic_long_inc(&niov->desc.pp_ref_count)=
+;
+> -                               tcp_xa_pool.netmems[tcp_xa_pool.idx++] =
+=3D skb_frag_netmem(frag);
+> +                               tcp_xa_pool_inc_pp_ref_count(&tcp_xa_pool=
+, frag);
+>
+>                                 sent +=3D copy;
+>
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index f8a9596e8f4d..7b1b5a17002f 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -89,6 +89,9 @@
+>
+>  #include <crypto/md5.h>
+>
+> +#include <linux/dma-buf.h>
+> +#include "../core/devmem.h"
+> +
+>  #include <trace/events/tcp.h>
+>
+>  #ifdef CONFIG_TCP_MD5SIG
+> @@ -2492,7 +2495,7 @@ static void tcp_release_user_frags(struct sock *sk)
+>         unsigned long index;
+>         void *netmem;
+>
+> -       xa_for_each(&sk->sk_user_frags, index, netmem)
+> +       xa_for_each(&sk->sk_devmem_info.frags, index, netmem)
+>                 WARN_ON_ONCE(!napi_pp_put_page((__force netmem_ref)netmem=
+));
+>  #endif
+>  }
+> @@ -2503,7 +2506,11 @@ void tcp_v4_destroy_sock(struct sock *sk)
+>
+>         tcp_release_user_frags(sk);
+>
+> -       xa_destroy(&sk->sk_user_frags);
+> +       xa_destroy(&sk->sk_devmem_info.frags);
+> +       if (sk->sk_devmem_info.binding) {
+> +               net_devmem_dmabuf_binding_put(sk->sk_devmem_info.binding)=
+;
 
-[    1.731786]  hv_iommu_attach_dev+0xf0/0x1d0
-[    1.731788]  __iommu_attach_device+0x21/0xb0
-[    1.731790]  __iommu_device_set_domain+0x65/0xd0
-[    1.731792]  __iommu_group_set_domain_internal+0x61/0x120
-[    1.731795]  iommu_setup_default_domain+0x3a4/0x530
-[    1.731796]  __iommu_probe_device.part.0+0x15d/0x1d0
-[    1.731798]  iommu_probe_device+0x81/0xb0
-[    1.731799]  iommu_bus_notifier+0x2c/0x80
-[    1.731800]  notifier_call_chain+0x66/0xe0
-[    1.731802]  blocking_notifier_call_chain+0x47/0x70
-[    1.731804]  bus_notify+0x3b/0x50
-[    1.731805]  device_add+0x631/0x850
-[    1.731807]  pci_device_add+0x2db/0x670
-[    1.731809]  pci_scan_single_device+0xc3/0x100
-[    1.731810]  pci_scan_slot+0x97/0x230
-[    1.731812]  pci_scan_child_bus_extend+0x3b/0x2f0
-[    1.731814]  pci_scan_root_bus_bridge+0xc0/0xf0
-[    1.731816]  hv_pci_probe+0x398/0x5f0
-[    1.731817]  vmbus_probe+0x42/0xa0
-[    1.731819]  really_probe+0xe5/0x3e0
-[    1.731822]  __driver_probe_device+0x7e/0x170
-[    1.731823]  driver_probe_device+0x23/0xa0
-[    1.731824]  __device_attach_driver+0x92/0x130
-[    1.731826]  bus_for_each_drv+0x8c/0xe0
-[    1.731828]  __device_attach+0xc0/0x200
-[    1.731830]  device_initial_probe+0x4c/0x50
-[    1.731831]  bus_probe_device+0x32/0x90
-[    1.731832]  device_add+0x65b/0x850
-[    1.731836]  device_register+0x1f/0x30
-[    1.731837]  vmbus_device_register+0x87/0x130
-[    1.731840]  vmbus_add_channel_work+0x139/0x1a0
-[    1.731841]  process_one_work+0x19f/0x3f0
-[    1.731843]  worker_thread+0x188/0x2f0
-[    1.731845]  kthread+0x119/0x230
-[    1.731852]  ret_from_fork+0x1b4/0x1e0
-[    1.731854]  ret_from_fork_asm+0x1a/0x30
+I don't understand the refcounting relationsship between the binding
+and the socket when autorelease=3Doff. It seems you're grabbing a
+reference on the binding on every recvmsg(), but only dropping the
+reference on the binding once here, so the binding is never freed.
 
->=20
-> > I was wondering if this "logical device id" is actually parsed by the h=
-ypervisor,
-> > or whether it is just a unique ID that is opaque to the hypervisor. Fro=
-m the
-> > usage in the hypercalls in pci-hyperv.c and this new IOMMU driver, it a=
-ppears
-> > to be the former. Evidently the hypervisor is taking this logical devic=
-e ID and
-> > and matching against bytes 4 thru 7 of the instance GUIDs of PCI pass-t=
-hru
-> > devices offered to the guest, so as to identify a particular PCI pass-t=
-hru device.
-> > If that's the case, then Linux doesn't have the option of choosing some=
- other
-> > unique ID that is easier to generate and access.
->=20
-> Yes, the device ID is actually used by the hypervisor to find the corresp=
-onding PCI
-> pass-thru device and the physical IOMMUs the device is behind and execute=
- the
-> requested operation for those IOMMUs.
->=20
-> > There's a uniqueness issue with this kind of logical device ID that has=
- been
-> > around for years, but I had never thought about before. In hv_pci_probe=
-()
-> > instance GUID bytes 4 and 5 are used to generate the PCI domain number =
-for
-> > the "fake" PCI bus that the PCI pass-thru device resides on. The issue =
-is the
-> > lack of guaranteed uniqueness of bytes 4 and 5, so there's code to deal=
- with
-> > a collision. (The full GUID is unique, but not necessarily some subset =
-of the
-> > GUID.) It seems like the same kind of uniqueness issue could occur here=
-. Does
-> > the Hyper-V host provide any guarantees about the uniqueness of bytes 4=
- thru
-> > 7 as a unit, and if not, what happens if there is a collision? Again, t=
-his
-> > uniqueness issue has existed for years, so it's not new to this patch s=
-et, but
-> > with new uses of the logical device ID, it seems relevant to consider.
->=20
-> Thank you for bringing that up, I was aware of the uniqueness workaround =
-but, like you,
-> I had not considered that the workaround could prevent matching the devic=
-e ID with the
-> record the hypervisor has of the PCI pass-thru device assigned to us. I w=
-ill work with
-> the hypervisor folks to resolve this before this patch series is posted f=
-or merge.
->=20
-> Thanks,
-> Easwar (he/him)
+> +               sk->sk_devmem_info.binding =3D NULL;
+> +       }
+>
+>         trace_tcp_destroy_sock(sk);
+>
+> diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+> index bd5462154f97..2aec977f5c12 100644
+> --- a/net/ipv4/tcp_minisocks.c
+> +++ b/net/ipv4/tcp_minisocks.c
+> @@ -662,7 +662,8 @@ struct sock *tcp_create_openreq_child(const struct so=
+ck *sk,
+>
+>         __TCP_INC_STATS(sock_net(sk), TCP_MIB_PASSIVEOPENS);
+>
+> -       xa_init_flags(&newsk->sk_user_frags, XA_FLAGS_ALLOC1);
+> +       xa_init_flags(&newsk->sk_devmem_info.frags, XA_FLAGS_ALLOC1);
+> +       newsk->sk_devmem_info.binding =3D NULL;
+>
+>         return newsk;
+>  }
+> diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux=
+/netdev.h
+> index e0b579a1df4f..1e5c209cb998 100644
+> --- a/tools/include/uapi/linux/netdev.h
+> +++ b/tools/include/uapi/linux/netdev.h
+> @@ -207,6 +207,7 @@ enum {
+>         NETDEV_A_DMABUF_QUEUES,
+>         NETDEV_A_DMABUF_FD,
+>         NETDEV_A_DMABUF_ID,
+> +       NETDEV_A_DMABUF_AUTORELEASE,
+>
+>         __NETDEV_A_DMABUF_MAX,
+>         NETDEV_A_DMABUF_MAX =3D (__NETDEV_A_DMABUF_MAX - 1)
+>
+> --
+> 2.47.3
+>
+
+
+--=20
+Thanks,
+Mina
 
