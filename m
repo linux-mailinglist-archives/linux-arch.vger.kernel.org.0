@@ -1,63 +1,67 @@
-Return-Path: <linux-arch+bounces-15743-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15744-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC049D0EA65
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 12:01:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ADBFD0F7E9
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 18:11:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 946DE3003FC4
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 11:01:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3B2913025A73
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Jan 2026 17:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6FE330661;
-	Sun, 11 Jan 2026 11:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D27C346AE8;
+	Sun, 11 Jan 2026 17:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvb+H2WE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e/vN13OW"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383B633064E;
-	Sun, 11 Jan 2026 11:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6908833F8AC;
+	Sun, 11 Jan 2026 17:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768129296; cv=none; b=TOTfr5DLORoqNBZeM2sqfX0RZXPjDzsLsz6QW5RlJhPHXk15d9Tes2B+nnrDNrlxx2BeXk+8K/tQf0uGrQXVGNOVsEGwUqFCZKIqto7J40F0+euYb5WqQL3QWCXNSVmsxQ58Wv27P9gYbPx2M0jtl7xj29L2IboOaEBGf2Jaolg=
+	t=1768151480; cv=none; b=gfcDmiVIU6pBg10ExlZlPpvLdlzHoACRFLOSHX7ZlEQQ/+CcERhdK0DTKSxJZ/Y6QpC0GuXcOG4OYi5OT+W3bV00bRzLgSRC4vI/L4W6Ucz5atBpotppIW3BpBcEnKugwkgbgzram2zfajWI6y385CsmlJJ+OVkj/d/1Dr0Zil0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768129296; c=relaxed/simple;
-	bh=o4CW2+vk0zKv56E//RFdbfEsliPa/M9rzdKnKi5Imtg=;
+	s=arc-20240116; t=1768151480; c=relaxed/simple;
+	bh=OnwustDebdONrg3DpiuMOYls7c9RN9aap05ypNQV4fk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EbVr1SCp3gPZDgBzBpKG2dt/UMBEdhZwPA6YK8f5TXQxDTXcAZrUAqHeoR2LQm6tDOOHB7h9/CCynWcsteFtGukfCWSe9jbDZSqkHWyydGs5x5SJrsOZqxpikghvheRmh4VKOcA04lkPN/q92yTep0PAlUQvemh21qXSdDLDzzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvb+H2WE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01DCEC4CEF7;
-	Sun, 11 Jan 2026 11:01:34 +0000 (UTC)
+	 MIME-Version:Content-Type; b=WR6qvHdf+fdCXR8CMqnnrup5Sk3f/7K6dzJhGitdJiXWIVWJSZ5lN5hpcjpIaBhK83BVdcRVzySO50W6zaj6AaxsKbw2kfueZFDkeCfnmCUuA1N3OBMEUYTUiuS1r2eyQ6eV8CsTioWS8csfmrDCcthrreVCyy5Y9WJSjnsAaGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e/vN13OW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B51DC4CEF7;
+	Sun, 11 Jan 2026 17:11:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768129295;
-	bh=o4CW2+vk0zKv56E//RFdbfEsliPa/M9rzdKnKi5Imtg=;
+	s=k20201202; t=1768151480;
+	bh=OnwustDebdONrg3DpiuMOYls7c9RN9aap05ypNQV4fk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=fvb+H2WES6sPyq/eqtUvHrroq9du4l4V22lGk93eB04kVrL1QLRi+GHI+Fsq3cb41
-	 7ncAWX614fViiMWby//Vcsgiy8D5WGNfLuVDRvc1dZbdXDy2SvNJh5ozCpR6MSSYTk
-	 xA/agNdZ9pzMiR0wmYPrsfgo4guN2YQmgKEJvD7PPwt2H356IySm8xGuhZ8oEDcUd/
-	 zVYHrmzvEsekCuChYOXIrA7wMIcmefOVzKVP7OniH+Q4WvmITD6ibyi8CP/zMKvtmO
-	 Ae6PcLH7waDraQSjFF9pbsMRzDzDmUo/01a2kAL3qFw4W+/fmh0hJaMX4TgWuabNxH
-	 lNaSAK1c1EwEw==
+	b=e/vN13OWu5FI6PK6APMnOLTgEdcOlzt/gjkUx59XwZcZ2dUpXE7k9sYxACj+Id+Tq
+	 zvENplEbpLoXxNxoRTrlIZRVGL/TnArv9HHMg8THqyBKQy8bjiSdepDl94uTBUOZ8D
+	 Uc5hM/eNqpv3FKbH2bBrYdFwPOwPI9MTlnohOo8cFAKH8Z0x1LsUAu4o5/WdEDCnxu
+	 PtX772XfYUbhoqcD5Dn41t0HrWrJRDyWv92h/ArbuIAP1IUjGrl4tTGdgoeQeZsGie
+	 h8whVpTH2KbkSSPJuo7FeSngn8qFtN+KbQJcp8N9SC9t3GLzzcMM2H/EihbTF34BE4
+	 rQJor4j84qZHQ==
 From: Thomas Gleixner <tglx@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet
- <corbet@lwn.net>, Prakash Sangappa <prakash.sangappa@oracle.com>, Madadi
- Vineeth Reddy <vineethr@linux.ibm.com>, K Prateek Nayak
- <kprateek.nayak@amd.com>, Steven Rostedt <rostedt@goodmis.org>, Sebastian
- Andrzej Siewior <bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>, Ron Geva
- <rongevarg@gmail.com>, Waiman Long <longman@redhat.com>
-Subject: Re: [patch V6 10/11] entry: Hook up rseq time slice extension
-In-Reply-To: <20251219110711.GE1132199@noisy.programming.kicks-ass.net>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, LKML
+ <linux-kernel@vger.kernel.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng
+ <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Prakash Sangappa
+ <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
+ <vineethr@linux.ibm.com>, K Prateek Nayak <kprateek.nayak@amd.com>, Steven
+ Rostedt <rostedt@goodmis.org>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>, Peter
+ Zijlstra <peterz@infradead.org>, Ron Geva <rongevarg@gmail.com>, Waiman
+ Long <longman@redhat.com>, Florian Weimer <fweimer@redhat.com>,
+ "carlos@redhat.com" <carlos@redhat.com>, Michael Jeanson
+ <mjeanson@efficios.com>
+Subject: Re: [patch V6 01/11] rseq: Add fields and constants for time slice
+ extension
+In-Reply-To: <225b9868-4ab7-4a90-8acb-8d965626f6a7@efficios.com>
 References: <20251215155615.870031952@linutronix.de>
- <20251215155709.258157362@linutronix.de>
- <d8215f9a-3088-483c-bd96-4058767b886d@efficios.com>
- <20251219110711.GE1132199@noisy.programming.kicks-ass.net>
-Date: Sun, 11 Jan 2026 12:01:31 +0100
-Message-ID: <878qe4ifas.ffs@tglx>
+ <20251215155708.669472597@linutronix.de>
+ <d97944e3-e5f3-4d7e-83ac-89ddd6a4cb64@efficios.com> <87jyyjbclh.ffs@tglx>
+ <225b9868-4ab7-4a90-8acb-8d965626f6a7@efficios.com>
+Date: Sun, 11 Jan 2026 18:11:16 +0100
+Message-ID: <87ldi4gjm3.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -66,88 +70,168 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Fri, Dec 19 2025 at 12:07, Peter Zijlstra wrote:
-> On Tue, Dec 16, 2025 at 10:37:24AM -0500, Mathieu Desnoyers wrote:
->> On 2025-12-15 13:24, Thomas Gleixner wrote:
->> > Wire the grant decision function up in exit_to_user_mode_loop()
->> > 
->> [...]
->> > +/* TIF bits, which prevent a time slice extension. */
->> > +#ifdef CONFIG_PREEMPT_RT
->> > +# define TIF_SLICE_EXT_SCHED	(_TIF_NEED_RESCHED_LAZY)
->> > +#else
->> > +# define TIF_SLICE_EXT_SCHED	(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY)
+On Wed, Jan 07 2026 at 16:11, Mathieu Desnoyers wrote:
+> On 2025-12-18 18:21, Thomas Gleixner wrote:
+>> On Tue, Dec 16 2025 at 09:36, Mathieu Desnoyers wrote:
+>>> On 2025-12-15 13:24, Thomas Gleixner wrote:
+>>> [...]
+>>>> +The thread has to enable the functionality via prctl(2)::
+>>>> +
+>>>> +    prctl(PR_RSEQ_SLICE_EXTENSION, PR_RSEQ_SLICE_EXTENSION_SET,
+>>>> +          PR_RSEQ_SLICE_EXT_ENABLE, 0, 0);
+>>>
+>>> Although it is not documented, it appears that a thread can
+>>> also use this prctl to disable slice extension.
 >> 
->> It would be relevant to explain the difference between RT and non-RT
->> in the commit message.
+>> Obviously. Controls are supposed to be symmetrical.
 >
-> So if you include TIF_NEED_RESCHED the extension period directly affects
-> the minimum scheduler delay like:
+> I agree that the vast majority of prctl are symmetrical, but
+> there are exceptions, e.g. PR_SET_NO_NEW_PRIVS, PR_SET_SECCOMP.
+
+Which have security requirements and are therefore different.
+
+>>> How is it meant to compose once we have libc trying to use slice
+>>> extension internally and the application also using it or wishing to
+>>> disable it, unaware that libc is also trying to use it ?
+>> 
+>> Tons of prctls have the same "issue". What's so special about this?
 >
->   min(extension_period, min_sched_delay)
+> What is special about this is the fact that we want to allow userspace
+> to specialize its fast-path code at runtime based on availability of an
+> rseq feature.
 >
-> because this is strictly a from-userspace thing. That is, it is
-> equivalent to the in-kernel preemption/IRQ disabled regions -- with
-> exception of the scheduler critical sections itself.
+> If we allow slice extension to be disabled by the program or any
+> library within the process, this means that either the program or any
+> other library cannot assume slice extension availability to stay
+> invariant after it has been setup.
+
+That's really a non-problem. This is not any different from other
+tunables and there is really no reason to make up theoretical cases
+where a library enables and another one disables. If user space can't
+get it's act together then so be it. It's not the kernels problem and as
+this is not a security feature with strict semantics, there is no reason
+to let the kernel implement policy.
+
+> Moreover, if the prctl enables the feature independently for each
+> thread (rather than for the whole process), this requires a conditional
+> state check on every use because it can be enabled or disabled
+> depending on the thread. This prevents code specialization that would
+> select the appropriate code at process startup through either ifunc
+> resolver, code patching or other mean.
+
+I'm not completely opposed to make it process wide. For threads created
+after enablement, that's trivial because that can be done when the per
+thread RSEQ is registered. But when it gets enabled _after_ threads have
+been created already then we need code to chase the threads and enable
+it after the fact because we are not going to query the enablement in
+curr->mm::whatever just to have another conditional and another
+cacheline to access.
+
+The only option is to reject enablement when there is already more than
+one thread in the process, but there is a reasonable argument that a
+process might only enable it for a subset of threads, which have actual
+lock interaction and not bother with it for other things. I'm not seeing
+a reason to restrict the flexibility of configuration just because you
+envision magic use cases all over the place.
+
+On the other hand there is no guarantee that libc registers RSEQ when a
+thread is started as it can be disabled or not supported, so you have
+exactly the same problem there that the code which wants to use it needs
+to ensure that a RSEQ area is registered, no?
+
+> [...]
 >
-> As I've agrued many times -- I don't see a fundamental reason to not do
-> this for RT -- but perhaps further reduce the magic number such that its
-> impact cannot be observed on a 'good' machine.
+>> The prctl allows you to query the state, so all parties can make
+>> informed decisions. It's not any different from other mechanisms, which
+>> require coordination between different parts.
 >
-> But yes, if/when we do this on RT it needs the promise to agressively
-> decrease the magic number any time it can actually be measured to impact
-> performance.
+> I'm fine with having prctl enable the feature (for the whole process)
+> and query its state.
 >
-> cyclictest should probably get a mode where it (ab)uses the feature to
-> failure before we do this.
+> The part I'm concerned with is the prctl disabling the feature, as
+> we're losing the availability invariant after setup.
+
+  close(0);
+
+has the same problem. How many instances of bugs in that area have you
+seen so far?
+
+>> What I've seen so far at least from the implementation is that it aims
+>> to enable the maximum amount of features, aka. overhead, unconditionally
+>> even if nothing uses them, e.g. CID.
 >
-> Anyway, I don't mind excluding RT for now, but it *does* deserve a
-> comment.
+> I don't mind having things disabled on process startup and then opt-in.
+> What I care about though is that the enabled state stays invariant across
+> the entire process after setting this up at program startup.
 
-I know you argued about this many times, but I still maintain my point
-of view that TIF_PREEMPT and TIF_PREEMPT_LAZY are fundmentally different:
+Userspace is perfectly equipped to do so and the kernel is not there to
+prevent user space from shooting itself into the foot.
 
-     TIF_PREEMPT_LAZY grants a non-RT task to complete until it reaches
-     return to user
+>> As I pointed out in the previous submission, the benefits of time slice
+>> extensions are limited. In low contention scenarios they result in
+>> measurable regressions, so it's not the magic panacea which solves all
+>> locking/critical section problems at once.
+>
+> I agree that whatever code we add to an uncontended spinlock fast path
+> will show up in microbenchmark measurements.
 
-     TIF_PREEMPT enforces preemption at the next possible preemption
-     point
+It not only shows up in microbenchmarks. It shows up in real world
+scenarios too. So enabling and using it in random places just because
+you can will not necessarily result in any performance gain, it might
+actually get worse.
 
-My main concern is this scenario:
+>> The idea that cobbling random libraries together in the hope that
+>> everything goes well has never worked. That's simply a wet dream and
+>> Java has proven that to the maximum extent decades ago. Nevertheless all
+>> other programming models went down the same yawning abyss and everyone
+>> expects that the kernel is magically solving their problems by adding
+>> more abusable [mis]features.
+>> 
+>> Systems have to be designed carefully as a whole if you want to achieve
+>> the maximum performance. That's not any different from other targets
+>> like real-time. A real-time enabled kernel does not magically create a
+>> real-time system.
+> [...]
+>
+> I think we are talking about two different program/libraries composition
+> use-cases here.
+>
+> AFAIU, the aspect you are focused on is whether we should allow users of
+> slice extension to nest. I agree with you that we should document this
+> as unsupported, since the goal of slice extension is really for short
+> spinlock critical sections, and nesting of those goes against that
+> basic definition.
 
-   sched_other_task()
-        request_slice_extension()
+This is not about nesting. This is about the completely unrealistic idea
+that combining random libraries will result in a functional optimized
+system. If you want to ensure that nothing can disable it then implement
+a syscall filter which rejects the disable command. That's user space
+policy, not kernel side hardcoded policy.
 
-   ---> interrupt
-        RT task is woken up
+> The concern I am raising here is different. It's about just _using_
+> slice extension from various entities (program, libraries) within a
+> process, without any nesting of slice extension requests.
+>
+> If libc successfully enables slice extension in its startup, the
+> kernel should guarantee that it stays invariant for the lifetime
+> of the program so libc can optimize its code accordingly, or use
+> a fallback, without requiring additional per-thread variable checks
+> in its fast paths.
 
-        return_to_user()
-           grant_extension()
-           ...
+Even if libc enables it and something else disables it, then the only
+downside is that user space pointlessly does the request dance:
 
-which means the RT task is delayed until the OTHER task relinquishes the
-CPU voluntarily or via timeout.
+      set_request()
+      critical_section()
+      clear_request()
+      if (granted())            // Guaranteed to be false
+         sys_rseq_slice_yield()
 
-That might be desired _if_ both tasks are using the same lock, but in
-case of fully independent tasks it's not necessarily a good idea. If a
-RT application uses locks in the RT tasks, then obviously latency is not
-so much of a concern, but for optimized RT applications the side effect
-of other processes getting a free pass to increase latency is troublesome.
-
-So I prefer to keep the current semantics for RT. This can be revisited
-of course when a proper evaluation has been done, but IMO there are too
-many moving parts in a RT system to make this actually work correctly
-under all circumstances.
-
-I'll add proper comments to that effect.
+The resulting harm is that requests are ignored by the kernel, so the
+"optimized" code is not getting what it expects and executes 3
+instructions for nothing. That's all. So where is your problem?
 
 Thanks,
 
         tglx
-
-
-
-
-
-
 
