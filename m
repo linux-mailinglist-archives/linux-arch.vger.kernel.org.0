@@ -1,54 +1,54 @@
-Return-Path: <linux-arch+bounces-15759-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15760-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59361D16B86
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 06:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D863DD16B95
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 06:39:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3A4A3303F7C2
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 05:38:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AA29A304F2CC
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 05:38:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D729F35BDBD;
-	Tue, 13 Jan 2026 05:38:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D8334B19F;
+	Tue, 13 Jan 2026 05:38:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ByJH5Iks"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pYIfNDkv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B5A2C235D;
-	Tue, 13 Jan 2026 05:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127E535CB69;
+	Tue, 13 Jan 2026 05:38:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768282705; cv=none; b=shg62/AD+fwstuqeEuxv4eRrz33crhwdM3DFiO2oulN7+MVn6FfzDrAo3sLS4YPG7B91ThtP961cvU8vPN0fUYu6F1so5XS7y6So+oePfN2GL+SrTA2LsWZzbKdTc3iGli87643Xh0lW+VwLwy6mgiZu3z3+RglCBr2UwgVZSqQ=
+	t=1768282716; cv=none; b=AT8+L31amNodj5ir78DnYCPVK/KSmJ8aQI6RvZ5fnVexYDEblMWyj7LbJTYFFVGklRSiQYfCplW9ek5W5SkPJnxYktBwnqEcQgGlL3b2jjS8Dy6hBYna62WpaZyLL5uUjlRrX7kOw1lDc8o06KIPpz/O8RrSGpIwyYYGeuC/OJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768282705; c=relaxed/simple;
-	bh=TVBYg+2G0DLr0zMyrc3vdOsG1553YTGNnc2V942V/Bw=;
-	h=To:Cc:Message-ID:In-Reply-To:References:From:Subject:Date; b=mVyu03FPbDLB9VZ9MaJ9G3bsWfHlCUxNbD0vJlMhoAy2H9Wl3LDwIzFGYANl24Us8bW6Gs6BFW2y0Su+BITePePVZ75PEI1VvMwKcxGcGmhrabvjJU8nLhpPtB5GSZl3HWP79HFnOTPywxyzPz682y2Fk311y707BSCX3ugsWhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ByJH5Iks; arc=none smtp.client-ip=202.12.124.156
+	s=arc-20240116; t=1768282716; c=relaxed/simple;
+	bh=bZKri+q8JzKy6ytJBb/Ncm9BqY+ao0ZKXtsoGhyWbEU=;
+	h=To:Cc:Message-ID:In-Reply-To:References:From:Subject:Date; b=iJmoOikh3JpsFDWSbEbmjvpWisBJuEmtYOcFcl76ZiBB1aSkx1CpdeRnQwwD6HLjoi1vD0XbNN6Ls3FQ28lrdeFHAOdw/Bgly8hXybHdl86RgMNPR/b6yg1BtKeDHjgKusZsz8QuMo2ga2pmrKTeZ6fEWex+HJWM0t1GhxIdUEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pYIfNDkv; arc=none smtp.client-ip=202.12.124.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 66C077A0095;
-	Tue, 13 Jan 2026 00:38:21 -0500 (EST)
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfout.stl.internal (Postfix) with ESMTP id 175B51D000E0;
+	Tue, 13 Jan 2026 00:38:34 -0500 (EST)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Tue, 13 Jan 2026 00:38:22 -0500
+  by phl-compute-10.internal (MEProxy); Tue, 13 Jan 2026 00:38:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
 	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1768282701; x=
-	1768369101; bh=CsktC8xD5EhNAbS2AjeT72YR6CfdK+yufEdKYFi5oBo=; b=B
-	yJH5Iksp+s2dl2BeWNT3+0GXbL4pFiKVsqQIuA5LP7MZcGQPzrzLzVVOY/gd3jB7
-	DmdH4tLHsdFYTg3Y0O6peSyDn0ebLh8xGPCX+ho0WzIBPgL65IsYmgyqitQUURwH
-	/UHfYmmrpcfb2An26uoJHQRjteEsb7QbKXjia2ULzcAq+AADrr7AzXwqZYBAbIOm
-	HQB8KFZzG5l6WyzfjbB/74WUFrmGduqob7rlQ7/kPkK5xe4itM5h2ZQWE92+225X
-	8KzYvdr9wJZC9pFsglfdGzZL++P//5GUy5cWPxPl10jcySHCK5IOyUMMp5ZamB82
-	/XkQWKFU71TrkZn2cCRPQ==
-X-ME-Sender: <xms:TNplaYOFuJ72KZUAG0ulz69EqOhU01dAjDDulhURWBqgEavESR064w>
-    <xme:TNplaT1-mQ3vIbDaNNosfmD80vpyZxnzgwPd1_Pdjeyfy1b91N4HD89JLAsVwDbpE
-    xjM-6PFjLcLNb5ALX8QCrw_h9Tc0KJNEns1CtSG0QkxtQWrmZGFKc13>
-X-ME-Received: <xmr:TNplac2eLVCFtcNAlMuXVlC6MZKm-2jTkjB1GhueunvBTiO7O973ouH9yxL8PLOJeHZPq4n3eN8zZIQoX6ToHNFOL9cGFfE93us>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1768282713; x=
+	1768369113; bh=jiBMJymXYYttEEG2SfWequihow3tSncHan9khHjXFzU=; b=p
+	YIfNDkvSxwFB6PTTFMTN+zdBumshQl9Xl8MQ212eVNGTeD+Kg8VP85Hila8UsKy2
+	/W3y3zAS99sEhVVl2Djw0V5rg1EQgv9oBUuqsWTbGemSJA7rQTWJDh2eEwneInNf
+	Eu2NuJRCP6xg5vZFgFvA2zUdMe5XqdEXt7SglroconqEnRlZzYS6aWuWirWyCQf9
+	ZAL/94jAl0doRDsjNouG361zR79zBAZMQMaUzxBHCK7bScUKIw+ksANBpLaTdq4L
+	MvKUpxr0gS3+34ZK2ZWuhATvt3JgN0ZtQpKrxW/6JbOCsEzpWnco3zuK9kOETztM
+	WyZPtUhYTWhuWlnDxPIuw==
+X-ME-Sender: <xms:WdplacAl8kZAKOZQo7uWHRnFJioCkJCFk5-0061O4PMKQjByoKdNrg>
+    <xme:WdplaSo1-skfe4TugQNsruxFwq4AH4yy828FZ24ecXJnaIpWIvKZfWp-I4EnaP8Q5
+    DYUBERzP3_bmm3BBqtnbfZAEAZkUASQIxWqkEy5CmxyDaz47gLl8Q>
+X-ME-Received: <xmr:WdplackdSYOzaiHdy3R0uGePZq1mN1iRYNhoHp-C99CV7BowwKCAdP7YttJ8F8RtTzsG0bxC2mWkPd2HCRxczgGeGxDhJWTrK-Q>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduudelhedtucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
@@ -57,7 +57,7 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduudelhedtucetufdote
     hnpeehkeduffehjedvieevkeelleegffeiuddvgeeluefhuedugeekkeehffekgffgheen
     ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
     frrghrrghmpehmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhr
-    ghdpnhgspghrtghpthhtohepvddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    ghdpnhgspghrtghpthhtohepudejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
     grkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepphgv
     thgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnh
     gvlhdrohhrghdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtohep
@@ -66,14 +66,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduudelhedtucetufdote
     ohhmpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorh
     hgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdho
     rhhg
-X-ME-Proxy: <xmx:TNplaSybt1dc4nXV8Pbz5hJaaI8SMS2x8qghwV2UQMV2q-pu-gVOpg>
-    <xmx:TNplafnybh97IHBbMMTouPbWixNMjTiIASA_c-HPv6qmXBSyPkRX8Q>
-    <xmx:TNplaWxxP8odMBWvLSqZxW2SvHAKMPYI5uK1dXnEAxhjl_p0wenkZg>
-    <xmx:TNplaeKSN53fJ2BOOKvOOf481cgZ2jZN9sTnx-K27QucyPiSoQ1ZaA>
-    <xmx:TdplaRTwYJPXw5r5bc3N6CnGoFRLJjc99VVeZSkMC3liyzQ6EZTDbsGR>
+X-ME-Proxy: <xmx:WdpladXgER1WtVs8VOBdILqmjEGlVGCwBxlMX4OUpXFlW3ZcGe95Zw>
+    <xmx:WdplaYTxnY224kRPpkA0qf3xFBlGy4nOapqkClL18izFGrIJ4kPMbA>
+    <xmx:WdplaQAgrF1RwFE2cXIi7eElHmNjZXACIIhq0lrf-ibXK4J_eSNKfw>
+    <xmx:WdplabQ7MqRTvuvwp4_5Z0OVdImecIFxaSuBt3GX48lpWUXoDUEbxw>
+    <xmx:WdplaUj-K4hrnW3BG2BJ2jI4M51ceohVVFv4e1yEnW87D-kGSOmDlVMG>
 Feedback-ID: i58a146ae:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Jan 2026 00:38:19 -0500 (EST)
+ 13 Jan 2026 00:38:30 -0500 (EST)
 To: Andrew Morton <akpm@linux-foundation.org>,
     Peter Zijlstra <peterz@infradead.org>,
     Will Deacon <will@kernel.org>
@@ -84,23 +84,19 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
     linux-arch@vger.kernel.org,
     linux-kernel@vger.kernel.org,
     linux-m68k@lists.linux-m68k.org,
-    Guo Ren <guoren@kernel.org>,
-    linux-csky@vger.kernel.org,
-    Geert Uytterhoeven <geert@linux-m68k.org>,
-    Dinh Nguyen <dinguyen@kernel.org>,
-    Jonas Bonn <jonas@southpole.se>,
-    Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-    Stafford Horne <shorne@gmail.com>,
-    linux-openrisc@vger.kernel.org,
-    Yoshinori Sato <ysato@users.sourceforge.jp>,
-    Rich Felker <dalias@libc.org>,
-    John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-    linux-sh@vger.kernel.org
-Message-ID: <a76bc24a4e7c1d8112d7d5fa8d14e4b694a0e90c.1768281748.git.fthain@linux-m68k.org>
+    Sasha Levin <sashal@kernel.org>,
+    Thomas Gleixner <tglx@linutronix.de>,
+    Ingo Molnar <mingo@redhat.com>,
+    Borislav Petkov <bp@alien8.de>,
+    Dave Hansen <dave.hansen@linux.intel.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <51ebf844e006ca0de408f5d3a831e7b39d7fc31c.1768281748.git.fthain@linux-m68k.org>
 In-Reply-To: <cover.1768281748.git.fthain@linux-m68k.org>
 References: <cover.1768281748.git.fthain@linux-m68k.org>
 From: Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH v7 2/4] atomic: Specify alignment for atomic_t and atomic64_t
+Subject: [PATCH v7 3/4] atomic: Add alignment check to instrumented atomic
+ operations
 Date: Tue, 13 Jan 2026 16:22:28 +1100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -108,86 +104,120 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 
-Some recent commits incorrectly assumed 4-byte alignment of locks.
-That assumption fails on Linux/m68k (and, interestingly, would have
-failed on Linux/cris also). The jump label implementation makes a
-similar alignment assumption.
+From: Peter Zijlstra <peterz@infradead.org>
 
-The expectation that atomic_t and atomic64_t variables will be naturally
-aligned seems reasonable, as indeed they are on 64-bit architectures.
-But atomic64_t isn't naturally aligned on csky, m68k, microblaze, nios2,
-openrisc and sh. Neither atomic_t nor atomic64_t are naturally aligned
-on m68k.
+Add a Kconfig option for debug builds which logs a warning when an
+instrumented atomic operation takes place that's misaligned.
+Some platforms don't trap for this.
 
-This patch brings a little uniformity by specifying natural alignment
-for atomic types. One benefit is that atomic64_t variables do not get
-split across a page boundary. The cost is that some structs grow which
-leads to cache misses and wasted memory.
+[ fthain: added __DISABLE_EXPORTS conditional and refactored as helper
+function. ]
 
-See also, commit bbf2a330d92c ("x86: atomic64: The atomic64_t data type
-should be 8 bytes aligned on 32-bit too").
-
-Cc: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Jonas Bonn <jonas@southpole.se>
-Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Cc: Stafford Horne <shorne@gmail.com>
-Cc: linux-openrisc@vger.kernel.org
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: linux-sh@vger.kernel.org
-Link: https://lore.kernel.org/lkml/CAFr9PX=MYUDGJS2kAvPMkkfvH+0-SwQB_kxE4ea0J_wZ_pk=7w@mail.gmail.com
-Link: https://lore.kernel.org/lkml/CAMuHMdW7Ab13DdGs2acMQcix5ObJK0O2dG_Fxzr8_g58Rc1_0g@mail.gmail.com/
-Acked-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Sasha Levin <sashal@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Link: https://lore.kernel.org/lkml/20250901093600.GF4067720@noisy.programming.kicks-ass.net/
+Link: https://lore.kernel.org/linux-next/df9fbd22-a648-ada4-fee0-68fe4325ff82@linux-m68k.org/
 Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+
 ---
+Checkpatch.pl says...
+ERROR: Missing Signed-off-by: line by nominal patch author 'Peter Ziljstra <peterz@infradead.org>'
+
+---
+Changed since v6:
+ - Implemented helper function earlier in patch series, as requested by Ard.
+ - Dropped __DISABLE_BUG_TABLE macro in favour of __DISABLE_EXPORTS, as
+ requested by Peter.
+
 Changed since v5:
- - Added tags from Guo Ren and Arnd Bergmann.
+ - Add new __DISABLE_BUG_TABLE macro to prevent a build failure on those
+architectures which use atomics in pre-boot code like the EFI stub loader:
+
+x86_64-linux-gnu-ld: error: unplaced orphan section `__bug_table' from `arch/x86/boot/compressed/sev-handle-vc.o'
 
 Changed since v2:
- - Specify natural alignment for atomic64_t.
-
-Changed since v1:
- - atomic64_t now gets an __aligned attribute too.
- - The 'Fixes' tag has been dropped because Lance sent a different fix
-   for commit e711faaafbe5 ("hung_task: replace blocker_mutex with encoded
-   blocker") that's suitable for -stable.
+ - Always check for natural alignment.
 ---
- include/asm-generic/atomic64.h | 2 +-
- include/linux/types.h          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ include/linux/instrumented.h | 11 +++++++++++
+ lib/Kconfig.debug            | 10 ++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic64.h
-index 100d24b02e52..f22ccfc0df98 100644
---- a/include/asm-generic/atomic64.h
-+++ b/include/asm-generic/atomic64.h
-@@ -10,7 +10,7 @@
- #include <linux/types.h>
+diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+index 711a1f0d1a73..e34b6a557e0a 100644
+--- a/include/linux/instrumented.h
++++ b/include/linux/instrumented.h
+@@ -7,6 +7,7 @@
+ #ifndef _LINUX_INSTRUMENTED_H
+ #define _LINUX_INSTRUMENTED_H
  
- typedef struct {
--	s64 counter;
-+	s64 __aligned(sizeof(s64)) counter;
- } atomic64_t;
++#include <linux/bug.h>
+ #include <linux/compiler.h>
+ #include <linux/kasan-checks.h>
+ #include <linux/kcsan-checks.h>
+@@ -55,6 +56,13 @@ static __always_inline void instrument_read_write(const volatile void *v, size_t
+ 	kcsan_check_read_write(v, size);
+ }
  
- #define ATOMIC64_INIT(i)	{ (i) }
-diff --git a/include/linux/types.h b/include/linux/types.h
-index d4437e9c452c..1760e1feeab9 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -180,7 +180,7 @@ typedef phys_addr_t resource_size_t;
- typedef unsigned long irq_hw_number_t;
++static __always_inline void instrument_atomic_check_alignment(const volatile void *v, size_t size)
++{
++#ifndef __DISABLE_EXPORTS
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ATOMIC) && ((unsigned long)v & (size - 1)));
++#endif
++}
++
+ /**
+  * instrument_atomic_read - instrument atomic read access
+  * @v: address of access
+@@ -67,6 +75,7 @@ static __always_inline void instrument_atomic_read(const volatile void *v, size_
+ {
+ 	kasan_check_read(v, size);
+ 	kcsan_check_atomic_read(v, size);
++	instrument_atomic_check_alignment(v, size);
+ }
  
- typedef struct {
--	int counter;
-+	int __aligned(sizeof(int)) counter;
- } atomic_t;
+ /**
+@@ -81,6 +90,7 @@ static __always_inline void instrument_atomic_write(const volatile void *v, size
+ {
+ 	kasan_check_write(v, size);
+ 	kcsan_check_atomic_write(v, size);
++	instrument_atomic_check_alignment(v, size);
+ }
  
- #define ATOMIC_INIT(i) { (i) }
+ /**
+@@ -95,6 +105,7 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
+ {
+ 	kasan_check_write(v, size);
+ 	kcsan_check_atomic_read_write(v, size);
++	instrument_atomic_check_alignment(v, size);
+ }
+ 
+ /**
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ba36939fda79..4b4d1445ef9c 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1359,6 +1359,16 @@ config DEBUG_PREEMPT
+ 	  depending on workload as it triggers debugging routines for each
+ 	  this_cpu operation. It should only be used for debugging purposes.
+ 
++config DEBUG_ATOMIC
++	bool "Debug atomic variables"
++	depends on DEBUG_KERNEL
++	help
++	  If you say Y here then the kernel will add a runtime alignment check
++	  to atomic accesses. Useful for architectures that do not have trap on
++	  mis-aligned access.
++
++	  This option has potentially significant overhead.
++
+ menu "Lock Debugging (spinlocks, mutexes, etc...)"
+ 
+ config LOCK_DEBUGGING_SUPPORT
 -- 
 2.49.1
 
