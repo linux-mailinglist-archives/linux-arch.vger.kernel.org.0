@@ -1,159 +1,135 @@
-Return-Path: <linux-arch+bounces-15758-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15762-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABA7BD16B74
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 06:38:24 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1EC4D17211
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 08:56:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6B0F5300C638
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 05:38:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 32E453012C52
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 07:56:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F6A35B127;
-	Tue, 13 Jan 2026 05:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BkdaaE9/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E57C311C10;
+	Tue, 13 Jan 2026 07:56:17 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f193.google.com (mail-vk1-f193.google.com [209.85.221.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B622C235D;
-	Tue, 13 Jan 2026 05:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8408E3090CC
+	for <linux-arch@vger.kernel.org>; Tue, 13 Jan 2026 07:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768282692; cv=none; b=VeKn8ExdHP0vhTwm2gSKXvk551/qQcXm349ENWphCY6seDTYVyfo+JMirne9BzZpfOe/QCMaIMxtQcnCmetrvfBiyvPmiOCCFVr6tKqZ4REoiheiji3cOIZffbLnXODwOokn1j+ZR5fufSBltVhMkBQNOH+P3YzeIaqgBkqJr10=
+	t=1768290977; cv=none; b=vBS0Bhra4AhQqoHEOueuNwCiGThfndU7Dc9RdvNHtE08+Od0wDpXCDGfK8KNvgVTa1/cEo3qoLvCjNaWShgeEE1FOBa1db9uOVwpagPqOnmBQ44949yOAPGcLGIZGdia/bGild5TV1L4zBFREVZhWQo50GXlZpX5gme3VTrsoL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768282692; c=relaxed/simple;
-	bh=6BaawB/5vhO7v/rumx07zT9BPZyyoYZDc4iUgex6uao=;
-	h=To:Cc:Message-ID:In-Reply-To:References:From:Subject:Date; b=joqkWf3zcI9ENORlrSHPkQLBUrtFBg7CIVtfX5wNbcmQLSk4z/lU7m7AW/IDIWh/ZlE5pXjcSBncU7tnjBE2Keb5M0igFqouUuLu1KVkiVWDyIhOiWe4U3qFYjUcr3dSOwoo0SeuoHH0VxiveoZq04FPck3RUp1sExVcRlmWNcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BkdaaE9/; arc=none smtp.client-ip=202.12.124.156
+	s=arc-20240116; t=1768290977; c=relaxed/simple;
+	bh=n0dF2Fe8tSdrXokCIMgp4lK4sPjCkU1ooCoSBypgxBI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g6Qmq3NK7aOzrX0WBJMrkxP781b67xxDu1tv3NZxC1NCm6uCu1xqyMFnyfJvfF9TvhFHlbwMjnBww70vsXns2t+w+a1i/BGgwCfqi77VibCriDxa80jFL6+oaoPR+YqbUnO7n02oLEK0YK/Cxta67jkVcdXIdjgYFv4hZLOHqCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 7E5EA7A0095;
-	Tue, 13 Jan 2026 00:38:09 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Tue, 13 Jan 2026 00:38:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1768282689; x=
-	1768369089; bh=nL9oXUgaQPIU6S4mzvMLiKSGthFWHu05i1DeuxQmtGs=; b=B
-	kdaaE9/oX7QGz5QHKWUNZ4An3q2fXEMCkfsh4lC+F9/IEaVj1yMi10ugkkWh4O9X
-	1/M3K8L0CEozQLX7MnMDdc8sc9aAucY5J2IUrhom4LApPHwQ0Yz0qdg6YTG0drtw
-	LzrS+P/p9tHKdwmQE0hVAqqMwuPbbhJNY51ydx4rgXtzJQ72GA1KnNIqoDZGmV7e
-	8C6RmkBR7ZBGbQwqK5zwsLZxCM/VQR727BCqvFxhc5r1WfU7L3xQdq2/yoTitzO4
-	ngADxD4rYNH3cOdIK34ws/L23izVcc+CZzh2hS+ngTMyBZnGyVYar0IzTBix98rP
-	u4pdL9xHfPudO3ShY4y0g==
-X-ME-Sender: <xms:QNplaTkNm-MXZh55LywoqMCdyW4erTATlkQ8LhMM8vliQp3qx9igvA>
-    <xme:QNplaawenKMlmyo-hM1sXO_Us1nq3JDv6tv6L5a4i2qeLkzM9tJvSUrbQusjE9VZJ
-    nnsnbPBQBxyqJS5lOLQ8nk8BkGBJabYF3erA8fiEkSbmDsyRzpFFljo>
-X-ME-Received: <xmr:QNplaSLXVKQLjzX-d3nSWRzEI6H3fYIKeWi2Amaw9UZGw2Cl2Rokvo7y8pZoDU4nQDas3hQ_XigtowQRG9NpilunoRkFUqBto_A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduudelhedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepvfevkfgjfhfhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghi
-    nhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrh
-    hnpeevgffgtdfhhfefveeuudfgtdeugfeftedtveekieeggfduleetgeegueehgeffffen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrg
-    hinheslhhinhhugidqmheikehkrdhorhhgpdhnsggprhgtphhtthhopedvgedpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtih
-    honhdrohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdp
-    rhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghrnhguse
-    grrhhnuggsrdguvgdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtgho
-    mhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhopehmrg
-    hrkhdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrrhgt
-    hhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnh
-    gvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:QNplaVI2nHIzCqJKwkB5l4wLlFnPQm97_sanwjp-zHyc5csrSwzTWA>
-    <xmx:QNplaZUfsSO-12B5sDfCU-hUUWWyPDSBywHSK8P5H39fjJSs_9j60g>
-    <xmx:QNplaVBib6f_91lccA9oDuxMDoDwq72ZFoe1yr9HFRKr5I8bSbMonQ>
-    <xmx:QNplaUHica4Gso_m9XvYzOEYqrkEPVrrd6SmZo1V8w_3iQDN1bsVFg>
-    <xmx:QdplafqODDGdKEJwDRbWQFCeOxok8dv6lwO73Ib2Moyr-nVggvQamg8A>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Jan 2026 00:38:05 -0500 (EST)
-To: Andrew Morton <akpm@linux-foundation.org>,
-    Peter Zijlstra <peterz@infradead.org>,
-    Will Deacon <will@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-    Boqun Feng <boqun.feng@gmail.com>,
-    Gary Guo <gary@garyguo.net>,
-    Mark Rutland <mark.rutland@arm.com>,
-    linux-arch@vger.kernel.org,
-    linux-kernel@vger.kernel.org,
-    linux-m68k@lists.linux-m68k.org,
-    Alexei Starovoitov <ast@kernel.org>,
-    Daniel Borkmann <daniel@iogearbox.net>,
-    Andrii Nakryiko <andrii@kernel.org>,
-    Martin KaFai Lau <martin.lau@linux.dev>,
-    Eduard Zingerman <eddyz87@gmail.com>,
-    Song Liu <song@kernel.org>,
-    Yonghong Song <yonghong.song@linux.dev>,
-    John Fastabend <john.fastabend@gmail.com>,
-    KP Singh <kpsingh@kernel.org>,
-    Stanislav Fomichev <sdf@fomichev.me>,
-    Hao Luo <haoluo@google.com>,
-    Jiri Olsa <jolsa@kernel.org>,
-    Geert Uytterhoeven <geert@linux-m68k.org>,
-    bpf@vger.kernel.org
-Message-ID: <8a83876b07d1feacc024521e44059ae89abbb1ea.1768281748.git.fthain@linux-m68k.org>
-In-Reply-To: <cover.1768281748.git.fthain@linux-m68k.org>
-References: <cover.1768281748.git.fthain@linux-m68k.org>
-From: Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH v7 1/4] bpf: Explicitly align bpf_res_spin_lock
-Date: Tue, 13 Jan 2026 16:22:28 +1100
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f193.google.com with SMTP id 71dfb90a1353d-560227999d2so2469864e0c.1
+        for <linux-arch@vger.kernel.org>; Mon, 12 Jan 2026 23:56:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768290974; x=1768895774;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CmIOh9tePUcFI+zdOYsAhgLlKNGSbSvD7MYXL084Vks=;
+        b=Je4IN48hUIrEIGU+9WZjXfzn7nXlaL22iV9kbAbQHDBIC5/ZpZhLhPlpW1EZNILl7/
+         FR4dkBGiIjyINHR52V7hui4atmA6/ylhq/ngS0nuCLV8f8pBtsfaQCndY+Sn8EQLDzpb
+         M9H7ko35bSLX1ie3E6Ck7s83p9MjVHrPSOdjZUayEFAJZWlXPl1911pWHwM4X1QDHysx
+         qjMGNhLgj2aYG9OHovnHQ8RbVo7aoYdYg2ul68LojZlLn+fuX8Fcn91br9OEF4rmuVyb
+         Aw0eTj6fk84hwizKrc7ocLjNEIWXQXV5KQ8nOkq05HKzudaKUARQPhklqgC8L3Kr1tmB
+         ieBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXyH7k1MGAhbymZuId0K6e3Ti7JN6pGj8Bu1n1JKg/d1tjJ3ycasgb7c+UyL9ZjwTMVcxVZj0T6hR3l@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+G/6EaZdT3os/Y30GBF3SAmPDlk0A2j7tYwEBtydSSumiIVlo
+	kIRqIUbELBhc5pbNkG68YznRs+ksTyZRZpi0ZCAJ6Y/T5rt8l9ew1eBSUhUTzHI8qNQ=
+X-Gm-Gg: AY/fxX4ht2VZxGxJVkJNRYRzjBXX6UmdX4DwvV4AgRO8r1ngBNvUi06jf/M2B9lFcQp
+	gkOfd7FuRtS3b8Df5Tp1L9Y9Lp8muSqWoYeln5wDY8tNTuVupzCByy0pa6JfXNnkvzyHpR3Gi1e
+	1QlXRBXlRC1T2HUhYOrQFJN+D7kheTPW92pdLZdSpgWY396IK9js/43RXT2tJyTAh14nk4rfYNj
+	8UhWUGJXyNPgbKDYu4BOhDL+mpU99Ivo1c3UOyKsFUcRoYWSlpvb1KL7mjIiIQ9t9kbILaW2f6G
+	1gpTsTrCsG14UMfANh/gvGIPZMpqCsWzikfu1enir97nkIG1jghy0NaoYDcoasx/PeIz8jVBQck
+	KQ0QjMLvWdveZjtgz0yQA4bFO2FmyoNam9lqHjSjzzdf5DzAZwqBor01rxuMEJeAiWPPkWg40gX
+	Q+wGf5yJCWN10VoCco8yiaytny9jIAMEfKkcz3AWQKLchT+yuc
+X-Google-Smtp-Source: AGHT+IHL9VYaQJhK4tCWuiEMB5+ppBq3+lU0lbhHy0jeN/fBEhcNnCDXTJWuxTtWfaYcedqwYEMgeQ==
+X-Received: by 2002:a05:6102:54aa:b0:5ef:a644:ca4 with SMTP id ada2fe7eead31-5efa6441614mr4199373137.23.1768290974537;
+        Mon, 12 Jan 2026 23:56:14 -0800 (PST)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ee9d013b3csm15277511137.5.2026.01.12.23.56.13
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jan 2026 23:56:13 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5f1726c2a72so94135137.3
+        for <linux-arch@vger.kernel.org>; Mon, 12 Jan 2026 23:56:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX18KxpTSb5XG+TadoQXhn3gqvmvwitq/gC8+697dZfZmpQApilvyuQ10j0lSrdtNqqXh2X19LgOwXe@vger.kernel.org
+X-Received: by 2002:a05:6102:3a06:b0:5ee:9fa4:19d7 with SMTP id
+ ada2fe7eead31-5ee9fa41a9bmr5674729137.35.1768290972875; Mon, 12 Jan 2026
+ 23:56:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <cover.1768281748.git.fthain@linux-m68k.org> <51ebf844e006ca0de408f5d3a831e7b39d7fc31c.1768281748.git.fthain@linux-m68k.org>
+In-Reply-To: <51ebf844e006ca0de408f5d3a831e7b39d7fc31c.1768281748.git.fthain@linux-m68k.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 13 Jan 2026 08:56:01 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXSXcxzhgfFyc3sBdyoJ4vq9sMpzLBLcZskqtZXdAjH+g@mail.gmail.com>
+X-Gm-Features: AZwV_Qg_Z9QZfAG1qbe85SkafzpcqvnHvixniNVcQY02OLTaoULqX8NYTMrQWAM
+Message-ID: <CAMuHMdXSXcxzhgfFyc3sBdyoJ4vq9sMpzLBLcZskqtZXdAjH+g@mail.gmail.com>
+Subject: Re: [PATCH v7 3/4] atomic: Add alignment check to instrumented atomic operations
+To: Finn Thain <fthain@linux-m68k.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	Sasha Levin <sashal@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Align bpf_res_spin_lock to avoid a BUILD_BUG_ON() when the alignment
-changes, as it will do on m68k when, in a subsequent patch, the minimum
-alignment of the atomic_t member of struct rqspinlock gets increased
-from 2 to 4. Drop the BUILD_BUG_ON() as it becomes redundant.
+Hi Finn,
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
+On Tue, 13 Jan 2026 at 06:39, Finn Thain <fthain@linux-m68k.org> wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
+>
+> Add a Kconfig option for debug builds which logs a warning when an
+> instrumented atomic operation takes place that's misaligned.
+> Some platforms don't trap for this.
+>
+> [ fthain: added __DISABLE_EXPORTS conditional and refactored as helper
+> function. ]
+>
+> Cc: Sasha Levin <sashal@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Link: https://lore.kernel.org/lkml/20250901093600.GF4067720@noisy.programming.kicks-ass.net/
+> Link: https://lore.kernel.org/linux-next/df9fbd22-a648-ada4-fee0-68fe4325ff82@linux-m68k.org/
+> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+>
+> ---
+> Checkpatch.pl says...
+> ERROR: Missing Signed-off-by: line by nominal patch author 'Peter Ziljstra <peterz@infradead.org>'
 
-Changed since v5:
- - Added tag from Arnd Bergmann.
----
- include/asm-generic/rqspinlock.h | 2 +-
- kernel/bpf/rqspinlock.c          | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+Alternatively, you can credit Peter using
 
-diff --git a/include/asm-generic/rqspinlock.h b/include/asm-generic/rqspinlock.h
-index 0f2dcbbfee2f..dd36ac96bf66 100644
---- a/include/asm-generic/rqspinlock.h
-+++ b/include/asm-generic/rqspinlock.h
-@@ -28,7 +28,7 @@ struct rqspinlock {
-  */
- struct bpf_res_spin_lock {
- 	u32 val;
--};
-+} __aligned(__alignof__(struct rqspinlock));
- 
- struct qspinlock;
- #ifdef CONFIG_QUEUED_SPINLOCKS
-diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
-index f7d0c8d4644e..8d892fb099ac 100644
---- a/kernel/bpf/rqspinlock.c
-+++ b/kernel/bpf/rqspinlock.c
-@@ -694,7 +694,6 @@ __bpf_kfunc int bpf_res_spin_lock(struct bpf_res_spin_lock *lock)
- 	int ret;
- 
- 	BUILD_BUG_ON(sizeof(rqspinlock_t) != sizeof(struct bpf_res_spin_lock));
--	BUILD_BUG_ON(__alignof__(rqspinlock_t) != __alignof__(struct bpf_res_spin_lock));
- 
- 	preempt_disable();
- 	ret = res_spin_lock((rqspinlock_t *)lock);
+    Suggested-by: Peter Zijlstra <peterz@infradead.org>
+
+just before the Link-header pointing to his suggestion.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.49.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
