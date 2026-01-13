@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-15768-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15780-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8523DD18C6D
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 13:38:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE18D18DF0
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 13:44:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7D6B63008744
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 12:38:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 120E5305497A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 12:39:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B25338FF01;
-	Tue, 13 Jan 2026 12:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2A83933F0;
+	Tue, 13 Jan 2026 12:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="mSKhjy2c"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IYN9eaFO"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C10338F252;
-	Tue, 13 Jan 2026 12:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0068D38E5F1;
+	Tue, 13 Jan 2026 12:37:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307868; cv=none; b=djYiWvhzEKieTxGVJd356uzT7sFI0pFL/lFHQonJR4qEmQchC8ru6z8dMLM5EBJcdNH6MpO9oUa50stDufwT40YqHaQeVFQs2339FAWLg5bQkMAMIRiN6ijj8AiPFzEjd1o/aGbpzl+lbUZm0ppiTVWLTV1MQDlJVFnR10uJMIU=
+	t=1768307875; cv=none; b=atG6cychtFTHt07oNHLVMJeDBC+V+Tv5rSPsTAqtvK2yam3fiPH37Ty0HrAi4eJBXhF5/oAfmZBO7w+xtA2I4kVqyzk/H4gaU5mMnIwSKhjVnezuVbz8TK0vcgmELZoGHqrXk53AXp8YFbAJNZ9QJao8piLZk0ye1b/TsnbKPDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768307868; c=relaxed/simple;
-	bh=jMY1zKU+259Wp+a3wq7CZ+K7/FJMp48oaCmjQIniFCk=;
+	s=arc-20240116; t=1768307875; c=relaxed/simple;
+	bh=ffsEg3AzeAOjcEOKQgQ3fDyvlrqj0lZ8Wi7Qp/6UEEQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=D/3yDX28/N2Wpqfq52VHlwq7D/6QI59NxXYmVKOkqGLOnuD7g1dAXTUARC1TGh2g6Iw2p0+FaSYbBlmIhWArjqal6e9yIRUMP0ylfxpXeJykx/5NFRBCR44XeTEU6kyNppvPcJZsLYKhjqSvgKJxNn64HjIbVoIKwsfdB8jW/hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=mSKhjy2c; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=LjZAieF9t65Y31kMN4St+Y9zPJfg/+dGStmKZUd4wjtzTWOb2Lr7CBN/rPxtFpl76Kx//bFgTXUe+oTqm3/g+89HaUgIZCjLP3gIV4HgiaswROPa+c8i0JkhsvwV1u+RkPFbaO2tszJzQl//33bu26Bg5hlrfWLdw0dhHS+3HHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IYN9eaFO; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1768307860;
-	bh=jMY1zKU+259Wp+a3wq7CZ+K7/FJMp48oaCmjQIniFCk=;
+	bh=ffsEg3AzeAOjcEOKQgQ3fDyvlrqj0lZ8Wi7Qp/6UEEQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=mSKhjy2cG0SoILQv6Sr5rIyz5sWn5E0wLY3SYbLLDS9EqPxMJhvK5dceTJALZmcP6
-	 IJkkOs4Z59ynVOtBwrDVgxIv2mk6V5U9lnCDBdvLQ8fszOFsxgyMUabiC78EePjOKs
-	 izVG9zxTIbRTSmJkQHf/uqmX6k7wqCIvs2VkWc/k=
+	b=IYN9eaFOHeqMdGkaTGB+TVa+imZW+KJUTkVyaop8E7fOAlzwCN4yYsDEsaCUKMvJb
+	 BJ7+ic09FhUq56ePuK99CKjQ1kPB5mB/3SA0LORNRAOl75FlxxZsJAFWdv6uc+Is5a
+	 jSr+kStLLuMEj2vMFjoKX/2WZjWeuYceLKDQ3AOM=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 13 Jan 2026 13:28:49 +0100
-Subject: [PATCH v4 05/17] module: Switch load_info::len to size_t
+Date: Tue, 13 Jan 2026 13:28:50 +0100
+Subject: [PATCH v4 06/17] kbuild: add stamp file for vmlinux BTF data
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -47,7 +47,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net>
+Message-Id: <20260113-module-hashes-v4-6-0b932db9b56b@weissschuh.net>
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
 In-Reply-To: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
 To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
@@ -79,52 +79,65 @@ Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
  linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768307859; l=1455;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768307859; l=2136;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=jMY1zKU+259Wp+a3wq7CZ+K7/FJMp48oaCmjQIniFCk=;
- b=DVDR4kzvvUtq8+nWgk5cczzRSYZuy7YfCXuw3SJMcR55420EdKvv7LI9IbT3Q+CEQVjFib1SB
- YS60h4NLSKWBX+FrCbwVXvEXOnGXehLwzKKNc6JZZOu+013x24N04AZ
+ bh=ffsEg3AzeAOjcEOKQgQ3fDyvlrqj0lZ8Wi7Qp/6UEEQ=;
+ b=b4EDQNJ82epRfEGaJ/hp28TeOBgtAEcqVjtkr3ZVEIkCclYbVB5JmexdIWsJA9Fnwm23h6Qpt
+ k9oimKRiUl5DMEFJmFf+vUyh81OfbtZAcHsW0m3IjftklL33x2aCRzb
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Switching the types will make some later changes cleaner.
-size_t is also the semantically correct type for this field.
-
-As both 'size_t' and 'unsigned int' are always the same size, this
-should be risk-free.
+The upcoming module hashes functionality will build the modules in
+between the generation of the BTF data and the final link of vmlinux.
+Having a dependency from the modules on vmlinux would make this
+impossible as it would mean having a cyclic dependency.
+Break this cyclic dependency by introducing a new target.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/module/internal.h | 2 +-
- kernel/module/main.c     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ scripts/Makefile.modfinal | 4 ++--
+ scripts/link-vmlinux.sh   | 6 ++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index e68fbcd60c35..037fbb3b7168 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -66,7 +66,7 @@ struct load_info {
- 	/* pointer to module in temporary copy, freed at end of load_module() */
- 	struct module *mod;
- 	Elf_Ehdr *hdr;
--	unsigned long len;
-+	size_t len;
- 	Elf_Shdr *sechdrs;
- 	char *secstrings, *strtab;
- 	unsigned long symoffs, stroffs, init_typeoffs, core_typeoffs;
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 710ee30b3bea..a88f95a13e06 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1838,7 +1838,7 @@ static int validate_section_offset(const struct load_info *info, Elf_Shdr *shdr)
- static int elf_validity_ehdr(const struct load_info *info)
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 149e12ff5700..adfef1e002a9 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -56,8 +56,8 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+ 	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+ 
+ # Re-generate module BTFs if either module's .ko or vmlinux changed
+-%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+-	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
++%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/.tmp_vmlinux_btf.stamp) FORCE
++	+$(call if_changed_except,ld_ko_o,$(objtree)/.tmp_vmlinux_btf.stamp)
+ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+ endif
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 4ab44c73da4d..8c98f8645a5c 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -111,6 +111,7 @@ vmlinux_link()
+ gen_btf()
  {
- 	if (info->len < sizeof(*(info->hdr))) {
--		pr_err("Invalid ELF header len %lu\n", info->len);
-+		pr_err("Invalid ELF header len %zu\n", info->len);
- 		return -ENOEXEC;
- 	}
- 	if (memcmp(info->hdr->e_ident, ELFMAG, SELFMAG) != 0) {
+ 	local btf_data=${1}.btf.o
++	local btf_stamp=.tmp_vmlinux_btf.stamp
+ 
+ 	info BTF "${btf_data}"
+ 	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+@@ -131,6 +132,11 @@ gen_btf()
+ 	fi
+ 	printf "${et_rel}" | dd of="${btf_data}" conv=notrunc bs=1 seek=16 status=none
+ 
++	info STAMP $btf_stamp
++	if ! cmp --silent $btf_data $btf_stamp; then
++		cp $btf_data $btf_stamp
++	fi
++
+ 	btf_vmlinux_bin_o=${btf_data}
+ }
+ 
 
 -- 
 2.52.0
