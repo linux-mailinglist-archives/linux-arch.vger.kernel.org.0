@@ -1,133 +1,164 @@
-Return-Path: <linux-arch+bounces-15789-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15790-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2370BD1BBB9
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Jan 2026 00:36:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B346D1BBEC
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Jan 2026 00:46:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9A5843012A86
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 23:36:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1C288301D657
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 23:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A1636B04B;
-	Tue, 13 Jan 2026 23:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01142773FC;
+	Tue, 13 Jan 2026 23:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="FQzahpKa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iJG6cK0V"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B397B350A2F;
-	Tue, 13 Jan 2026 23:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD161BC08F
+	for <linux-arch@vger.kernel.org>; Tue, 13 Jan 2026 23:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768347413; cv=none; b=PiwTbjEo/AMfdXlc2W6FT9lNWxOPipXkzRAZGnDQWWG7/FYPVHZAbhgrEdA/PUhCN1sMkwdlp+5xMVkZifHAEczZT/9d8q2oQ6PaGRVSXOXfpJwNcwA7f6eb5pma19jeK0vtBn46oHvmHmwkG1bCLyX33N9caAXz5CBcdyc4EIU=
+	t=1768347973; cv=none; b=uEL5pHkWnpbjBNo8CEYJhKEcI3NbpfQdR9eOyuRS8TcvuTsQIlMv/xWWSDxVI3EVPQf1KbyW296ZRJv7S6q8caGluPRgeTAyngXApeKm+tmWoGdDLKnXiw+QXW+/qpnaY6m/86ZTO6BU/N26kGKw5ExMlki+ImkE6VDWI3347Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768347413; c=relaxed/simple;
-	bh=nQ1Er+e6wiAGW985FIUiLA7461AK7NqClc19JOQg8mM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NOCt25ULWuZWQI0LV71ptOghTERSOAauVII6nHDudlRs0yFVpya2wCte5uewIaPu1qvRwvupbq35nYs7PhoaHX6+YmbGeR3/WvGgaCe7jxMDIMEeapDrYcRqWe1oWesrIFmQzUh9RLZZwvbO3Dh/nQwwexjL6GAiVvDMVJ2LFmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=FQzahpKa; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.0.88] (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 86B8020B7165;
-	Tue, 13 Jan 2026 15:36:51 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 86B8020B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1768347411;
-	bh=EgyExoSDN5kPVh+zTwTWyc3xFjQLCGJpKNu/GKPBTTM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FQzahpKaWtI21sUUZuniYfTBtjFbdO9s+OD6cdHUuqrorzru+98HIkrfKvlAuf1KP
-	 KMqyt1dLzKY3xTbD6J4jljmDU/HWayD4/jg1j7xd6OJ30gvXnlHfZke8wV1XiebexP
-	 ItDGE+/Evq3dlSwivHIGW1hVosiDj66fRAR29qnM=
-Message-ID: <88b38aff-51b8-57d8-e548-00d42254a541@linux.microsoft.com>
-Date: Tue, 13 Jan 2026 15:36:51 -0800
+	s=arc-20240116; t=1768347973; c=relaxed/simple;
+	bh=nSdP3HrW9iuR4NuegmVwuOru56ZkoJwnpe6xdX8o7gI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=uKIEn/bgdW2rC6Pptizj7X7pDEep9GgVPW/e9mvwZ3wz4Xl/K/diSvGc8sZkWGeZjXlP8hhhAwEbq3yPqysMpSUYyAwk/anNCQDaMmfAXli9FyFZ+TDfvHMCcJacitiWjd/faQaEVOJZlBM/vG5L8hkhglbH+kJgHRbRnb4DGTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iJG6cK0V; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768347971;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/DXPqAQ/gddAb6fWL3d3+ZRcDVd8+OsmA1rq1PZbNuY=;
+	b=iJG6cK0VXn5faWzFvoU4R8pdD4mh/lFbBCzwMim4ax5X2hq25LpuWYwFJXmr6NYPA8wyVz
+	/MwPAsIMn3E9vB8hlIM0itgK9q/a5f9pMVb0oTL00nbp/LCa8Gj8D++xDDc8mkBrsZoSyl
+	y3aECdXsnlp8CEBR1/CMlgI4ewoHAbc=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-451-NxnTPfRcNgan3FBbiTySLA-1; Tue,
+ 13 Jan 2026 18:46:07 -0500
+X-MC-Unique: NxnTPfRcNgan3FBbiTySLA-1
+X-Mimecast-MFC-AGG-ID: NxnTPfRcNgan3FBbiTySLA_1768347965
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D93E19560B7;
+	Tue, 13 Jan 2026 23:46:04 +0000 (UTC)
+Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.32.17])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C22EF30001A2;
+	Tue, 13 Jan 2026 23:45:57 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,  LKML
+ <linux-kernel@vger.kernel.org>,  "Paul E. McKenney" <paulmck@kernel.org>,
+  Boqun Feng <boqun.feng@gmail.com>,  Jonathan Corbet <corbet@lwn.net>,
+  Prakash Sangappa <prakash.sangappa@oracle.com>,  Madadi Vineeth Reddy
+ <vineethr@linux.ibm.com>,  K Prateek Nayak <kprateek.nayak@amd.com>,
+  Steven Rostedt <rostedt@goodmis.org>,  Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>,  Arnd Bergmann <arnd@arndb.de>,
+  linux-arch@vger.kernel.org,  Randy Dunlap <rdunlap@infradead.org>,  Peter
+ Zijlstra <peterz@infradead.org>,  Ron Geva <rongevarg@gmail.com>,  Waiman
+ Long <longman@redhat.com>,  "carlos@redhat.com" <carlos@redhat.com>,
+  Michael Jeanson <mjeanson@efficios.com>
+Subject: Re: [patch V6 01/11] rseq: Add fields and constants for time slice
+ extension
+In-Reply-To: <87ldi4gjm3.ffs@tglx> (Thomas Gleixner's message of "Sun, 11 Jan
+	2026 18:11:16 +0100")
+References: <20251215155615.870031952@linutronix.de>
+	<20251215155708.669472597@linutronix.de>
+	<d97944e3-e5f3-4d7e-83ac-89ddd6a4cb64@efficios.com>
+	<87jyyjbclh.ffs@tglx>
+	<225b9868-4ab7-4a90-8acb-8d965626f6a7@efficios.com>
+	<87ldi4gjm3.ffs@tglx>
+Date: Wed, 14 Jan 2026 00:45:54 +0100
+Message-ID: <lhua4yhcc0d.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v3 5/6] x86/hyperv: Implement hypervisor RAM collection
- into vmcore
-Content-Language: en-US
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
- wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
- mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
- hpa@zytor.com, arnd@arndb.de
-References: <20251006224208.1060990-1-mrathor@linux.microsoft.com>
- <20251006224208.1060990-6-mrathor@linux.microsoft.com>
- <20260113111412.GAaWYpBFPPLRG-YxNt@fat_crate.local>
-From: Mukesh R <mrathor@linux.microsoft.com>
-In-Reply-To: <20260113111412.GAaWYpBFPPLRG-YxNt@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 1/13/26 03:14, Borislav Petkov wrote:
-> On Mon, Oct 06, 2025 at 03:42:07PM -0700, Mukesh Rathor wrote:
->> Introduce a new file to implement collection of hypervisor RAM into the
->> vmcore collected by linux. By default, the hypervisor RAM is locked, ie,
->> protected via hw page table. Hyper-V implements a disable hypercall which
->> essentially devirtualizes the system on the fly. This mechanism makes the
->> hypervisor RAM accessible to linux. Because the hypervisor RAM is already
->> mapped into linux address space (as reserved RAM), it is automatically
->> collected into the vmcore without extra work. More details of the
->> implementation are available in the file prologue.
+* Thomas Gleixner:
+
+> I'm not completely opposed to make it process wide. For threads created
+> after enablement, that's trivial because that can be done when the per
+> thread RSEQ is registered. But when it gets enabled _after_ threads have
+> been created already then we need code to chase the threads and enable
+> it after the fact because we are not going to query the enablement in
+> curr->mm::whatever just to have another conditional and another
+> cacheline to access.
+
+In glibc, we make sure that the registration for restartable sequences
+happens before any user code (with the exception of IFUNC resolvers) can
+run.  This includes code from signal handlers.  We started masking
+signals on newly created threads for this reason, to make these
+partially initialized states unobservable.
+
+It's not clear to me what the expected outcome is.  If we ever want to
+offer deadline extension as a mutex attribute (for example), then we
+have to switch this on at process start unconditionally because we don't
+know if this new API will be used by the new process (potentially after
+dlopen, so we can't even use things likely analyzing the symbol
+footprint ahead of time).
+
+> The only option is to reject enablement when there is already more than
+> one thread in the process, but there is a reasonable argument that a
+> process might only enable it for a subset of threads, which have actual
+> lock interaction and not bother with it for other things. I'm not seeing
+> a reason to restrict the flexibility of configuration just because you
+> envision magic use cases all over the place.
+
+Sure, but it looks like this needs a custom/minimal libc.  It's like
+repurposing set_robust_list for something else.  It can be done, but it
+has a significant cost in terms of compatibility because some
+functionality (that other libraries in the process depend on) will stop
+working.
+
+> On the other hand there is no guarantee that libc registers RSEQ when a
+> thread is started as it can be disabled or not supported, so you have
+> exactly the same problem there that the code which wants to use it needs
+> to ensure that a RSEQ area is registered, no?
+
+With glibc, if RSEQ is registered on the main thread, it will be
+registered on all other threads, too.  Technically, it's possible to
+unregister RSEQ with the kernel, of course, but that's totally
+undefined, like unmapping memory originally returned from malloc.
+
+>>> The prctl allows you to query the state, so all parties can make
+>>> informed decisions. It's not any different from other mechanisms, which
+>>> require coordination between different parts.
 >>
->> Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
->> ---
->>   arch/x86/hyperv/hv_crash.c | 642 +++++++++++++++++++++++++++++++++++++
->>   1 file changed, 642 insertions(+)
->>   create mode 100644 arch/x86/hyperv/hv_crash.c
-> 
-> This breaks randconfig builds here:
-> 
-> arch/x86/hyperv/hv_crash.c:631:2: error: must use 'struct' tag to refer to type 'smp_ops'
->    631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
->        |         ^
->        |         struct
-> arch/x86/hyperv/hv_crash.c:631:9: error: expected identifier or '('
->    631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
->        |                ^
-> 2 errors generated.
-> make[4]: *** [scripts/Makefile.build:287: arch/x86/hyperv/hv_crash.o] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> make[3]: *** [scripts/Makefile.build:544: arch/x86/hyperv] Error 2
-> make[3]: *** Waiting for unfinished jobs....
-> make[2]: *** [scripts/Makefile.build:544: arch/x86] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [/home/amd/kernel/linux/Makefile:2054: .] Error 2
-> make: *** [Makefile:248: __sub-make] Error 2
-> 
-> config 01-18-21-randconfig-x86_64-13708.cfg attached. Note that this is
-> a clang build:
-> 
-> Ubuntu clang version 18.1.3 (1ubuntu1)
-> 
-> It fails with gcc too tho:
-> 
-> arch/x86/hyperv/hv_crash.c: In function ?hv_root_crash_init?:
-> arch/x86/hyperv/hv_crash.c:631:9: error: ?smp_ops? undeclared (first use in this function)
->    631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
->        |         ^~~~~~~
-> arch/x86/hyperv/hv_crash.c:631:9: note: each undeclared identifier is reported only once for each function it appears in
-> make[4]: *** [scripts/Makefile.build:287: arch/x86/hyperv/hv_crash.o] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> make[3]: *** [scripts/Makefile.build:544: arch/x86/hyperv] Error 2
-> make[3]: *** Waiting for unfinished jobs....
-> make[2]: *** [scripts/Makefile.build:544: arch/x86] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [/home/amd/kernel/linux/Makefile:2054: .] Error 2
-> make: *** [Makefile:248: __sub-make] Error 2
-> 
+>> I'm fine with having prctl enable the feature (for the whole process)
+>> and query its state.
+>>
+>> The part I'm concerned with is the prctl disabling the feature, as
+>> we're losing the availability invariant after setup.
+>
+>   close(0);
+>
+> has the same problem. How many instances of bugs in that area have you
+> seen so far?
 
-Looks like needs some config option around it, probably SMP. Will take
-a look in a day or two. Thanks for letting us know.
+We've had significant issues due to incorrect close calls (maybe not
+close(0) in particular, but definitely with double-closes removing
+descriptors created by other threads.
 
--Mukesh
+We need the prctl to unregister for CRIU, though, otherwise CRIU won't
+be able to use glibc directly (or would have to re-exec itself in a new
+configuration).
 
-
+Thanks,
+Florian
 
 
