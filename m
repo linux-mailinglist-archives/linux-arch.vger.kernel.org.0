@@ -1,105 +1,133 @@
-Return-Path: <linux-arch+bounces-15788-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15789-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11079D1B6DA
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 22:36:35 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2370BD1BBB9
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Jan 2026 00:36:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A27513035CD2
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 21:36:24 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9A5843012A86
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Jan 2026 23:36:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE9D31DDA4;
-	Tue, 13 Jan 2026 21:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A1636B04B;
+	Tue, 13 Jan 2026 23:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="FQzahpKa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747762C0269;
-	Tue, 13 Jan 2026 21:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B397B350A2F;
+	Tue, 13 Jan 2026 23:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768340182; cv=none; b=hJOpBie/eTUWh5Q/ivNAgf6BZkye4pHzc+tc5YDpNbSfSJ5hLFZJb8kLmC4qtxPhLtIBTq/ZqCgTCKEQEL1wqkJ24tx66yqOrJVXvQySVU/3XdoeMFemc3bpQQJMrfbvKnoC3bkjlDm3mx7ft8tuyOLebu9XLQ718YPZkS38DYk=
+	t=1768347413; cv=none; b=PiwTbjEo/AMfdXlc2W6FT9lNWxOPipXkzRAZGnDQWWG7/FYPVHZAbhgrEdA/PUhCN1sMkwdlp+5xMVkZifHAEczZT/9d8q2oQ6PaGRVSXOXfpJwNcwA7f6eb5pma19jeK0vtBn46oHvmHmwkG1bCLyX33N9caAXz5CBcdyc4EIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768340182; c=relaxed/simple;
-	bh=9AT6ixj8wRM4v9kWU/Ei/l4TWcUEovDiGuGjsC03d8E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OJGbfqttrG+nEClUFiv4UJXJc+gFrU4Wl+6WWHMDWASHMFFRNqMOdTTSg/QHyZubE9jtAiHSKk2J56G+3m0DSqgPzguEs/SObAFNaSlYbc9j3tPeiYi0FLYBbgKOmv0kVdNYvX7/KaKL2OV9uIpVmi2sVF5bLnplXhG7WMMX3XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.150])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4drMxZ62dPzJ468g;
-	Wed, 14 Jan 2026 05:36:02 +0800 (CST)
-Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
-	by mail.maildlp.com (Postfix) with ESMTPS id 715CE40539;
-	Wed, 14 Jan 2026 05:36:16 +0800 (CST)
-Received: from [10.123.123.226] (10.123.123.226) by
- mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 14 Jan 2026 00:36:15 +0300
-Message-ID: <d0c0ae41-e0c6-4c90-9dbe-3b10a20a992e@huawei.com>
-Date: Wed, 14 Jan 2026 00:36:15 +0300
+	s=arc-20240116; t=1768347413; c=relaxed/simple;
+	bh=nQ1Er+e6wiAGW985FIUiLA7461AK7NqClc19JOQg8mM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NOCt25ULWuZWQI0LV71ptOghTERSOAauVII6nHDudlRs0yFVpya2wCte5uewIaPu1qvRwvupbq35nYs7PhoaHX6+YmbGeR3/WvGgaCe7jxMDIMEeapDrYcRqWe1oWesrIFmQzUh9RLZZwvbO3Dh/nQwwexjL6GAiVvDMVJ2LFmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=FQzahpKa; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.0.88] (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 86B8020B7165;
+	Tue, 13 Jan 2026 15:36:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 86B8020B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1768347411;
+	bh=EgyExoSDN5kPVh+zTwTWyc3xFjQLCGJpKNu/GKPBTTM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FQzahpKaWtI21sUUZuniYfTBtjFbdO9s+OD6cdHUuqrorzru+98HIkrfKvlAuf1KP
+	 KMqyt1dLzKY3xTbD6J4jljmDU/HWayD4/jg1j7xd6OJ30gvXnlHfZke8wV1XiebexP
+	 ItDGE+/Evq3dlSwivHIGW1hVosiDj66fRAR29qnM=
+Message-ID: <88b38aff-51b8-57d8-e548-00d42254a541@linux.microsoft.com>
+Date: Tue, 13 Jan 2026 15:36:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 5/5] kernel: futex: use HQ-spinlock for
- hash-buckets
-To: <peterz@infradead.org>, <boqun.feng@gmail.com>, <longman@redhat.com>,
-	<catalin.marinas@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
-	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	<hpa@zytor.com>, <arnd@arndb.de>, <dvhart@infradead.org>,
-	<dave@stgolabs.net>, <andrealmeid@igalia.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<guohanjun@huawei.com>, <wangkefeng.wang@huawei.com>,
-	<weiyongjun1@huawei.com>, <yusongping@huawei.com>, <leijitang@huawei.com>,
-	<artem.kuzin@huawei.com>, <fedorov.nikita@h-partners.com>,
-	<kang.sun@huawei.com>
-References: <aad84044-a9d3-4806-a966-4770a3634b03@redhat.com>
- <20251206062106.2109014-1-stepanov.anatoly@huawei.com>
- <20251206062106.2109014-6-stepanov.anatoly@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 5/6] x86/hyperv: Implement hypervisor RAM collection
+ into vmcore
 Content-Language: en-US
-From: Stepanov Anatoly <stepanov.anatoly@huawei.com>
-In-Reply-To: <20251206062106.2109014-6-stepanov.anatoly@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
+ wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+ mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+ hpa@zytor.com, arnd@arndb.de
+References: <20251006224208.1060990-1-mrathor@linux.microsoft.com>
+ <20251006224208.1060990-6-mrathor@linux.microsoft.com>
+ <20260113111412.GAaWYpBFPPLRG-YxNt@fat_crate.local>
+From: Mukesh R <mrathor@linux.microsoft.com>
+In-Reply-To: <20260113111412.GAaWYpBFPPLRG-YxNt@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: mscpeml500003.china.huawei.com (7.188.49.51) To
- mscpeml500003.china.huawei.com (7.188.49.51)
 
-On 12/6/2025 9:21 AM, Anatoly Stepanov wrote:
-> This is example of HQ-spinlock enabled for futex hash-table bucket locks
-> (used in memcached testing scenario)
+On 1/13/26 03:14, Borislav Petkov wrote:
+> On Mon, Oct 06, 2025 at 03:42:07PM -0700, Mukesh Rathor wrote:
+>> Introduce a new file to implement collection of hypervisor RAM into the
+>> vmcore collected by linux. By default, the hypervisor RAM is locked, ie,
+>> protected via hw page table. Hyper-V implements a disable hypercall which
+>> essentially devirtualizes the system on the fly. This mechanism makes the
+>> hypervisor RAM accessible to linux. Because the hypervisor RAM is already
+>> mapped into linux address space (as reserved RAM), it is automatically
+>> collected into the vmcore without extra work. More details of the
+>> implementation are available in the file prologue.
+>>
+>> Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
+>> ---
+>>   arch/x86/hyperv/hv_crash.c | 642 +++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 642 insertions(+)
+>>   create mode 100644 arch/x86/hyperv/hv_crash.c
 > 
-> Signed-off-by: Anatoly Stepanov <stepanov.anatoly@huawei.com>
+> This breaks randconfig builds here:
 > 
-> Co-authored-by: Stepanov Anatoly <stepanov.anatoly@huawei.com>
-> Co-authored-by: Fedorov Nikita <fedorov.nikita@h-partners.com>
-> ---
->  kernel/futex/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> arch/x86/hyperv/hv_crash.c:631:2: error: must use 'struct' tag to refer to type 'smp_ops'
+>    631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
+>        |         ^
+>        |         struct
+> arch/x86/hyperv/hv_crash.c:631:9: error: expected identifier or '('
+>    631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
+>        |                ^
+> 2 errors generated.
+> make[4]: *** [scripts/Makefile.build:287: arch/x86/hyperv/hv_crash.o] Error 1
+> make[4]: *** Waiting for unfinished jobs....
+> make[3]: *** [scripts/Makefile.build:544: arch/x86/hyperv] Error 2
+> make[3]: *** Waiting for unfinished jobs....
+> make[2]: *** [scripts/Makefile.build:544: arch/x86] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [/home/amd/kernel/linux/Makefile:2054: .] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
 > 
-> diff --git a/kernel/futex/core.c b/kernel/futex/core.c
-> index 125804fbb..05c6d1efc 100644
-> --- a/kernel/futex/core.c
-> +++ b/kernel/futex/core.c
-> @@ -1521,7 +1521,7 @@ static void futex_hash_bucket_init(struct futex_hash_bucket *fhb,
->  #endif
->  	atomic_set(&fhb->waiters, 0);
->  	plist_head_init(&fhb->chain);
-> -	spin_lock_init(&fhb->lock);
-> +	spin_lock_init_hq(&fhb->lock);
->  }
->  
->  #define FH_CUSTOM	0x01
+> config 01-18-21-randconfig-x86_64-13708.cfg attached. Note that this is
+> a clang build:
+> 
+> Ubuntu clang version 18.1.3 (1ubuntu1)
+> 
+> It fails with gcc too tho:
+> 
+> arch/x86/hyperv/hv_crash.c: In function ?hv_root_crash_init?:
+> arch/x86/hyperv/hv_crash.c:631:9: error: ?smp_ops? undeclared (first use in this function)
+>    631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
+>        |         ^~~~~~~
+> arch/x86/hyperv/hv_crash.c:631:9: note: each undeclared identifier is reported only once for each function it appears in
+> make[4]: *** [scripts/Makefile.build:287: arch/x86/hyperv/hv_crash.o] Error 1
+> make[4]: *** Waiting for unfinished jobs....
+> make[3]: *** [scripts/Makefile.build:544: arch/x86/hyperv] Error 2
+> make[3]: *** Waiting for unfinished jobs....
+> make[2]: *** [scripts/Makefile.build:544: arch/x86] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [/home/amd/kernel/linux/Makefile:2054: .] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
+> 
+
+Looks like needs some config option around it, probably SMP. Will take
+a look in a day or two. Thanks for letting us know.
+
+-Mukesh
 
 
-Hello,
 
-gentle ping regarding the RFC
-
--- 
-Anatoly Stepanov, Huawei
 
