@@ -1,710 +1,331 @@
-Return-Path: <linux-arch+bounces-15805-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15806-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34028D25901
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 17:01:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F90FD26E51
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 18:53:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5D0103068761
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 16:00:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id AD10D3028893
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 17:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077FC3B8BC5;
-	Thu, 15 Jan 2026 16:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E85743BC4F2;
+	Thu, 15 Jan 2026 17:24:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O4CDog9w"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ONAeW3G5";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="UjJ52Kn2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f202.google.com (mail-lj1-f202.google.com [209.85.208.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AD73B8BD3
-	for <linux-arch@vger.kernel.org>; Thu, 15 Jan 2026 15:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768492799; cv=none; b=gxjzIFpqwpL6mm/eytpUun4WtPiXPqZ0Cp6z6p7fteC27iWQacEB3fn8/seWneAwNH3RHBQqlpV2BlIDCHFd3YL0aG7UaRSLtGdyBaINp0JABAGdD3FvxVF80Z3m+PV6gugzoN5CorMt+ju3tZ32rmthLNsC1agwT3/er5vWVVQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768492799; c=relaxed/simple;
-	bh=jRm43U2AsnIO7xFmqZjHsWNWqyQ/L0IQkKZkoftjZj0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mYOKKphtCZwIxH8YXu+jZ9KmbTP2nbCKZ/tFwXRGFsOZLciihgton9U/ym+LfNUN0cC1y5ltj68N9Bk9irhc39rQieZEGfzDtfcMCdiPCC1oXtlym3vof1a3cQ0yOtYyRKSjB1Dplp3DqfZgJLPhOhhuCRzDGjKoS72GGWbI2kU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O4CDog9w; arc=none smtp.client-ip=209.85.208.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com
-Received: by mail-lj1-f202.google.com with SMTP id 38308e7fff4ca-38305d006feso4505961fa.2
-        for <linux-arch@vger.kernel.org>; Thu, 15 Jan 2026 07:59:56 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159DF2D6E72;
+	Thu, 15 Jan 2026 17:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768497861; cv=fail; b=UJ347qn5seyfiGPP/bQDQlSKOsvr6Asukp386eqny7kztKsUTZ8NZMuC4/9lixmTa4zEvCAlFcZut7drMHFVTMaG8myU8D9ZVtCvNyT16E5a+EE6RMLtLreyru+PNSImKwCIeXsda5210Wo+2KIVvnJ1Lrm6Sqk4q/yMWp2zINE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768497861; c=relaxed/simple;
+	bh=BnkOUBF3xUmhROKq38g3RUUU5ULtLpr0Ievfv0yIafo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=CMTO5CUg5UA2YULx6pUI0/3OUV2W/RIoPPei2kWHX9DFUa8hD7Uvs/gqxT/8wlXjvYLr/g3JxmZJ1FOeOlUsUmqbxyCBIaXfAJo8uQ8YvOUOWFDk6KtMFsNDIzyH6hDwol8KcQoka8Dq5mIYOKkReZh9ulIqxIN8Rc13bTMWYeY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ONAeW3G5; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=UjJ52Kn2; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60FDcuDK3643762;
+	Thu, 15 Jan 2026 17:22:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=VRxeQY7IwbY3FbWkWq
+	f1UCQHc68BB9udhvBUae3JkM4=; b=ONAeW3G5NlPU84NirkNoNryMHxoB9wPvWW
+	W0w0PJDcPyMfe8RcRWxwhKtq16g51tMjiOqi8zWIUeMTxOhy5iEc5EScj+Q/BcO/
+	1bzUN4yNFQIgLBHAxKTTOFKy7mDNeksgZgZSECa0t/Ugs4qi0+38l+1RsL25lgKu
+	0mOy+9IUAZQRQaAOqlspaKWUDV6TZVr5rhfPeuUXPl3qwRQYosdYB+LIk83Q04OM
+	EeAZA6sJNwZ80iXOB5ygiXKpz/7UFx1mQt3p7wVNjTEnd3B55b5B3JkrxSX6kPYM
+	KpJtlw2R2hus/Pc21VqTCWquY+X/AgOiEwBbR6YiIzTHxdlEVE9w==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bp5tc3k4e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Jan 2026 17:22:34 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60FGW1LA039133;
+	Thu, 15 Jan 2026 17:22:33 GMT
+Received: from sa9pr02cu001.outbound.protection.outlook.com (mail-southcentralusazon11013001.outbound.protection.outlook.com [40.93.196.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4bkd7fc1hb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Jan 2026 17:22:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=y36GMvrzP8BgjejfxJH+vFFDBZrbf9H4iArvftUO7BB8X2huqYkUeZJIaVema/dG9X/+1KUZvowFrif9E4xGWc3RBvdKEgzx5sf4fDo0gM+bxJgKkr+5JNfa/Ru6u0zcH8XE7aCrkdUf3AAwA2zwxlNa1i/LXcAtvblDXFXBa9nyKHBsjZ4ibAvqGo0qDJBgm9kOa3JiFrief0JECk8i29hPTciSom86Mw9yUZpO7pZhdO8UUfWd+AOfrA5JqnPZ+K4Y+WVpgAE6cDrSlOuHeDjy81E2NrslCcd28XFcSMg8er2aJQhTJ4c2CRiVlNKLIuR6olH/EOFDy+LVzKLmQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VRxeQY7IwbY3FbWkWqf1UCQHc68BB9udhvBUae3JkM4=;
+ b=iGyxJYec45tN9CY4wdUauP+K4aM4BOnXKLbCM7dXuSBCqve+w/W6e8L+fYThzs72YjjjM85BVPADAnRTV4QoWH/NjfkNATxaw0sAVIADIQBKoI0vMiqca2jEeaJ+z4hQ9J8UO/iFQkLPohu6R9jpnmernf9BbKMeWJ4iZIyQfEOsSAYQUA7FspypmNPgZqUohax6RWC+lcu4etwCxMiiP+ipgoQaOy81bdPJGTVQDI4sBkLtOOt/jYGHMeiHIYUAdjYwQjLkbU9T176/jkaf5/DTLcsR7JdHHoHf6UEx02lBLT/326uMJXU2y4AogHgQ1DDMM/WA0qPivhIdt2pvnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768492795; x=1769097595; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZdLyvXEcNm2F3Dn8JAz82gdODXREWzN4kLA1i0te6Y=;
-        b=O4CDog9wWNfBArp5Vjw+LFv+f24i84vyj01SdarAB0nFNABQ4tHzF1B3v/QBj5p2Up
-         YK6M+SNbamIWipR+wIa9WfDmrucRzImZgmnofG4iGya8G5iAWaCidfLc7d8Irfqd6kph
-         ItYo27ONZ/osQTGe5v8i14SxWBcF769uFQl5RJtVLhvcajUt+WDeu+CErMqrGr5oiMJf
-         O5KAVwQssB2vSOI51zTaaPE4Ns0law6KAyiu8FJWPckCFykIZz9xDlJAOleZTfHMSZma
-         3IBbHz0G3AnqdkpXWfUcRZcGpRh91sI3+jBXygOM2azI+PNi7e/Tkla4HP11yDmnAhvL
-         9E0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768492795; x=1769097595;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZdLyvXEcNm2F3Dn8JAz82gdODXREWzN4kLA1i0te6Y=;
-        b=BJgnYaGgT9UUiJmefvvWonhLdUUhUo9k2fn5XjlDi2+Eqjle45o1QwfBugDtL900Om
-         6fjCMvOZlnbQ+3kRj9OREyOboEtKjAUXNN5WlEC0fUOePN5QJR83N93hStUGaOffyioS
-         qOeQ6o/haJTftL0gQ8oRBXDeNptgCNneH8/PiLWS4R3YMIpFXJQ9lFiBSWNLP72C3uKo
-         SU8ypGS7KoRdvJf+8qqTo339lI6vLmoNfojq7uNa9ACZ6x8lUvbaM+cqiprsEM7DVkkw
-         FhFymdpGUyV3F/e+JY86oWWpBYM+1mkp+FUr46MOcnNbhgaj4mVdZQ9I3DKdwg77Dbvj
-         Lz8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUDVBtPGLHlTya7iesQcpMGRK0vYt3Hhbx+N8EnjGHaUqwE9okESCIfipdfAEZpw8HfUhgd8yCCxHqj@vger.kernel.org
-X-Gm-Message-State: AOJu0YwF9EH2CoqIrSV593gbwxIFhUcy5BlSkANWxAIrOtjAna6P34d8
-	4ZmqEfzxQZgClx0yYMGNE710iKTfUJFwJb5G0iKGVa2adBh9g37UawqMgH1Be5TXQH3W4FKcKPh
-	lAgKgwQ==
-X-Received: from ljhp21.prod.google.com ([2002:a2e:93d5:0:b0:37f:8d02:4f39])
- (user=lrizzo job=prod-delivery.src-stubby-dispatcher) by 2002:a2e:a9a8:0:b0:37b:9b58:dd04
- with SMTP id 38308e7fff4ca-3838417575bmr764271fa.7.1768492794621; Thu, 15 Jan
- 2026 07:59:54 -0800 (PST)
-Date: Thu, 15 Jan 2026 15:59:42 +0000
-In-Reply-To: <20260115155942.482137-1-lrizzo@google.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VRxeQY7IwbY3FbWkWqf1UCQHc68BB9udhvBUae3JkM4=;
+ b=UjJ52Kn2U14+tweF681yTs0RTw4WTGIW+o0ix6NwgL5SObcfiinqdW3Ha6tSEB7wqaBuwEmPrCP5KPAMfe8D06tCwi1W6mfQq7ic6aeGU/SXFeV94B8sOfowUaboLC3MnMC5WevIKjqgB7Z9887xgwCrNUfxuyZ3TaaWpc7Kc2M=
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com (2603:10b6:208:4e6::14)
+ by DM4PR10MB6109.namprd10.prod.outlook.com (2603:10b6:8:b5::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.5; Thu, 15 Jan
+ 2026 17:22:27 +0000
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582]) by BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582%6]) with mapi id 15.20.9520.005; Thu, 15 Jan 2026
+ 17:22:27 +0000
+Date: Thu, 15 Jan 2026 17:22:30 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
+        Harry Yoo <harry.yoo@oracle.com>,
+        Laurence Oberman <loberman@redhat.com>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH RESEND v3 0/4] mm/hugetlb: fixes for PMD table sharing
+ (incl. using mmu_gather)
+Message-ID: <fa37f15c-e5a8-4502-ba82-c077ee7b8e5f@lucifer.local>
+References: <20251223214037.580860-1-david@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251223214037.580860-1-david@kernel.org>
+X-ClientProxiedBy: LO2P265CA0252.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:8a::24) To BL4PR10MB8229.namprd10.prod.outlook.com
+ (2603:10b6:208:4e6::14)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260115155942.482137-1-lrizzo@google.com>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260115155942.482137-4-lrizzo@google.com>
-Subject: [PATCH v4 3/3] genirq: Adaptive Global Software Interrupt Moderation (GSIM).
-From: Luigi Rizzo <lrizzo@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
-	Luigi Rizzo <rizzo.unipi@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Sean Christopherson <seanjc@google.com>, 
-	Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Bjorn Helgaas <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Luigi Rizzo <lrizzo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL4PR10MB8229:EE_|DM4PR10MB6109:EE_
+X-MS-Office365-Filtering-Correlation-Id: d08773ad-a168-472d-8061-08de545aa795
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?YoYokK6Ywa2W3xiPYDEDmcp/Fl56jJyDoAIeN3KPEomb29sncNJeyAjQqi8l?=
+ =?us-ascii?Q?Yujz1z9TA7PK+3gFEJQ3aLZ4lZRPEyIETIhPJpZjVqI4nH5umC3kryQzPL2L?=
+ =?us-ascii?Q?dn3DfK/5UE3gEXOAVjlgi1RN3SF+L8EWPBFpXVKEOywjed5OptQQcB9MwVLR?=
+ =?us-ascii?Q?Re6fT44NPutYxnldDJa/lc8C72Pi6zMqSdl5zXpOfJVKZr6GKNOs0bKkrswd?=
+ =?us-ascii?Q?qHURaMpdKC5iHuHf+IEPpG22dtaCRcIO0wPd3MtYXct3LzHsaiQRapLY9F4e?=
+ =?us-ascii?Q?VU9bwHnQfcSnzd8mBLi9L1sVE0Ya86T4EB2Jf6XRtKRwVRzsDiWmFJyFL3z4?=
+ =?us-ascii?Q?eQxZV9EKlKq3cwO2N0Owsm7liig70NP27u7NUN7UwwyWSSvTfMVne8yCUwkn?=
+ =?us-ascii?Q?zG7PZ+OsrIpAweRama1/hTwltex0VybRHwMgrI/d3xWj7TLVDJaepwTntIJA?=
+ =?us-ascii?Q?gO+/U6BjQ5wwUCBX/twO9eBNYHc6jxbsNF9BNGqMh5Jynky1jxp5tsPzkaOu?=
+ =?us-ascii?Q?GHEiwYzfKnL7EVDZr4gy1ypkY6u5QdzCvVbz/AyFldsP+v74KLRrHFxnloQ/?=
+ =?us-ascii?Q?VyRBadcUTkjTWVpbvusMHm6VjG5awXwD4uadyolGEgWVyEJ2sh/KRsd7IUjo?=
+ =?us-ascii?Q?iQPT8FwpQquzwnDpzi6PG2C19PGad+FtVppbge6DyAtlK45aAd2BA+0PhnUy?=
+ =?us-ascii?Q?0XRFG5Q1C7RyxWiuW28K+nV91Uv25a2HtLXMyuR0To9iGxPW/OEGPwlyuSNe?=
+ =?us-ascii?Q?asQhgtZ9/WHzrlLZsqoJA95b6zInV4ZAtX+fXlLttEubzu0qRBrsrZ5a2gPa?=
+ =?us-ascii?Q?/4FTcG25kelzZfoQGS8TUiTlFoMWvOYyHZTDuVKsE2zgWeeRXMH0yrkvWPBY?=
+ =?us-ascii?Q?TMj9FniJRro9nFxuSfN6gCjab0D47Jmc/n1RQZqIb7AUE92qMXWZwyDNCTUB?=
+ =?us-ascii?Q?sWyU+xxlDCjd+4Mw4SXs5CKksMcrefxG9q2A/EtMkIQZMhrLU7OOIL3Layr+?=
+ =?us-ascii?Q?qqpePwlqdyA3X5fmhiSDHsudKYFq0nAxlTf2cM/8ZHm1GDSrJJLOVZNESCOZ?=
+ =?us-ascii?Q?X6AYnYlQFPJJF8NJ2lBmMTMr4eIwuhwKSmShKm/blv68bOnKh0/NtnNnmnnH?=
+ =?us-ascii?Q?JZCQp6UKPE0niIFucQEX97/cxxuMOl+5S5vznrdHjmv4xbizjVudpa9rYxsi?=
+ =?us-ascii?Q?UzKerhrFyG85iosiefV7bV449+5bh+GoeRwlfdOLDSE9gHBlB2rHN+Lab32u?=
+ =?us-ascii?Q?5e+OWPteU8aGrzjWDgknbMoURiPrkvPOfNwPZMNBu2FH4NrUrf2P8xebkDTP?=
+ =?us-ascii?Q?iS892cG0GiJqtADac0P5m2pzsG9ykqhXlUJcCfyNkwbtzavfay8EmA8YurAS?=
+ =?us-ascii?Q?BP9AjEJH5096BuefxPKUx+cxhfWE7n7Hn2HOylnpTLQ0jywH/4O5zRJdvTob?=
+ =?us-ascii?Q?nsdgMAyQ5LG12KSz5nI/AC6ZfrPxkhnaWffcw19e2Tchs388fx0MgmtLDRQd?=
+ =?us-ascii?Q?cCLJ4XlvBeGLkQ9OWEW+ng6+3AP6EH7LoTfLYbG+xCkNyPfZRfAWyjUUGghp?=
+ =?us-ascii?Q?Uhkptb9+arte8f3IxDA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR10MB8229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?y0tTSL3OhL342kSDFeKBLlKIhX6Fy6FrnNpSZi5Dqm9/OMc7WhPGLOEKmNOj?=
+ =?us-ascii?Q?O8pfyq35k+OZ6fBzmmv7sq0LBf8Odeou2FfQc1G3d93izS5SdMyqKJP1F9Ua?=
+ =?us-ascii?Q?+MbFn2y4odtkH/kb2KfArjPmAes6RM6CdL0iSFINQCoeNmDbyOVe5VjVUqUD?=
+ =?us-ascii?Q?kb0m0Zyr1+Zyt+1MkRxCwjqutjCRE5hfl4w9Apl/kmeOq5N7lLmQfMh1YQN7?=
+ =?us-ascii?Q?VN2N/hTv2jU3R2DzZKFBmfaLpC+rKJy1tsImUN+aCm0RbasPx0XovDHmn3cJ?=
+ =?us-ascii?Q?gzBUydl9C3apQIbDzwZLy0WQxeMs2pk2Xo+Vnd4sQyo02zpm5RfWdeBxPKuq?=
+ =?us-ascii?Q?yPXs8xOD0kuQ1Z/IPGXMc4ais3SQ5j0IukJoO7kadCP6h8LPiIriUqSCfYyE?=
+ =?us-ascii?Q?CyAF5tesvs89j6bMdPaw05TOA4w7K+ewIiz/lyNr3MspQYUuW4AM1BjRauWT?=
+ =?us-ascii?Q?cU98NUDT8vCIMf16sz15/ySxFD5S/BjLz1t0RES2IeW06cTlF5ZU02gQU2YQ?=
+ =?us-ascii?Q?ibOgXuyIGwtcpyMOGA/tTX/lKrI2mE83H/HqRcVE49xesiAtDiGkl9Ik6TUi?=
+ =?us-ascii?Q?EaXu/NdpMKAXrwK8N2XXl5fx8Emi/VHavCxjbBw4p7QVB2jLWPs2H9blSKpi?=
+ =?us-ascii?Q?jlfP91/c1EqvYgO+TcM1HPT+I5dEXQGDt1fB5dCWYPhQM15UisnglYxdzd6X?=
+ =?us-ascii?Q?cXgo9sk5nzLNeTAUPfqNjew84mmiduIqmJrkzoiBmTaufPXyn+klXEwMZZLq?=
+ =?us-ascii?Q?lqfFFzyqpbqPkxqJk6HUfj3jYeoAA4OkOJ7wOs4JcSFs7JDNl5sl22RDUSw6?=
+ =?us-ascii?Q?X8KDYo0Re6C67GS7anvHhHSL6QstZ9lpBIp0OjXCtfU4NhxsC9WpvezKZ9lj?=
+ =?us-ascii?Q?JmlGXrEze9Lsig8vrVpRlJ+j7JBwCNMrJE/OMd3DPUI/zdV08YkTzyeVt8QM?=
+ =?us-ascii?Q?GeR9vQPGAZOgmFX+yiyammFjNEvlpReYVCDeed1GuaWvp2su+rO+hLwIarZL?=
+ =?us-ascii?Q?PHzHUKboh51LUWr3LQKEVBIBsTnYjP+TOi0dgkM++vnln16t5XyfTl0HFJlG?=
+ =?us-ascii?Q?gqAMbiJWkReN+PgSrClwIunURdirv8D8ZcDTS3wUwTykIJ1+PsGN2/WmSY6W?=
+ =?us-ascii?Q?8JeNkEtrhMOHdrDIg3zGDESL7Gof2c8pQ7Q2u540dUQ+Br6EFRBcyzuIQGLl?=
+ =?us-ascii?Q?dm8dfs7/VQaJpQLguXmRTSgjFdksjVdmQWfWDS4g2g1+CuPOHHgl7qyjJlqO?=
+ =?us-ascii?Q?N787j48lpDXXeQyu3liwG7fPKsB5BsdIuQobi5o4jazxuHqjzdyvuUTk0ePD?=
+ =?us-ascii?Q?joRh+GDhOfo5VmMvCIrE4rEnvNm3PqWGDtpqM1XviugDwmcMgUdc/ZRSVmXs?=
+ =?us-ascii?Q?0+GSYoVldyoox+wqLrx1XtoVDVDy3gVSFnzATvM3i2ZVcE+CAZglfWLX6gGn?=
+ =?us-ascii?Q?ikop2l3m0ok3eSW6/EI9mjyrpaIJs0fyqn+Kj++BB5eVgfCMB7rybVwAjjuI?=
+ =?us-ascii?Q?WLqPClcksi7nGUoZuzETa+FH7+JXF7qjoBzhcHDjuIEV2klZXew5YtIbrs+X?=
+ =?us-ascii?Q?EcehoTff9U+c2sduyQF6POXTZmkpU013t8pxGLT91G/WPFMCHP5yjY3+jLg4?=
+ =?us-ascii?Q?LgxStwu/cqnAzLh9ZlDj1BmVOeMDWD6Fxim2QVE1l+0StFLBIfAkNYhW+OGy?=
+ =?us-ascii?Q?nAB/ugjEBLUCHqTZJT02f+e9JZxlTr3cno8nXk83zwrSyUrwWiPbHfsrmY19?=
+ =?us-ascii?Q?U+WISbwbfJRilx12tF3g7zrenwEP8FA=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	cmix5CubHdsqPVO5XkP2D+IAfXOacfTZKVLFJNwr+ug8Ker+xZ9RPiuIXJXYX5hYEI78a8oXtkPs5rPTZ/ESAZaqft9LQQYji5K0hxEB2wqU2kpl+U7GGv7Uu2m1lhgFAUvmxtJUaZJI4smAKJuGwSq5UazLv0dg0dkh5AZRXK4sNI1cGd620uKe9ddsOUpate8xpTmsqsw3g5jPT1du6ledZJk+a/ZQf10nXmQdYVte50z5+8wOEPTGRN6lbcZ6ZV4e0ccNB2BJnfpTeCPfQD4E4m2bNY4TaSWkQK/gOEVlgxlcDmdGEBIWDmT26u1E+YEjgUp0UIIR52Gq0i+489x8JwP+5jD/8AQg+zRqjrKmhuwrBd4+NXun+BzscgKaF+jhYjQ9S/piPPRwxc3hOFAtz80ldtAfn63F56uau4BTfX2EHpz55PV+FojeeduZD3C+Ne2A25p2r11BHQxm4skA50PPgEKHpfe3QiydDz3oGqqCXwmMGSdzpOAKRRn7h+FJB50oMGK8VgNFqwT3HrJH1ELPrf3PVcuo78XjVMYplk61K+KlK9vo+RHESBrXGmJp7Lm5waFtY2fH2Vi6anEhOJFn/bH/G913XBwR7bk=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d08773ad-a168-472d-8061-08de545aa795
+X-MS-Exchange-CrossTenant-AuthSource: BL4PR10MB8229.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2026 17:22:26.9974
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uFVcREFfUdfOy9aUEPI0h+GmMH/9dxXRGfnuEkmqRMCdmdIlB+Xb4OXXVQbI23IugkXdxL2Uj48YANtRST3t/9OsYplHp1OFqSnzp04Yhxw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6109
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-15_05,2026-01-15_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2512120000
+ definitions=main-2601150133
+X-Authority-Analysis: v=2.4 cv=XP09iAhE c=1 sm=1 tr=0 ts=6969225a b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=Z4Rwk6OoAAAA:8 a=pGLkceISAAAA:8 a=JfrnYn6hAAAA:8
+ a=yPCof4ZbAAAA:8 a=1XWaLZrsAAAA:8 a=fwyzoN0nAAAA:8 a=20KFwNOVAAAA:8
+ a=OkVqU9m7NFNb-lFjlXQA:9 a=CjuIK1q_8ugA:10 a=HkZW87K1Qel5hWWM3VKY:22
+ a=1CNFftbPRP8L7MoqJWF3:22 a=Sc3RvPAMVtkGz6dGeUiH:22 cc=ntf awl=host:13654
+X-Proofpoint-GUID: 5353RquWYz82Si12ysINEhy7CBe34e0m
+X-Proofpoint-ORIG-GUID: 5353RquWYz82Si12ysINEhy7CBe34e0m
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDEzMyBTYWx0ZWRfXxnxn72FwDs/6
+ Wj9nciyiInoHdaUjl4n6BdipGCKjiEsKVm58n8ROggQajUZF+Fr7qIM6K2ox/1yFSsqM4GttvDX
+ zYQADsV67ce8pgqkt+CFjHZ/kqvRxBFr/yxpCHzFk+0swBJ4VqjADAZMS0UnvT+qMZYOzNxBX6F
+ H3czWS15QTsY6REd3yA7b3YO/o5dTk7CI4NFjcQ+zAPueHM15woRryXfCRV+bxhdxH5JTGa5Gr6
+ 3/jk3O4QJv6fkg3N+Ql1JcyavelAWjv1910kQQjnXplJO3pwUYBUN54VjjQ8AEnKkGrkbpVIiLB
+ 6zZNmFPe84/59vSp+/CeGAtX9y1ZAcAh13zl496UCnTudJBRBH/dAcOGNZA1Q6Rw+fTBzCjy3AU
+ b+4luwDTb3l5XOLX2Y/KORSwD8Rh3lsQ7AMZCdTjD1e2eXtsS2Yt92tzE/Hlk6kzy94Y7Jqy3/S
+ MmtveCWywsFZnKy3uVzhjkdrNmEcxGwr6QLQVXqg=
 
-Interrupt moderation helps keeping system load (as defined later) under
-control, but the use of a fixed moderation delay imposes unnecessary
-latency when the system load is already low.
+Hi,
 
-We focus on two types of system load related to interrupts:
-- total device interrupt rates. Some platforms show severe I/O
-  performance degradation with more than 1-2 Mintr/s across the entire
-  system. This affects especially server-class hardware with hundreds of
-  interrupt sources (NIC or SSD queues from many physical or virtualized
-  devices).
-- percentage of time spent in hardirq. This can become problematic in
-  presence of large numbers of interrupt sources hitting individual CPUs
-  (for instance, as a result of attempts to isolate application CPUs
-  from interrupt load).
+Any update on this series? It's a hotfix series and I don't see it queued
+up anywhere in either mm-hotfixes-unstable or mm-hotfixes-stable, this
+issue is causing ongoing problems for a lot of people, is there any reason
+it's being delayed?
 
-Make GSIM adaptive by measuring total and per-CPU interrupt rates, as
-well as time spent in hardirq on each CPU. The metrics are compared to
-configurable targets, and each CPU adjusts the moderation delay up
-or down depending on the result, using multiplicative increase/decrease.
+It's received extensive approval and testing, so should be GTG right?
 
-Configuration of moderation parameters is done via procfs
+Andrew, David?
 
-  echo ${VALUE} > /proc/irq/soft_moderation/${NAME}
+Thanks, Lorenzo
 
-Parameters are:
-
-  delay_us (0 off, range 0-500)
-      Maximum moderation delay in microseconds.
-
-  target_intr_rate (0 off, range 0-50000000)
-      Total rate above which moderation should trigger.
-
-  hardirq_percent (0 off,range 0-100)
-      Percentage of time spent in hardirq above which moderation should
-      trigger.
-
-  update_ms (range 1-100, default 5)
-      How often the metrics should be computed and moderation delay
-      updated.
-
-When target_intr_rate and hardirq_percent are both 0, GSIM uses delay_us
-as fixed moderation delay. Otherwise, the delay is dynamically adjusted
-up or down, independently on each CPU, based on how the total and per-CPU
-metrics compare with the targets.
-
-Provided that delay_us suffices to bring the metrics within the target,
-the control loop will dynamically converge to the minimum actual
-moderation delay to stay within the target.
-
-PERFORMANCE BENEFITS:
-
-The tests below demonstrate how adaptive moderation allows improved
-throughput at high load (same as fixed moderation) and low latency ad
-moderate load (same as no moderation) without having to hand-tune the
-system based on load.
-
-We run experiments on one x86 platform with 8 SSD (64 queues) capable of
-an aggregate of approximately 14M IOPS running fio with variable number
-of SSD devices (1 or 8), threads per disk (1 or 200), and IODEPTH (from
-1 to 128 per thread) the actual command is below:
-
-${FIO} --name=read_IOPs_test ${DEVICES} --iodepth=${IODEPTH} --numjobs=${JOBS} \
-    --bs=4K --rw=randread  --filesize=1000G --ioengine=libaio --direct=1 \
-    --verify=0 --randrepeat=0 --time_based=1 --runtime=600s \
-    --cpus-allowed=1-119 --cpus_allowed_policy=split --group_reporting=1
-
-For each configuration we test three moderations settings:
-- OFF:      delay_us=0
-- FIXED:    delay_us=200 target_intr_rate=0 hardirq_percent=0
-- ADAPTIVE: delay_us=200 target_intr_rate=1000000 hardirq_percent=70
-
-The first set of measurements is for ONE DISK, ONE THREAD.
-At low IODEPTH the throughput is latency bound, and moderation is not
-necessary. A fixed moderation delay dominates the latency hence reducing
-throughput; adaptive moderation avoids the problem.
-As the IODEPTH increases, the system becomes I/O bound, and even the
-fixed moderation delay does not harm.
-
-Overall: adaptive moderation is better than fixed moderation and
-at least as good as moderation off.
-
-COMPLETION LATENCY PERCENTILES in us (p50, p90, p99)
-
-         ------ OFF --------   ------ FIXED ------   ----- ADAPTIVE ----
-IODEPTH  IOPS  p50  p90  p99   IOPS  p50  p90  p99   IOPS  p50  p90  p99
-         -------------------   -------------------   -------------------
-1:        12K   78   88   94 .   5K  208  210  215 .  12K   78   88   96
-8:        94K   83   91  110 .  38K  210  212  221 .  94K   83   91  105
-32:      423K   72   85  124 . 150K  210  219  235 . 424K   72   85  124
-128:     698K  180  200  243 . 513K  251  306  347 . 718K  174  194  239
-
-A second set of measurements is with one disk and 200 threads.
-The system is I/O bound but without significant interrupt overhead.
-All three scenarios are basically equivalent.
-
-         --------- OFF --------   ------- FIXED -------   ------ ADAPTIVE -----
-IODEPTH  IOPS    p50  p90   p99   IOPS    p50  p90  p99   IOPS    p50  p90  p99
-         ----------------------   ---------------------   ---------------------
-1:       1581K   110  174   281 .  933K   208  223  363 . 1556K   114  176  277
-8:       1768K   889 1516  1926 . 1768K   848 1516 2147 . 1768K   889 1516 1942
-32:      1768K  3589 5735  7701 . 1768K  3589 5735 7635 . 1768K  3589 5735 7504
-128:     1768K  14ms 24ms  31ms . 1768K  14ms 24ms 29ms . 1768K  14ms 24ms 30ms
-
-Finally, we have one set of measurements with 8 disks and 200 threads
-per disk, all running on socket 0.  The system would be I/O bound (and
-CPU/latency bound at low IODEPTH), but this platform is unable to cope with the
-high global interrupt rate and so moderation is really necessary to hit
-the disk limits.
-
-As we see below, adaptive moderation gives more than 2X higher
-throughput at meaningful iodepths, and even latency is much better.
-The only case where we see a small regression is with iodepth=1, because
-the high interrupt rate triggers the control loop to increase the
-moderation delay.
-
-         --------- OFF --------   -------- FIXED -------   ------ ADAPTIVE ------
-IODEPTH  IOPS    p50  p90   p99   IOPS     p50  p90  p99   IOPS     p50  p90  p99
-         ----------------------   ----------------------   ----------------------
-1:       2304K    82   94   128 .  1030K   208  277  293 .  1842K    97  149  188
-8:       5240K   128  938  1680 .  7500K   208  233  343 . 10000K   151  210  281
-32:      5251K   206 3621  3949 . 12300K   184 1106 5407 . 12100K   184 1139 5407
-128:     5330K  4228 12ms  17ms . 13800K  1123 4883 7373 . 13800K  1074 4883 7635
-
-Finally, here are experiments indicating how throughput is affected by
-the various parameters (with 8 disks and 200 threads).
-
-IOPS vs delay_us (target_intr_rate = 0, hardirq_percent=0)
-
-delay_us	0	50	100	150	200	250
-IODEPTH 1	2300	1860	1580	1300	1034	1066
-IODEPTH 8	5254	9936	9645	8818	7500	6150
-IODEPTH 32	5250	11300	13800	13800	13800	13800
-IODEPTH 128	5900	13600	13900	13900	13900	13900
-
-IOPS vs target_intr_rate (delay_us = 200, hardirq_percent=0, iodepth 128)
-value		250K	500K	750K	1000K	1250K	1500K	1750K	2000K
-socket0		13900	13900	13900	13800	13800	12900	11000	8808
-both sockets	13900	13900	13900	13800	8600	8000	6900	6400
-
-hardirq_percent (delay_us = 200, target_intr_rate=0, iodepth 128)
-hardirq%	1	10	20	30	40	50	60	70
-KIOPS		13900	13800	13300	12100	10400	8600	7400	6500
-
-Signed-off-by: Luigi Rizzo <lrizzo@google.com>
----
- kernel/irq/irq_moderation.c | 271 ++++++++++++++++++++++++++++++++++--
- kernel/irq/irq_moderation.h |  58 +++++++-
- 2 files changed, 314 insertions(+), 15 deletions(-)
-
-diff --git a/kernel/irq/irq_moderation.c b/kernel/irq/irq_moderation.c
-index 07d1e740addcd..8221cb8d9fc79 100644
---- a/kernel/irq/irq_moderation.c
-+++ b/kernel/irq/irq_moderation.c
-@@ -18,8 +18,9 @@
-  *
-  * Some platforms show reduced I/O performance when the total device interrupt
-  * rate across the entire platform becomes too high. To address the problem,
-- * GSIM uses a hook after running the handler to implement software interrupt
-- * moderation with programmable delay.
-+ * GSIM uses a hook after running the handler to measure global and per-CPU
-+ * interrupt rates, compare them with configurable targets, and implements
-+ * independent, per-CPU software moderation delays.
-  *
-  * Configuration is done at runtime via procfs
-  *   echo ${VALUE} > /proc/irq/soft_moderation/${NAME}
-@@ -30,6 +31,26 @@
-  *       Maximum moderation delay. A reasonable range is 20-100. Higher values
-  *       can be useful if the hardirq handler has long runtimes.
-  *
-+ *   target_intr_rate (default 0, suggested 1000000, 0 off, range 0-50000000)
-+ *       The total interrupt rate above which moderation kicks in.
-+ *       Not particularly critical, a value in the 500K-1M range is usually ok.
-+ *
-+ *   hardirq_percent (default 0, suggested 70, 0 off, range 0-100)
-+ *       The hardirq percentage above which moderation kicks in.
-+ *       50-90 is a reasonable range.
-+ *
-+ *       FIXED MODERATION mode requires target_intr_rate=0, hardirq_percent=0
-+ *
-+ *   update_ms (default 5, range 1-100)
-+ *       How often the load is measured and moderation delay updated.
-+ *
-+ *   scale_cpus (default 150, range 50-1000)
-+ *       Small update_ms may lead to underestimate the number of CPUs
-+ *       simultaneously handling interrupts, and the opposite can happen
-+ *       with very large values. This parameter may help correct the value,
-+ *       though it is not recommended to modify the default unless there are
-+ *       very strong reasons.
-+ *
-  * Moderation can be enabled/disabled dynamically for individual interrupts with
-  *   echo 1 > /proc/irq/NN/soft_moderation # use 0 to disable
-  *
-@@ -93,6 +114,8 @@
- /* Recommended values. */
- struct irq_mod_info irq_mod_info ____cacheline_aligned = {
- 	.update_ms		= 5,
-+	.increase_factor	= MIN_SCALING_FACTOR,
-+	.scale_cpus		= 150,
- };
- 
- DEFINE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
-@@ -107,6 +130,171 @@ static void update_enable_key(void)
- 		static_branch_disable(&irq_moderation_enabled_key);
- }
- 
-+/* Functions called in handle_*_irq(). */
-+
-+/*
-+ * Compute smoothed average between old and cur. 'steps' is used
-+ * to approximate applying the smoothing multiple times.
-+ */
-+static inline u32 smooth_avg(u32 old, u32 cur, u32 steps)
-+{
-+	const u32 smooth_factor = 64;
-+
-+	steps = min(steps, smooth_factor - 1);
-+	return ((smooth_factor - steps) * old + steps * cur) / smooth_factor;
-+}
-+
-+/* Measure and assess time spent in hardirq. */
-+static inline bool hardirq_high(struct irq_mod_state *m, u32 hardirq_percent)
-+{
-+	bool above_threshold;
-+	u64 irqtime, cur;
-+
-+	if (!IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING))
-+		return false;
-+
-+	cur = kcpustat_this_cpu->cpustat[CPUTIME_IRQ];
-+	irqtime = cur - m->last_irqtime;
-+	m->last_irqtime = cur;
-+
-+	above_threshold = irqtime * 100 > (u64)m->epoch_ns * hardirq_percent;
-+	m->hardirq_high += above_threshold;
-+	return above_threshold;
-+}
-+
-+/* Measure and assess total and per-CPU interrupt rates. */
-+static inline bool irqrate_high(struct irq_mod_state *m, u32 target_rate, u32 steps)
-+{
-+	u32 global_intr_rate, local_intr_rate, delta_intrs, active_cpus, tmp;
-+	bool local_rate_high, global_rate_high;
-+
-+	local_intr_rate = ((u64)m->intr_count * NSEC_PER_SEC) / m->epoch_ns;
-+
-+	/* Accumulate global counter and compute global interrupt rate. */
-+	tmp = atomic_add_return(m->intr_count, &irq_mod_info.total_intrs);
-+	m->intr_count = 1;
-+	delta_intrs = tmp - m->last_total_intrs;
-+	m->last_total_intrs = tmp;
-+	global_intr_rate = ((u64)delta_intrs * NSEC_PER_SEC) / m->epoch_ns;
-+
-+	/*
-+	 * Count how many CPUs handled interrupts in the last epoch, needed
-+	 * to determine the per-CPU target (target_rate / active_cpus).
-+	 * Each active CPU increments the global counter approximately every
-+	 * update_ns. Scale the value by (update_ns / m->epoch_ns) to get the
-+	 * correct value. Also apply rounding and make sure active_cpus > 0.
-+	 */
-+	tmp = atomic_add_return(1, &irq_mod_info.total_cpus);
-+	active_cpus = tmp - m->last_total_cpus;
-+	m->last_total_cpus = tmp;
-+	active_cpus = (active_cpus * m->update_ns + m->epoch_ns / 2) / m->epoch_ns;
-+	if (active_cpus < 1)
-+		active_cpus = 1;
-+
-+	/* Compare with global and per-CPU targets. */
-+	global_rate_high = global_intr_rate > target_rate;
-+
-+	/*
-+	 * Short epochs may lead to underestimate the number of active CPUs.
-+	 * Apply a scaling factor to compensate. This may make the controller
-+	 * a bit more aggressive but does not harm system throughput.
-+	 */
-+	local_rate_high = local_intr_rate * active_cpus * irq_mod_info.scale_cpus > target_rate * 100;
-+
-+	/* Statistics. */
-+	m->global_intr_rate = smooth_avg(m->global_intr_rate, global_intr_rate, steps);
-+	m->local_intr_rate = smooth_avg(m->local_intr_rate, local_intr_rate, steps);
-+	m->scaled_cpu_count = smooth_avg(m->scaled_cpu_count, active_cpus * 256, steps);
-+	m->local_irq_high += local_rate_high;
-+	m->global_irq_high += global_rate_high;
-+
-+	/* Moderate on this CPU only if both global and local rates are high. */
-+	return global_rate_high && local_rate_high;
-+}
-+
-+/* Periodic adjustment, called once per epoch. */
-+void irq_moderation_update_epoch(struct irq_mod_state *m)
-+{
-+	const u32 hardirq_percent = READ_ONCE(irq_mod_info.hardirq_percent);
-+	const u32 target_rate = READ_ONCE(irq_mod_info.target_intr_rate);
-+	const u32 min_delay_ns = 500;
-+	bool above_target = false;
-+	u32 steps;
-+
-+	/*
-+	 * If any of the configuration parameter changes, read the main ones
-+	 * (delay_ns, update_ns), and set the adaptive delay, mod_ns, to the
-+	 * maximum value to help converge.
-+	 * Without that, the system might be already below target_intr_rate
-+	 * because of saturation on the bus (the very problem GSIM is trying
-+	 * to address) and that would block the control loop.
-+	 * Setting mod_ns to the highest value (if chosen properly) can reduce
-+	 * the interrupt rate below target_intr_rate and let the controller
-+	 * gradually reach the target.
-+	 */
-+	if (raw_read_seqcount(&irq_mod_info.seq.seqcount) != m->seq) {
-+		do {
-+			m->seq = read_seqbegin(&irq_mod_info.seq);
-+			m->update_ns = READ_ONCE(irq_mod_info.update_ms) * NSEC_PER_MSEC;
-+			m->mod_ns = READ_ONCE(irq_mod_info.delay_us) * NSEC_PER_USEC;
-+			m->delay_ns = m->mod_ns;
-+		} while (read_seqretry(&irq_mod_info.seq, m->seq));
-+	}
-+
-+	if (target_rate == 0 && hardirq_percent == 0) {
-+		/* Use fixed moderation delay. */
-+		m->mod_ns = m->delay_ns;
-+		m->global_intr_rate = 0;
-+		m->local_intr_rate = 0;
-+		m->scaled_cpu_count = 0;
-+		return;
-+	}
-+
-+	/*
-+	 * To scale values X by a factor (1 +/- 1/F) every "update_ns" we do
-+	 *	X := X * (1 +/- 1/F)
-+	 * If the interval is N times longer, applying the formula N times gives
-+	 *	X := X * ((1 +/- 1/F) ** N)
-+	 * We don't want to deal floating point or exponentials, and we cap N
-+	 * to some small value < F . This leads to an approximated formula
-+	 *	X := X * (1 +/- N/F)
-+	 * The variable steps below is the number N of steps.
-+	 */
-+	steps = clamp(m->epoch_ns / m->update_ns, 1u, MIN_SCALING_FACTOR - 1u);
-+
-+	if (target_rate > 0 && irqrate_high(m, target_rate, steps))
-+		above_target = true;
-+
-+	if (hardirq_percent > 0 && hardirq_high(m, hardirq_percent))
-+		above_target = true;
-+
-+	/*
-+	 * Controller: adjust delay with exponential increase or decrease.
-+	 *
-+	 * Note the different constants: we increase fast (smaller factor)
-+	 * to aggressively slow down when the interrupt rate goes up,
-+	 * but decrease slowly (larger factor) because reducing the delay can
-+	 * drive up the interrupt rate and we don't want to create load spikes.
-+	 */
-+	if (above_target) {
-+		const u32 increase_factor = READ_ONCE(irq_mod_info.increase_factor);
-+
-+		/* Make sure the value is large enough for the exponential to grow. */
-+		if (m->mod_ns < min_delay_ns)
-+			m->mod_ns = min_delay_ns;
-+		m->mod_ns += m->mod_ns * steps / increase_factor;
-+		if (m->mod_ns > m->delay_ns)
-+			m->mod_ns = m->delay_ns;
-+	} else {
-+		const u32 decrease_factor = 2 * READ_ONCE(irq_mod_info.increase_factor);
-+
-+		m->mod_ns -= m->mod_ns * steps / decrease_factor;
-+		/* Round down to 0 values that are too small to bother. */
-+		if (m->mod_ns < min_delay_ns)
-+			m->mod_ns = 0;
-+	}
-+}
-+
- /* Actually start moderation. */
- bool irq_moderation_do_start(struct irq_desc *desc, struct irq_mod_state *m)
- {
-@@ -142,6 +330,8 @@ bool irq_moderation_do_start(struct irq_desc *desc, struct irq_mod_state *m)
- 	return true;
- }
- 
-+/* Control functions. */
-+
- /* Initialize moderation state, used in desc_set_defaults() */
- void irq_moderation_init_fields(struct irq_desc_mod *mod_state)
- {
-@@ -189,7 +379,9 @@ static int swmod_wr_u32(struct swmod_param *n, const char __user *s, size_t coun
- 	int ret = kstrtouint_from_user(s, count, 0, &res);
- 
- 	if (!ret) {
-+		write_seqlock(&irq_mod_info.seq);
- 		WRITE_ONCE(*(u32 *)(n->val), clamp(res, n->min, n->max));
-+		write_sequnlock(&irq_mod_info.seq);
- 		ret = count;
- 	}
- 	return ret;
-@@ -211,34 +403,82 @@ static int swmod_wr_delay(struct swmod_param *n, const char __user *s, size_t co
- 	return ret;
- }
- 
--#define HEAD_FMT "%5s  %8s  %11s  %11s  %9s\n"
--#define BODY_FMT "%5u  %8u  %11u  %11u  %9u\n"
-+#define HEAD_FMT "%5s  %8s  %10s  %4s  %8s  %11s  %11s  %11s  %11s  %11s  %9s\n"
-+#define BODY_FMT "%5u  %8u  %10u  %4u  %8u  %11u  %11u  %11u  %11u  %11u  %9u\n"
- 
- #pragma clang diagnostic error "-Wformat"
- 
- /* Print statistics */
- static void rd_stats(struct seq_file *p)
- {
-+	ulong global_intr_rate = 0, global_irq_high = 0;
-+	ulong local_irq_high = 0, hardirq_high = 0;
- 	uint delay_us = irq_mod_info.delay_us;
--	int cpu;
-+	u64 now = ktime_get_ns();
-+	int cpu, active_cpus = 0;
- 
- 	seq_printf(p, HEAD_FMT,
--		   "# CPU", "delay_ns", "timer_set", "enqueue", "stray_irq");
-+		   "# CPU", "irq/s", "loc_irq/s", "cpus", "delay_ns",
-+		   "irq_hi", "loc_irq_hi", "hardirq_hi", "timer_set",
-+		   "enqueue", "stray_irq");
- 
- 	for_each_possible_cpu(cpu) {
--		struct irq_mod_state cur;
-+		struct irq_mod_state cur, *m = per_cpu_ptr(&irq_mod_state, cpu);
-+		u64 epoch_start_ns;
-+		bool recent;
-+
-+		/* Accumulate and print only recent samples */
-+		epoch_start_ns = atomic64_read(&m->epoch_start_ns);
-+		recent = (now - epoch_start_ns) < 10 * NSEC_PER_SEC;
- 
- 		/* Copy statistics, will only use some 32bit values, races ok. */
- 		data_race(cur = *per_cpu_ptr(&irq_mod_state, cpu));
-+		if (recent) {
-+			active_cpus++;
-+			global_intr_rate += cur.global_intr_rate;
-+		}
-+
-+		global_irq_high += cur.global_irq_high;
-+		local_irq_high += cur.local_irq_high;
-+		hardirq_high += cur.hardirq_high;
-+
- 		seq_printf(p, BODY_FMT,
--			   cpu, cur.mod_ns, cur.timer_set, cur.enqueue, cur.stray_irq);
-+			   cpu,
-+			   recent * cur.global_intr_rate,
-+			   recent * cur.local_intr_rate,
-+			   recent * (cur.scaled_cpu_count + 128) / 256,
-+			   recent * cur.mod_ns,
-+			   cur.global_irq_high,
-+			   cur.local_irq_high,
-+			   cur.hardirq_high,
-+			   cur.timer_set,
-+			   cur.enqueue,
-+			   cur.stray_irq);
- 	}
- 
- 	seq_printf(p, "\n"
- 		   "enabled              %s\n"
--		   "delay_us             %u\n",
-+		   "delay_us             %u\n"
-+		   "target_intr_rate     %u\n"
-+		   "hardirq_percent      %u\n"
-+		   "update_ms            %u\n"
-+		   "scale_cpus           %u\n",
- 		   str_yes_no(delay_us > 0),
--		   delay_us);
-+		   delay_us,
-+		   irq_mod_info.target_intr_rate, irq_mod_info.hardirq_percent,
-+		   irq_mod_info.update_ms, irq_mod_info.scale_cpus);
-+
-+	seq_printf(p,
-+		   "intr_rate            %lu\n"
-+		   "irq_high             %lu\n"
-+		   "my_irq_high          %lu\n"
-+		   "hardirq_percent_high %lu\n"
-+		   "total_interrupts     %u\n"
-+		   "total_cpus           %u\n",
-+		   active_cpus ? global_intr_rate / active_cpus : 0,
-+		   global_irq_high, local_irq_high, hardirq_high,
-+		   READ_ONCE(*((u32 *)&irq_mod_info.total_intrs)),
-+		   READ_ONCE(*((u32 *)&irq_mod_info.total_cpus)));
- }
- 
- static int moderation_show(struct seq_file *p, void *v)
-@@ -258,6 +498,11 @@ static int moderation_open(struct inode *inode, struct file *file)
- 
- static struct swmod_param param_names[] = {
- 	{ "delay_us", swmod_wr_delay, swmod_rd_u32, &irq_mod_info.delay_us, 0, 500 },
-+	{ "target_intr_rate", swmod_wr_u32, swmod_rd_u32, &irq_mod_info.target_intr_rate, 0, 50000000 },
-+	{ "hardirq_percent", swmod_wr_u32, swmod_rd_u32, &irq_mod_info.hardirq_percent, 0, 100 },
-+	{ "update_ms", swmod_wr_u32, swmod_rd_u32, &irq_mod_info.update_ms, 1, 100 },
-+	{ "increase_factor", swmod_wr_u32, NULL, &irq_mod_info.increase_factor, MIN_SCALING_FACTOR, 128 },
-+	{ "scale_cpus", swmod_wr_u32, swmod_rd_u32, &irq_mod_info.scale_cpus, 50, 1000 },
- 	{ "stats", NULL, rd_stats},
- };
- 
-@@ -427,6 +672,7 @@ static int __init init_irq_moderation(void)
- 	/* Clamp all initial values to the allowed range. */
- 	for (uint *cur = &irq_mod_info.delay_us; cur < irq_mod_info.params_end; cur++)
- 		clamp_parameter(cur, *cur);
-+	seqlock_init(&irq_mod_info.seq);
- 
- 	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "irq_moderation", cpu_setup_cb, cpu_remove_cb);
- 	register_pm_notifier(&mod_nb);
-@@ -436,8 +682,11 @@ static int __init init_irq_moderation(void)
- 	dir = proc_mkdir("irq/soft_moderation", NULL);
- 	if (!dir)
- 		return 0;
--	for (i = 0, n = param_names; i < ARRAY_SIZE(param_names); i++, n++)
-+	for (i = 0, n = param_names; i < ARRAY_SIZE(param_names); i++, n++) {
-+		if (!n->rd)
-+			continue;
- 		proc_create_data(n->name, n->wr ? 0644 : 0444, dir, &proc_ops, n);
-+	}
- 	return 0;
- }
- 
-diff --git a/kernel/irq/irq_moderation.h b/kernel/irq/irq_moderation.h
-index 0d634f8e9225d..3a92306d1aee9 100644
---- a/kernel/irq/irq_moderation.h
-+++ b/kernel/irq/irq_moderation.h
-@@ -13,12 +13,32 @@
- 
- /**
-  * struct irq_mod_info - global configuration parameters and state
-+ * @total_intrs:	running count of total interrupts
-+ * @total_cpus:		running count of total active CPUs
-+ *			totals are updated every update_ms ("epoch")
-+ * @seq:		protects updates to parameters
-  * @delay_us:		maximum delay
-- * @update_ms:		how often to update delay (epoch duration)
-+ * @target_intr_rate:	target maximum interrupt rate
-+ * @hardirq_percent:	target maximum hardirq percentage
-+ * @update_ms:		how often to update delay/rate/fraction (epoch duration)
-+ * @increase_factor:	constant for exponential increase/decrease of delay
-+ * @scale_cpus:		(percent) scale factor to estimate active CPUs
-  */
- struct irq_mod_info {
-+	/* These fields are written to by all CPUs every epoch. */
-+	____cacheline_aligned
-+	atomic_t	total_intrs;
-+	atomic_t	total_cpus;
-+
-+	/* These are mostly read (frequently), so use a different cacheline. */
-+	____cacheline_aligned
-+	seqlock_t	seq;
- 	u32		delay_us;
-+	u32		target_intr_rate;
-+	u32		hardirq_percent;
- 	u32		update_ms;
-+	u32		increase_factor;
-+	u32		scale_cpus;
- 	u32		params_end[];
- };
- 
-@@ -43,8 +63,22 @@ extern struct irq_mod_info irq_mod_info;
-  * @descs:		list of	moderated irq_desc on this CPU
-  * @enqueue:		how many enqueue on the list
-  *
-+ * Used once per epoch:
-+ * @seq:		latest seq from irq_mod_info
-+ * @delay_ns:		fetched from irq_mod_info
-+ * @epoch_ns:		duration of last epoch
-+ * @last_total_intrs:	from irq_mod_info
-+ * @last_total_cpus:	from irq_mod_info
-+ * @last_irqtime:	from cpustat[CPUTIME_IRQ]
-+ *
-  * Statistics
-+ * @global_intr_rate:	smoothed global interrupt rate
-+ * @local_intr_rate:	smoothed interrupt rate for this CPU
-  * @timer_set:		how many timer_set calls
-+ * @scaled_cpu_count:	smoothed CPU count (scaled)
-+ * @global_irq_high:	how many times global irq rate was above threshold
-+ * @local_irq_high:	how many times local irq rate was above threshold
-+ * @hardirq_high:	how many times local hardirq_percent was above threshold
-  */
- struct irq_mod_state {
- 	struct hrtimer		timer;
-@@ -57,14 +91,29 @@ struct irq_mod_state {
- 	u32			stray_irq;
- 	struct list_head	descs;
- 	u32			enqueue;
-+	u32			seq;
-+	u32			delay_ns;
-+	u32			epoch_ns;
-+	u32			last_total_intrs;
-+	u32			last_total_cpus;
-+	u64			last_irqtime;
-+	u32			global_intr_rate;
-+	u32			local_intr_rate;
- 	u32			timer_set;
-+	u32			scaled_cpu_count;
-+	u32			global_irq_high;
-+	u32			local_irq_high;
-+	u32			hardirq_high;
- };
- 
- DECLARE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
- 
-+#define MIN_SCALING_FACTOR 8u
-+
- extern struct static_key_false irq_moderation_enabled_key;
- 
- bool irq_moderation_do_start(struct irq_desc *desc, struct irq_mod_state *m);
-+void irq_moderation_update_epoch(struct irq_mod_state *m);
- 
- static inline void check_epoch(struct irq_mod_state *m)
- {
-@@ -74,9 +123,10 @@ static inline void check_epoch(struct irq_mod_state *m)
- 	/* Run approximately every update_ns, a little bit early is ok. */
- 	if (epoch_ns < m->update_ns - slack_ns)
- 		return;
--	/* Fetch updated parameters. */
--	m->update_ns = READ_ONCE(irq_mod_info.update_ms) * NSEC_PER_MSEC;
--	m->mod_ns = READ_ONCE(irq_mod_info.delay_us) * NSEC_PER_USEC;
-+	m->epoch_ns = min(epoch_ns, (u64)U32_MAX);
-+	atomic64_set(&m->epoch_start_ns, now);
-+	/* Do the expensive processing */
-+	irq_moderation_update_epoch(m);
- }
- 
- /*
--- 
-2.52.0.457.g6b5491de43-goog
-
+On Tue, Dec 23, 2025 at 10:40:33PM +0100, David Hildenbrand (Red Hat) wrote:
+> One functional fix, one performance regression fix, and two related
+> comment fixes.
+>
+> I cleaned up my prototype I recently shared [1] for the performance fix,
+> deferring most of the cleanups I had in the prototype to a later point.
+> While doing that I identified the other things.
+>
+> The goal of this patch set is to be backported to stable trees "fairly"
+> easily. At least patch #1 and #4.
+>
+> Patch #1 fixes hugetlb_pmd_shared() not detecting any sharing
+> Patch #2 + #3 are simple comment fixes that patch #4 interacts with.
+> Patch #4 is a fix for the reported performance regression due to excessive
+> IPI broadcasts during fork()+exit().
+>
+> The last patch is all about TLB flushes, IPIs and mmu_gather.
+> Read: complicated
+>
+> I added as much comments + description that I possibly could, and I am
+> hoping for review from Jann.
+>
+> There are plenty of cleanups in the future to be had + one reasonable
+> optimization on x86. But that's all out of scope for this series.
+>
+> Compile tested on plenty of architectures.
+>
+> Runtime tested, with a focus on fixing the performance regression using
+> the original reproducer [2] on x86.
+>
+> [1] https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
+> [2] https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
+>
+> --
+>
+> v2 -> v3:
+> * Rebased to 6.19-rc2 and retested on x86
+> * Changes on last patch:
+>  * Introduce and use tlb_gather_mmu_vma() for properly setting up mmu_gather
+>    for hugetlb -- thanks to Harry for pointing me once again at the nasty
+>    hugetlb integration in mmu_gather
+>  * Move tlb_remove_huge_tlb_entry() after move_huge_pte()
+>  * For consistency, always call tlb_gather_mmu_vma() after
+>    flush_cache_range()
+>  * Don't pass mmu_gather to hugetlb_change_protection(), simply use
+>    a local one for now. (avoids messing with tlb_start_vma() /
+>    tlb_start_end())
+>  * Dropped Lorenzo's RB due to the changes
+>
+> v1 -> v2:
+> * Picked RB's/ACK's, hopefully I didn't miss any
+> * Added the initialization of fully_unshared_tables in __tlb_gather_mmu()
+>   (Thanks Nadav!)
+> * Refined some comments based on Lorenzo's feedback.
+>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Nick Piggin <npiggin@gmail.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Pedro Falcato <pfalcato@suse.de>
+> Cc: Rik van Riel <riel@surriel.com>
+> Cc: Harry Yoo <harry.yoo@oracle.com>
+> Cc: Uschakow, Stanislav" <suschako@amazon.de>
+> Cc: Laurence Oberman <loberman@redhat.com>
+> Cc: Prakash Sangappa <prakash.sangappa@oracle.com>
+> Cc: Nadav Amit <nadav.amit@gmail.com>
+>
+> David Hildenbrand (Red Hat) (4):
+>   mm/hugetlb: fix hugetlb_pmd_shared()
+>   mm/hugetlb: fix two comments related to huge_pmd_unshare()
+>   mm/rmap: fix two comments related to huge_pmd_unshare()
+>   mm/hugetlb: fix excessive IPI broadcasts when unsharing PMD tables
+>     using mmu_gather
+>
+>  include/asm-generic/tlb.h |  77 +++++++++++++++++++++-
+>  include/linux/hugetlb.h   |  17 +++--
+>  include/linux/mm_types.h  |   1 +
+>  mm/hugetlb.c              | 131 +++++++++++++++++++++-----------------
+>  mm/mmu_gather.c           |  33 ++++++++++
+>  mm/rmap.c                 |  45 ++++++-------
+>  6 files changed, 213 insertions(+), 91 deletions(-)
+>
+>
+> base-commit: b927546677c876e26eba308550207c2ddf812a43
+> --
+> 2.52.0
+>
 
