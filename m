@@ -1,129 +1,122 @@
-Return-Path: <linux-arch+bounces-15809-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15810-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CB69D28883
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 21:52:23 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AF15D28895
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 21:53:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E0D27300CCCD
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 20:52:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 17D45300F673
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 20:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268EC2877D4;
-	Thu, 15 Jan 2026 20:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39882877D4;
+	Thu, 15 Jan 2026 20:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1n63cWg"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="FKLxLDO6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F8F27F72C;
-	Thu, 15 Jan 2026 20:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933AD21FF46;
+	Thu, 15 Jan 2026 20:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768510339; cv=none; b=CNJouEbpMP7F00rLv67vGt9dK0owQ8wWgZVwGVRj5kjMf72UQqMq/8d826sj3rz4ebeGj82OYADQ8k2cGTK98eZHhDuujrBUDjx4rFQ0CGGMkHTwUliXU4/Dsd8WplIA+A39+PdaOzzQvogyBCvs+QUFyC7mb54tkvKttLkDhdI=
+	t=1768510406; cv=none; b=CD8vOmdv4yQSvvdbD8F/0ReIVTEfqmx2IEU35H/z8+miQmYMpqenA84dQSuLWjBfHlh64/Ci32QP3zNTu9BQo/vJtQv40Dui6AZ8Ca+7aPSyCEq0NyKfsSqSWLEpOwFEoVphqYmFa1sn57oIZpQDRD+tndyw3KnF0XmdfnQ4zqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768510339; c=relaxed/simple;
-	bh=pQQGVRG/NDVNSldCrMgbQd2NvjFlVVpwVNlrxeOnPug=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c+LGmMWwpSsLicyUZCJnKPOqxqA6wHkYNCCPodH542JGo0gqRRCJBqkQESXxV+M7JQIDz+b85fVv/Fz5hAqcH9JpKenaue96Nk2uEQmGc/wNop88xd8c9fN+won67whUM4ZEcW4aUz9udiqR2Wqz8nS5cGCX+8WhJnQBrZ0k7v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1n63cWg; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768510337; x=1800046337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pQQGVRG/NDVNSldCrMgbQd2NvjFlVVpwVNlrxeOnPug=;
-  b=g1n63cWgkjl/yAt/Nw7XGcAoCvDbK+8KGbLrDTrOdQuxRV5YLtiGAibs
-   f+QIJnH8itGMLNagcQ4i9sEU1D3dGFeShwmqVqtBxWx3LQa/kJtjFR4dM
-   NbCKZp0ZMSEXMinisrVP9S7rOewGUbqhPiHp0gNbNBfRWTLmUQ8vczAhi
-   ax3sHf5oujdhk00eo4h2fFjgnO+63LR3W4FS6d/9qV+kcvsQmyl9mih7c
-   99XXW6hiVK2P6EedSjXVDJ2uby6k9frImJMJO7DsrsRgcqkXemYOfGQ8B
-   Nv9ekIH2TSf6ZUO+bv136mFAEE5/lLgyyGbCeR7+KmhcpTdOa0bnwvCgh
-   A==;
-X-CSE-ConnectionGUID: iI+oQB01Tw66uUhDLShA5A==
-X-CSE-MsgGUID: 9QcjnhCkRYuW2Or+Ia7OnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="72411544"
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="72411544"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 12:52:17 -0800
-X-CSE-ConnectionGUID: tDozUA/lQe+FKS9fq9cx3g==
-X-CSE-MsgGUID: KmJ1BYAsT/GswGHVSqYj+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
-   d="scan'208";a="204939722"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 15 Jan 2026 12:52:14 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vgUKC-00000000Jya-08M7;
-	Thu, 15 Jan 2026 20:52:12 +0000
-Date: Fri, 16 Jan 2026 04:52:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH v4 2/3] genirq: Fixed-delay Global Software Interrupt
- Moderation (GSIM)
-Message-ID: <202601160402.Z1oBJhge-lkp@intel.com>
-References: <20260115155942.482137-3-lrizzo@google.com>
+	s=arc-20240116; t=1768510406; c=relaxed/simple;
+	bh=+kSn6OZb689goDZqhJCcy2AxMqtGudBDlkvG4nHQZN8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=EmRQsi3UZHsxVk3xiGtW2XEdQDk98CmvJqzNj1TAvAq3jAx7RWgyLWQzVE7HGBHbXkj12yfsVxxwbeCYvxoHTHSOubZ/XLtI32YPsMbcuNTQ8nCy9g8g8FJDzkHPrbTkdP1q7oNruBphrJNlepTzy7yj1HDplNzV3dmJH8JaQzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=FKLxLDO6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78038C116D0;
+	Thu, 15 Jan 2026 20:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1768510406;
+	bh=+kSn6OZb689goDZqhJCcy2AxMqtGudBDlkvG4nHQZN8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FKLxLDO6WXGtdWy1XYnd/pnyJXXBMLdvo3ZvG1BHZf8HQJO80m9gwZxcxFcynmIu2
+	 JVqSh29Yf4miHM1RVCKZINiVX4Dy9/POf8a5LSlyVZlW/HUMOcpHX6n3oooRr7XpUW
+	 NCVaEuUx2RPTF9CggzR1Xnyinjj1b8guq+FoIHBk=
+Date: Thu, 15 Jan 2026 12:53:24 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
+ <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Peter Zijlstra
+ <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, Muchun Song
+ <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>, Harry Yoo
+ <harry.yoo@oracle.com>, Laurence Oberman <loberman@redhat.com>, Prakash
+ Sangappa <prakash.sangappa@oracle.com>, Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH RESEND v3 0/4] mm/hugetlb: fixes for PMD table sharing
+ (incl. using mmu_gather)
+Message-Id: <20260115125324.6373966518a479c585c4f404@linux-foundation.org>
+In-Reply-To: <84a00b16-0fd3-4a32-bb7a-f117dcdcf1e2@kernel.org>
+References: <20251223214037.580860-1-david@kernel.org>
+	<fa37f15c-e5a8-4502-ba82-c077ee7b8e5f@lucifer.local>
+	<20260115100501.2b956d74aabfe142d37aa608@linux-foundation.org>
+	<84a00b16-0fd3-4a32-bb7a-f117dcdcf1e2@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260115155942.482137-3-lrizzo@google.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Luigi,
+On Thu, 15 Jan 2026 20:40:13 +0100 "David Hildenbrand (Red Hat)" <david@kernel.org> wrote:
 
-kernel test robot noticed the following build warnings:
+> On 1/15/26 19:05, Andrew Morton wrote:
+> > On Thu, 15 Jan 2026 17:22:30 +0000 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+> > 
+> >> Any update on this series? It's a hotfix series and I don't see it queued
+> >> up anywhere in either mm-hotfixes-unstable or mm-hotfixes-stable, this
+> >> issue is causing ongoing problems for a lot of people, is there any reason
+> >> it's being delayed?
+> >>
+> >> It's received extensive approval and testing, so should be GTG right?
+> > 
+> > This has been in mm-unstable for a long time.  As the series had a
+> > mixture of cc:stable and not-cc:stable patches, I figured we'd merge
+> > them all into next merge window and let the -stable maintainers figure
+> > it all out.
+> > 
+> > As this is more urgent than I believed, we need to figure out what to
+> > do.
+> > 
+> > a) Pluck out the two cc:stable patches, merge just those into 6.19-rc.
+> > 
+> > b) Merge all of them into 6.19-rc, let -stable maintainers figure it out
+> 
+> Right. We can just CC: stable on comment fixes #2 and #3 to make 
+> back-porting easier.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.19-rc5]
-[cannot apply to tip/irq/core next-20260115]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yep.  Seems lame to be backporting comment fixes because real fixes
+were textually dependent.  Also seems lame to retain known-wrong
+comments in stable kernels!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-Add-flags-for-software-interrupt-moderation/20260116-000808
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260115155942.482137-3-lrizzo%40google.com
-patch subject: [PATCH v4 2/3] genirq: Fixed-delay Global Software Interrupt Moderation (GSIM)
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20260116/202601160402.Z1oBJhge-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601160402.Z1oBJhge-lkp@intel.com/reproduce)
+> > 
+> > 
+> > Also, David, where do we stand with
+> > 
+> > : I'd love to get some generic hugetlb testing on arm64 and powerpc,
+> > : that do hugetlb TLB flushing stuff a bit more special.
+> > :
+> > : I'll try doing some arm64 testing early in the new year myself.
+> > 
+> > ?
+> 
+> Not done yet, unfortunately. (I don't (yet) have easy access to decent 
+> arm64 hardware ;) )
+> 
+> I still hope that Jann could quickly have a look, but it's been a while 
+> already since I posted v1.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601160402.Z1oBJhge-lkp@intel.com/
+OK.  It may well have had the hoped-for testing in linux-next, only we
+didn't hear about it.
 
-All warnings (new ones prefixed by >>):
-
->> kernel/irq/irq_moderation.c:217: warning: ignoring '#pragma clang diagnostic' [-Wunknown-pragmas]
-     217 | #pragma clang diagnostic error "-Wformat"
-
-
-vim +217 kernel/irq/irq_moderation.c
-
-   216	
- > 217	#pragma clang diagnostic error "-Wformat"
-   218	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
