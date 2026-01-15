@@ -1,182 +1,129 @@
-Return-Path: <linux-arch+bounces-15808-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15809-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68B11D28314
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 20:45:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CB69D28883
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 21:52:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 18096308B0BE
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 19:40:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E0D27300CCCD
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Jan 2026 20:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D36C2D47F4;
-	Thu, 15 Jan 2026 19:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268EC2877D4;
+	Thu, 15 Jan 2026 20:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCULaqSi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1n63cWg"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F74F31A041;
-	Thu, 15 Jan 2026 19:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F8F27F72C;
+	Thu, 15 Jan 2026 20:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768506021; cv=none; b=EQZLZsZdJHG+ZOQ1Elp5/JajnKUDcJ6XT7vswLNeFHxQYOdDiCXY9rM6LRbQ+gpviUZt/HsuSCl4+kPqPrLud0wzPZJjLyT4BGkz2n1N1NC0HuUSuBgSZd3FXCnP4TS66kqhmt746xwrZ5VKvdmcBzkH7CidxMLZqdMzHzG9flk=
+	t=1768510339; cv=none; b=CNJouEbpMP7F00rLv67vGt9dK0owQ8wWgZVwGVRj5kjMf72UQqMq/8d826sj3rz4ebeGj82OYADQ8k2cGTK98eZHhDuujrBUDjx4rFQ0CGGMkHTwUliXU4/Dsd8WplIA+A39+PdaOzzQvogyBCvs+QUFyC7mb54tkvKttLkDhdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768506021; c=relaxed/simple;
-	bh=nLGaqWdpnH8fEEVBvwXlgYEC0zyBCL56gElb3tVuEgQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oH/2qVCeLDXqjgIkILrVSEuihlPNL83RthVrNiO4pQucOmHEm2s/uWcgPsEsoAJH/bS0Wk3NDhWvWnBmk62ppLuXFd6WkGFcHNqT7pFsGBsstabDpL8TObFxWpQ7SX3w4q0xtXr7aKmoauOk+6HONnSYGp8grNU3dfKymyVGUGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCULaqSi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4296C16AAE;
-	Thu, 15 Jan 2026 19:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768506020;
-	bh=nLGaqWdpnH8fEEVBvwXlgYEC0zyBCL56gElb3tVuEgQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JCULaqSiagqhvxYAXnBf6QFqboCKJo9CFWcUgzbmW/KxbKuSq3ws3wJEZqOFjN7i5
-	 ZEqFPJ5VJabscSnYwpOK0bwmhOGlZHn7L7ywxQyesZzR7i9yc80uDz+0diYQCK7r8h
-	 +ePYH6HLe5Fny+wdLdQpxqxNCBOBQ2AOmors7MInu/5HnaEiatL2cp0gk/qke/tnUn
-	 6ilQN8j4ZL+IvYc6LZtddA74UPBzh8jyxE37Pq6NBmi34aVheXNk7oyTxhlDnxPis0
-	 IhdpPGmwT8OGdkT7uxj6LqI7rInF8pEJSvXAyhFyiR5Jp5vVAAnyFZC5nwXN9QzxJ+
-	 AaZtzAWStrNQA==
-Message-ID: <84a00b16-0fd3-4a32-bb7a-f117dcdcf1e2@kernel.org>
-Date: Thu, 15 Jan 2026 20:40:13 +0100
+	s=arc-20240116; t=1768510339; c=relaxed/simple;
+	bh=pQQGVRG/NDVNSldCrMgbQd2NvjFlVVpwVNlrxeOnPug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c+LGmMWwpSsLicyUZCJnKPOqxqA6wHkYNCCPodH542JGo0gqRRCJBqkQESXxV+M7JQIDz+b85fVv/Fz5hAqcH9JpKenaue96Nk2uEQmGc/wNop88xd8c9fN+won67whUM4ZEcW4aUz9udiqR2Wqz8nS5cGCX+8WhJnQBrZ0k7v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1n63cWg; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768510337; x=1800046337;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pQQGVRG/NDVNSldCrMgbQd2NvjFlVVpwVNlrxeOnPug=;
+  b=g1n63cWgkjl/yAt/Nw7XGcAoCvDbK+8KGbLrDTrOdQuxRV5YLtiGAibs
+   f+QIJnH8itGMLNagcQ4i9sEU1D3dGFeShwmqVqtBxWx3LQa/kJtjFR4dM
+   NbCKZp0ZMSEXMinisrVP9S7rOewGUbqhPiHp0gNbNBfRWTLmUQ8vczAhi
+   ax3sHf5oujdhk00eo4h2fFjgnO+63LR3W4FS6d/9qV+kcvsQmyl9mih7c
+   99XXW6hiVK2P6EedSjXVDJ2uby6k9frImJMJO7DsrsRgcqkXemYOfGQ8B
+   Nv9ekIH2TSf6ZUO+bv136mFAEE5/lLgyyGbCeR7+KmhcpTdOa0bnwvCgh
+   A==;
+X-CSE-ConnectionGUID: iI+oQB01Tw66uUhDLShA5A==
+X-CSE-MsgGUID: 9QcjnhCkRYuW2Or+Ia7OnQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="72411544"
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="72411544"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 12:52:17 -0800
+X-CSE-ConnectionGUID: tDozUA/lQe+FKS9fq9cx3g==
+X-CSE-MsgGUID: KmJ1BYAsT/GswGHVSqYj+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,229,1763452800"; 
+   d="scan'208";a="204939722"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 15 Jan 2026 12:52:14 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgUKC-00000000Jya-08M7;
+	Thu, 15 Jan 2026 20:52:12 +0000
+Date: Fri, 16 Jan 2026 04:52:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH v4 2/3] genirq: Fixed-delay Global Software Interrupt
+ Moderation (GSIM)
+Message-ID: <202601160402.Z1oBJhge-lkp@intel.com>
+References: <20260115155942.482137-3-lrizzo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3 0/4] mm/hugetlb: fixes for PMD table sharing
- (incl. using mmu_gather)
-To: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
- <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>,
- Oscar Salvador <osalvador@suse.de>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry.yoo@oracle.com>,
- Laurence Oberman <loberman@redhat.com>,
- Prakash Sangappa <prakash.sangappa@oracle.com>,
- Nadav Amit <nadav.amit@gmail.com>
-References: <20251223214037.580860-1-david@kernel.org>
- <fa37f15c-e5a8-4502-ba82-c077ee7b8e5f@lucifer.local>
- <20260115100501.2b956d74aabfe142d37aa608@linux-foundation.org>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
-In-Reply-To: <20260115100501.2b956d74aabfe142d37aa608@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260115155942.482137-3-lrizzo@google.com>
 
-On 1/15/26 19:05, Andrew Morton wrote:
-> On Thu, 15 Jan 2026 17:22:30 +0000 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
-> 
->> Any update on this series? It's a hotfix series and I don't see it queued
->> up anywhere in either mm-hotfixes-unstable or mm-hotfixes-stable, this
->> issue is causing ongoing problems for a lot of people, is there any reason
->> it's being delayed?
->>
->> It's received extensive approval and testing, so should be GTG right?
-> 
-> This has been in mm-unstable for a long time.  As the series had a
-> mixture of cc:stable and not-cc:stable patches, I figured we'd merge
-> them all into next merge window and let the -stable maintainers figure
-> it all out.
-> 
-> As this is more urgent than I believed, we need to figure out what to
-> do.
-> 
-> a) Pluck out the two cc:stable patches, merge just those into 6.19-rc.
-> 
-> b) Merge all of them into 6.19-rc, let -stable maintainers figure it out
+Hi Luigi,
 
-Right. We can just CC: stable on comment fixes #2 and #3 to make 
-back-porting easier.
+kernel test robot noticed the following build warnings:
 
-> 
-> c) Stick with my original plan.
-> 
-> <checks>
-> 
-> The cc:stable "mm/hugetlb: fix excessive IPI broadcasts when unsharing
-> PMD tables using mmu_gather" has dependencies on the preceding two
-> non-cc:stable patches.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.19-rc5]
+[cannot apply to tip/irq/core next-20260115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-At least one of them (doc update), yes.
+url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-Add-flags-for-software-interrupt-moderation/20260116-000808
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260115155942.482137-3-lrizzo%40google.com
+patch subject: [PATCH v4 2/3] genirq: Fixed-delay Global Software Interrupt Moderation (GSIM)
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20260116/202601160402.Z1oBJhge-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260116/202601160402.Z1oBJhge-lkp@intel.com/reproduce)
 
-> 
-> So I'm thinking I add cc:stable to everything and send the whole series
-> into 6.19-rcX.  wdyt?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601160402.Z1oBJhge-lkp@intel.com/
 
-Works for me.
+All warnings (new ones prefixed by >>):
 
-> 
-> 
-> Also, David, where do we stand with
-> 
-> : I'd love to get some generic hugetlb testing on arm64 and powerpc,
-> : that do hugetlb TLB flushing stuff a bit more special.
-> :
-> : I'll try doing some arm64 testing early in the new year myself.
-> 
-> ?
+>> kernel/irq/irq_moderation.c:217: warning: ignoring '#pragma clang diagnostic' [-Wunknown-pragmas]
+     217 | #pragma clang diagnostic error "-Wformat"
 
-Not done yet, unfortunately. (I don't (yet) have easy access to decent 
-arm64 hardware ;) )
 
-I still hope that Jann could quickly have a look, but it's been a while 
-already since I posted v1.
+vim +217 kernel/irq/irq_moderation.c
+
+   216	
+ > 217	#pragma clang diagnostic error "-Wformat"
+   218	
 
 -- 
-Cheers
-
-David
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
