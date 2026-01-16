@@ -1,68 +1,68 @@
-Return-Path: <linux-arch+bounces-15829-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15830-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBCD4D2D6A5
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 08:45:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC4CCD2D7B3
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 08:50:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1A454300793F
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 07:45:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D3D603072F9D
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 07:46:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03C9283FD4;
-	Fri, 16 Jan 2026 07:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC48E2BE647;
+	Fri, 16 Jan 2026 07:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="FDrOs6T2";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qNP1FOxs"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="wcnfFEpF";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OAF90mRX"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B31F1A840A;
-	Fri, 16 Jan 2026 07:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFC7283FE3;
+	Fri, 16 Jan 2026 07:46:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768549527; cv=none; b=ZW+McNICNzGMAWvvUH58oAwt52IzHr9Bubk0Yru+QhOhgvyaesgxoLd5uLCUElJUvOaopdtEhH+ZBf/1HnXsf/eIM0pPztTqj9Nco9fVpZDV9te7/NS0aIO9p9fYGCbFvc1nHdA8oQQ9TjBbllGUQjIbhpIi83Ax7EVIpf8m5wI=
+	t=1768549607; cv=none; b=Xza69MyQso2qZuaWI0YtHjb0aZXCU4N86TwvQoo5uwEW+0OS+ddh52EU/rC55kgZ2KjNHcPt9xdo0xUsJv0RHCEvOoqpac6tKZ3HTDrV/t/DgJf71UF1hkyGW65OnNVBZii6Sjhn6S7vSmBL4/LWpsKV8si5YrU3jxOTa0YiiC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768549527; c=relaxed/simple;
-	bh=NczJXBVMiKn2vKt9LvztTP2m8qqCtdImPLXdFp+ZYE8=;
+	s=arc-20240116; t=1768549607; c=relaxed/simple;
+	bh=RRPZA1AKXR+QnIOWxiGpqY6TTtEeq2Sm6aGzQoR6MpY=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=nPU7QZKB1tgmDygswcpDHS7c6hNNs1rPc+zCWLMhN3m4x/ViTR36tiKcHUNi+2zg4JHvOHu5ECTaCgHWDQfXIh7L+ZK9wLIMAvDcyqT0Quwz9kYpnmVkTIwRwu84zVbXq/96C7wUO1wHxccX24FzJPTnDn6uVUdr+nXffl2iy8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=FDrOs6T2; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qNP1FOxs; arc=none smtp.client-ip=202.12.124.154
+	 Subject:Content-Type; b=XDqTbsPqacA/ujkQ6j1K0Ib+JamkHjjE7Hi1bqy2/OzBZvT8aEfYP+EafeKry8XnlSTm7Y+Fsz02nIMhEZFufH9quh2Pwv0v+Jj60rhb5T8B+ZwIVy1EiOAJXUYeXU+9TlqfJpDbvF40nysp5pyvWdp2+o0c69KrGhZfCVlD5l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=wcnfFEpF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OAF90mRX; arc=none smtp.client-ip=202.12.124.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 30F547A00E9;
-	Fri, 16 Jan 2026 02:45:24 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 1EDFE7A00E9;
+	Fri, 16 Jan 2026 02:46:44 -0500 (EST)
 Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 16 Jan 2026 02:45:24 -0500
+  by phl-compute-04.internal (MEProxy); Fri, 16 Jan 2026 02:46:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1768549524;
-	 x=1768635924; bh=0GY6uW4EfHcjEhKoCKaXl5iPY66LFt+39ly5D/9ZP4o=; b=
-	FDrOs6T2okUPvaN0wZNP8uUzr6pwy/PEQiFr5m1HHyhjEqjL1toNvMdSrIuTwEPh
-	h3BmSIlH+/MJVXn18pbn7HekKfVWZYDUdn5rZVc/4I33EC68jXHNHn9CTLEwGFq6
-	nYn2kzAidSK1ToafLuN6EiQTBx1i8p5UHYpUVyqk4Inoj//pB/JIpPJXDeyQFP6w
-	A9DbEyVuZYa6KWYTkEhWY6OJ1nzF+Q90J50Ye+U1qpvYb02ufZsWrWuSW8Pyqg5H
-	hcLV+W2xgls9MVPJTUGdKDAjcXO7kmLmQ4kpTL8O/3u79jzEeHnGSO4f0MBPIXrt
-	sKtvedsmbHVzZhfRWzZGKQ==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1768549603;
+	 x=1768636003; bh=RRPZA1AKXR+QnIOWxiGpqY6TTtEeq2Sm6aGzQoR6MpY=; b=
+	wcnfFEpFkDnHJO7mLJ49GejGWIsRRMtWiAjahGnA1YOcUg9UTaZHEUvI7GPRFULh
+	cxTcWotkGTgFT46pephLYQ5wIQf/UuCywCrGrJd1UXtPZgsjVuc/wgLBdF5h+C9F
+	VbTENBQrS46jfg95Nw+0EBPWW95eQW4WZALy2xIwVxzRmVFZgrv5gehEXZgDeEfU
+	xwd+FGpca9lpkAnalv8Ixa3mzXxm15E9SJSO5Y2om7mPXSdAu+fVAQEgv1UsVWV7
+	kCZRJm8XtXFQxPSAm+09mJBtWKLXqmq0dzOJRAyjxDqy9biQF4xz0ozBYXkLhwRk
+	UXq/tLyOYKVu4UNDcxMEYg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1768549524; x=
-	1768635924; bh=0GY6uW4EfHcjEhKoCKaXl5iPY66LFt+39ly5D/9ZP4o=; b=q
-	NP1FOxsoc9Z2QgoGozoznTdqYf8LaXUicwh3AgVkXRjmJwp8jWpGzwzT9/V6uCUW
-	JDC0l3C+YY8m4vhXyW8irxFCWpJlkQ10CNF9r/5Jzl9y0od/P8T0JXXG0uZ+AW2c
-	fCLsdxI2sKTcWXpKbO8wL1A84nzNNuNfilEh+A6iciGotTsdFNX0EaV6De4pYeol
-	ZdslrTCRh+rmLlSpZPKKydyzwYN3TVVetofD4M8vLZGScW7rGC/m/YQJb5zVUc6X
-	b+rzubFmxcAQQrtS2Qr4ZrurYbbwErsEmiMsUx94Tiktj12EXZVBdMa444IGx0qT
-	ndnleo3fY1mgiOIj6gw4w==
-X-ME-Sender: <xms:k-xpaWMvFbxulgOWiKV7IOe3BgKXXaNxjGBtT7Wm2-B-morTDpuZVw>
-    <xme:k-xpafzyaoJFZgpPuJ_Bxax2h7e3VYHX2Kzuju248FIlZp6d06_0tU3_HKj94n4gN
-    dCaGhHrwSqZ4gnQgPbE37ALDicEbaoAId63Mlc9JUcRwvXSlzr1JHM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduvdekfeejucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1768549603; x=
+	1768636003; bh=RRPZA1AKXR+QnIOWxiGpqY6TTtEeq2Sm6aGzQoR6MpY=; b=O
+	AF90mRX7Cegpgdpy9ROJJKAF7A5HvxLrPdwe8bSU8FfpKYjFZWA4MypHUbc61qpu
+	jdH1IsaIRqnD9YUYw4TjZqRbX9W1GuxHA2A3cY+YnHt5A3WkoFGjwzTZyJg6UpsJ
+	3Z+r8I2hS/SnAMv8LFCuFtT062ewEY78NnZPAwRs4E3mroPbHn0Q5FZRzO5JjHEM
+	4Rq4/KGyKhSY6edDquaL4s+FzBeBc/Pbl/JsukP5+IOVWxj/iWFjtN431noIWPtX
+	1Pf2xhUFuO9aPAJhKAsstcd2C7QBOFLX5CLdNtt5dOcRrODg5F3DUeQT9opdZXY5
+	9DNUQCy7mPx0w8fGn7qOw==
+X-ME-Sender: <xms:4-xpaTp_K8L4z7eOgDg6XuMv1mAjjuTVX67piSMM2ocr7rgqy6Mr1A>
+    <xme:4-xpaYcb2jETv_k65Byjo-SvCLumMUArokZF5JExtvV5fpN9i84VQPdSwJxCXiC2_
+    GNNGccZaeN3jcahisURFtR07gXcr4yBCXicG1lsYVkrqvLp5qnB0Xw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduvdekfeekucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
     gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
@@ -77,14 +77,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduvdekfeejucetufdote
     ohhrghdprhgtphhtthhopehthhhomhgrshdrfigvihhsshhstghhuhhhsehlihhnuhhtrh
     honhhigidruggvpdhrtghpthhtoheprghgohhruggvvghvsehlihhnuhigrdhisghmrdgt
     ohhmpdhrtghpthhtohepsghorhhnthhrrggvghgvrheslhhinhhugidrihgsmhdrtghomh
-X-ME-Proxy: <xmx:k-xpabmJnGrx9OFLIEqlguE-coLrQa0A8H-gnuXLImzHF8GriskJ9w>
-    <xmx:k-xpaU_eHQhUMf1NmdRqkWMSHTyJp2W09z5UVYp3nvI1aoXerTfzeA>
-    <xmx:k-xpaXNJAmhTPmXZLgWYBQlc3ydOXSZb7vWVGttew9-L0G1XC-31lA>
-    <xmx:k-xpaW81IA1nz-eDzd5yYPlk_K4U2yhyLo380QHse2m5b8gJoU-Y8A>
-    <xmx:lOxpabxzhzCdsLThIc0pdlq3HcwnaynSTYdr6iESGAB2J5gbGNKJx2jV>
+X-ME-Proxy: <xmx:4-xpaaOO7X-I3fVN0KS3Frvdh8TEnKZXo8WEz3JHksShJI7uckeK8w>
+    <xmx:4-xpaaTeYVwAPAS6_2UifJ5usUYSG4gLjX8QRMypsCz8DdJTUxFS8w>
+    <xmx:4-xpaV4oElbVsM1QrCVwmdFzph6ansRj2OfXHX8mP4wD2HF6mGAWEg>
+    <xmx:4-xpadZLY1t9JUd3IVVB1YQQct87ldLWgrNXpCLRJZGoUvGZAEY1rw>
+    <xmx:4-xpaRKq5FPK0mYhMeX_ADiueQs4PTmNBYoHVTbgIGJlCKnsUIkXYoLJ>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 22C50700065; Fri, 16 Jan 2026 02:45:23 -0500 (EST)
+	id 667A9700065; Fri, 16 Jan 2026 02:46:43 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -92,8 +92,8 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A5KQZWxRIPew
-Date: Fri, 16 Jan 2026 08:45:02 +0100
+X-ThreadId: A42RL7jkrr-J
+Date: Fri, 16 Jan 2026 08:46:22 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  "David S . Miller" <davem@davemloft.net>,
@@ -108,38 +108,37 @@ To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  "Sven Schnelle" <svens@linux.ibm.com>
 Cc: sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
  Linux-Arch <linux-arch@vger.kernel.org>, linux-s390@vger.kernel.org
-Message-Id: <7827adb0-b2a8-4809-8f5e-859102600e02@app.fastmail.com>
+Message-Id: <5424652d-3607-4718-b32a-a9591437c133@app.fastmail.com>
 In-Reply-To: 
- <20260116-vdso-compat-checkflags-v1-3-4a83b4fbb0d3@linutronix.de>
+ <20260116-vdso-compat-checkflags-v1-4-4a83b4fbb0d3@linutronix.de>
 References: <20260116-vdso-compat-checkflags-v1-0-4a83b4fbb0d3@linutronix.de>
- <20260116-vdso-compat-checkflags-v1-3-4a83b4fbb0d3@linutronix.de>
-Subject: Re: [PATCH 3/4] s390/vdso: Trim includes in linker script
+ <20260116-vdso-compat-checkflags-v1-4-4a83b4fbb0d3@linutronix.de>
+Subject: Re: [PATCH 4/4] asm-generic/bitsperlong.h: Add sanity checks for
+ __BITS_PER_LONG
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 On Fri, Jan 16, 2026, at 08:40, Thomas Wei=C3=9Fschuh wrote:
-> Some of the included files are unnecessary or too broad.
+> The value of __BITS_PER_LONG from architecture-specific logic should
+> always match the generic one if that is available. It should also match
+> the actual C type 'long'.
 >
-> This is a preparation for a new validation step to validate the
-> consistency of __BITS_PER_LONG. vdso.lds.S may be preprocessed with a
-> 32-bit compiler, but __BITS_PER_LONG is always 64.
+> Mismatches can happen for example when building the compat vDSO. Either
+> during the compilation, see commit 9a6d3ff10f7f ("arm64: uapi: Provide
+> correct __BITS_PER_LONG for the compat vDSO"), or when running sparse
+> when mismatched CHECKFLAGS are inherited from the kernel build.
 >
-> Trim the includes to the necessary ones.
+> Add some consistency checks which detect such issues early and clearly.
+> The tests are added to the UAPI header to make sure it is also used wh=
+en
+> building the vDSO as that is not supposed to use regular kernel header=
+s.
+>
+> The kernel-interal BITS_PER_LONG is not checked as it is derived from
+> CONFIG_64BIT and therefore breaks for the compat vDSO. See the similar,
+> deactivated check in include/asm-generic/bitsperlong.h.
 >
 > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 
 Acked-by: Arnd Bergmann <arnd@arndb.de>
-
-It's certainly a good idea to limit the use of asm/page.h and the
-other headers here.=20
-
-> There are other ways to solve this issue, for example using
-> KBUILD_CPPFLAGS +=3D -m64.
-
-I think we should probably do that as well, especially since my
-kernel.org cross-compilers still default to a 32-bit s390 target
-for historic reasons, but the kernel no longer supports 32-bit
-userland.
-
-    Arnd
 
