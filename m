@@ -1,90 +1,91 @@
-Return-Path: <linux-arch+bounces-15830-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15831-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC4CCD2D7B3
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 08:50:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 054ACD2D855
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 08:53:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D3D603072F9D
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 07:46:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2A67C30B514C
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Jan 2026 07:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC48E2BE647;
-	Fri, 16 Jan 2026 07:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 419022D5950;
+	Fri, 16 Jan 2026 07:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="wcnfFEpF";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OAF90mRX"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="K6vZsm2M";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lOECjkcW"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFC7283FE3;
-	Fri, 16 Jan 2026 07:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD682BE65F;
+	Fri, 16 Jan 2026 07:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768549607; cv=none; b=Xza69MyQso2qZuaWI0YtHjb0aZXCU4N86TwvQoo5uwEW+0OS+ddh52EU/rC55kgZ2KjNHcPt9xdo0xUsJv0RHCEvOoqpac6tKZ3HTDrV/t/DgJf71UF1hkyGW65OnNVBZii6Sjhn6S7vSmBL4/LWpsKV8si5YrU3jxOTa0YiiC0=
+	t=1768549777; cv=none; b=k6GcGnMLuM4mRgpGiCngSE4FT5CJvamUYvAjo1SB7WFRm64Wylf44HWqZfHHHWTR6ueXvXIWkrgdtljPCBfmdQMun3kMADl6GWS/oqGq7Uh6Ej5J+VFX+vQp7wLORe1d7/TcfX001SQeCnyGjdvnKK2EgvPzRLSxlo1uGfqppnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768549607; c=relaxed/simple;
-	bh=RRPZA1AKXR+QnIOWxiGpqY6TTtEeq2Sm6aGzQoR6MpY=;
+	s=arc-20240116; t=1768549777; c=relaxed/simple;
+	bh=RXWDqAdLZcTJvhwatSusU4vt75Aax8tkKS2QqboMI1w=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=XDqTbsPqacA/ujkQ6j1K0Ib+JamkHjjE7Hi1bqy2/OzBZvT8aEfYP+EafeKry8XnlSTm7Y+Fsz02nIMhEZFufH9quh2Pwv0v+Jj60rhb5T8B+ZwIVy1EiOAJXUYeXU+9TlqfJpDbvF40nysp5pyvWdp2+o0c69KrGhZfCVlD5l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=wcnfFEpF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OAF90mRX; arc=none smtp.client-ip=202.12.124.154
+	 Subject:Content-Type; b=do5VCaWYFb/AWnRyv9FB0zC8YyZlHXKnfnjSJlyGin2Y0tU9eSZ+bMpWixQKyi7BQtLzkRiPXzFb/w6gvZKBmMmq42skBgT/cPTgBCS5+C56E1eImXsfRBMX2I170tZovRuBwy0dnvDIChDNX1YkmXg9O4L0Ho/gttGRLUsCMn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=K6vZsm2M; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lOECjkcW; arc=none smtp.client-ip=202.12.124.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 1EDFE7A00E9;
-	Fri, 16 Jan 2026 02:46:44 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 977507A005A;
+	Fri, 16 Jan 2026 02:49:34 -0500 (EST)
 Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 16 Jan 2026 02:46:44 -0500
+  by phl-compute-04.internal (MEProxy); Fri, 16 Jan 2026 02:49:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1768549603;
-	 x=1768636003; bh=RRPZA1AKXR+QnIOWxiGpqY6TTtEeq2Sm6aGzQoR6MpY=; b=
-	wcnfFEpFkDnHJO7mLJ49GejGWIsRRMtWiAjahGnA1YOcUg9UTaZHEUvI7GPRFULh
-	cxTcWotkGTgFT46pephLYQ5wIQf/UuCywCrGrJd1UXtPZgsjVuc/wgLBdF5h+C9F
-	VbTENBQrS46jfg95Nw+0EBPWW95eQW4WZALy2xIwVxzRmVFZgrv5gehEXZgDeEfU
-	xwd+FGpca9lpkAnalv8Ixa3mzXxm15E9SJSO5Y2om7mPXSdAu+fVAQEgv1UsVWV7
-	kCZRJm8XtXFQxPSAm+09mJBtWKLXqmq0dzOJRAyjxDqy9biQF4xz0ozBYXkLhwRk
-	UXq/tLyOYKVu4UNDcxMEYg==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1768549774;
+	 x=1768636174; bh=OOEkW/VVyRuMfIofkXVsoE3+Qr35ltML1K9ZLShVqr8=; b=
+	K6vZsm2MbIqr3DB2dYYMciazteFY5vjiccg3cSGFwqz1kZdDPHyqVytCnjn0qqKC
+	oiocStSV74eoOwp2PP565PZoBFACh3vcL2obRBZfE122qomhBsGGXOInvLpyd+Fr
+	0+TNgN+jKlGwTqruDEapykbEZ8nUEQ2vEI+HuMj7n0IrxcvpXCdxlmHCyLQf2oix
+	nxUq6bwxTwN1IfMd3I5Z0vij0IOWgeiqnzJJ5L+kjt3A5BGU/4f0kRUTPcZsuDnX
+	oUxagOTDSugbUfAGCKiWau52LVqjQQTlNymoPQe3TkkflSsK9yh6+9DOVMhAKeLc
+	ZpnC1jUHZdxHQfrDwdF3Vw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1768549603; x=
-	1768636003; bh=RRPZA1AKXR+QnIOWxiGpqY6TTtEeq2Sm6aGzQoR6MpY=; b=O
-	AF90mRX7Cegpgdpy9ROJJKAF7A5HvxLrPdwe8bSU8FfpKYjFZWA4MypHUbc61qpu
-	jdH1IsaIRqnD9YUYw4TjZqRbX9W1GuxHA2A3cY+YnHt5A3WkoFGjwzTZyJg6UpsJ
-	3Z+r8I2hS/SnAMv8LFCuFtT062ewEY78NnZPAwRs4E3mroPbHn0Q5FZRzO5JjHEM
-	4Rq4/KGyKhSY6edDquaL4s+FzBeBc/Pbl/JsukP5+IOVWxj/iWFjtN431noIWPtX
-	1Pf2xhUFuO9aPAJhKAsstcd2C7QBOFLX5CLdNtt5dOcRrODg5F3DUeQT9opdZXY5
-	9DNUQCy7mPx0w8fGn7qOw==
-X-ME-Sender: <xms:4-xpaTp_K8L4z7eOgDg6XuMv1mAjjuTVX67piSMM2ocr7rgqy6Mr1A>
-    <xme:4-xpaYcb2jETv_k65Byjo-SvCLumMUArokZF5JExtvV5fpN9i84VQPdSwJxCXiC2_
-    GNNGccZaeN3jcahisURFtR07gXcr4yBCXicG1lsYVkrqvLp5qnB0Xw>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1768549774; x=
+	1768636174; bh=OOEkW/VVyRuMfIofkXVsoE3+Qr35ltML1K9ZLShVqr8=; b=l
+	OECjkcW0aucX+ZH4nLmKrTCMjRAALMwlLwo1Rp+08IFI5r/gtPMvknr2ygL616da
+	hYi8N+U0k9f9/p4sm/iCG2vzt0SXkqbdYgorcGy2P0ozh9WEvaeGJa8XvldzZXj9
+	LG0vr0aw64rAq72C7q2PHVO4U+XeTKSRaob6My/rHKWbsI3LN7DFNLCHxFrKP3DS
+	D9qXkWYIkVBwF33ovZonJd1ktxuIEvzDcsN/P0BfZ7xJDlV0LxoHJQm9fUtWXPec
+	f7Mic8BoF9nJek6M04wMpqVg0V+u5tt1vpUvYKlxWaLguW7pmSZZY6OP92EfZ1Sz
+	MvsO/dNCuzXNaho70QPcw==
+X-ME-Sender: <xms:je1paT5ATetf8sSBFyfB-1s_03Rf7JXa2V8h0ev74jRshd4jyZoIzw>
+    <xme:je1paTviUnAE8ecWzIA9AjQQQ2vfLPEc6nMsDbO1nZbxn5KtsVaSLSxdF9JG61fxf
+    batqLiCeXluPVOTMCTIgImM10GuVFohDRmVFTRwpJHyhKU5hWNvVhw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduvdekfeekucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
     gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
     uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudelpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopegurghvvghmse
-    gurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoheprghnughrvggrshesghgrihhslhgv
-    rhdrtghomhdprhgtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    epthhglhigsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeigkeeisehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehthhhomhgrshdrfigvihhsshhstghhuhhhsehlihhnuhhtrh
-    honhhigidruggvpdhrtghpthhtoheprghgohhruggvvghvsehlihhnuhigrdhisghmrdgt
-    ohhmpdhrtghpthhtohepsghorhhnthhrrggvghgvrheslhhinhhugidrihgsmhdrtghomh
-X-ME-Proxy: <xmx:4-xpaaOO7X-I3fVN0KS3Frvdh8TEnKZXo8WEz3JHksShJI7uckeK8w>
-    <xmx:4-xpaaTeYVwAPAS6_2UifJ5usUYSG4gLjX8QRMypsCz8DdJTUxFS8w>
-    <xmx:4-xpaV4oElbVsM1QrCVwmdFzph6ansRj2OfXHX8mP4wD2HF6mGAWEg>
-    <xmx:4-xpadZLY1t9JUd3IVVB1YQQct87ldLWgrNXpCLRJZGoUvGZAEY1rw>
-    <xmx:4-xpaRKq5FPK0mYhMeX_ADiueQs4PTmNBYoHVTbgIGJlCKnsUIkXYoLJ>
+    hrnhepkedvuefhiedtueeijeevtdeiieejfeelvefffeelkeeiteejffdvkefgteeuhffg
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
+    phhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivg
+    hnkedruggvpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgt
+    phhtthhopegrnhgurhgvrghssehgrghishhlvghrrdgtohhmpdhrtghpthhtohepshhunh
+    drjhhirghnrdhkuggvvhesghhmrghilhdrtghomhdprhgtphhtthhopehluhhtoheskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehthhhomhgrshdrfigv
+    ihhsshhstghhuhhhsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheprghgohhrug
+    gvvghvsehlihhnuhigrdhisghmrdgtohhm
+X-ME-Proxy: <xmx:ju1paXoiO0IaRrOcA3KG3P7TgEILUCdR9YP8wLQU6nHMmy-c0dRkZw>
+    <xmx:ju1pae2g1_7EgaExIZKp7PwQB31Hn2TRiOl4pv2kvadh3YVBhcPGZg>
+    <xmx:ju1paYvrlxSq1QXO4qZ9o9llJr2RyGQbPXyILGHGHezUopV2F11JhA>
+    <xmx:ju1paXEzOwaQFUvMDZaO2vowr_Kzhxlzq5I34y7FUyEbJo3E4iteNA>
+    <xmx:ju1paWhmhOGl8Nj5M8j45VRKOEdHJc1kpjXALJAc5jGrzqJ93i9Igjds>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 667A9700065; Fri, 16 Jan 2026 02:46:43 -0500 (EST)
+	id E327A700065; Fri, 16 Jan 2026 02:49:33 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -92,8 +93,8 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A42RL7jkrr-J
-Date: Fri, 16 Jan 2026 08:46:22 +0100
+X-ThreadId: A0bkllDka2_o
+Date: Fri, 16 Jan 2026 08:49:12 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  "David S . Miller" <davem@davemloft.net>,
@@ -107,38 +108,40 @@ To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  "Christian Borntraeger" <borntraeger@linux.ibm.com>,
  "Sven Schnelle" <svens@linux.ibm.com>
 Cc: sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-s390@vger.kernel.org
-Message-Id: <5424652d-3607-4718-b32a-a9591437c133@app.fastmail.com>
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-s390@vger.kernel.org,
+ "Sun Jian" <sun.jian.kdev@gmail.com>
+Message-Id: <edeb782d-f413-48e6-b6b5-36961aacfcdd@app.fastmail.com>
 In-Reply-To: 
- <20260116-vdso-compat-checkflags-v1-4-4a83b4fbb0d3@linutronix.de>
+ <20260116-vdso-compat-checkflags-v1-2-4a83b4fbb0d3@linutronix.de>
 References: <20260116-vdso-compat-checkflags-v1-0-4a83b4fbb0d3@linutronix.de>
- <20260116-vdso-compat-checkflags-v1-4-4a83b4fbb0d3@linutronix.de>
-Subject: Re: [PATCH 4/4] asm-generic/bitsperlong.h: Add sanity checks for
- __BITS_PER_LONG
+ <20260116-vdso-compat-checkflags-v1-2-4a83b4fbb0d3@linutronix.de>
+Subject: Re: [PATCH 2/4] x86/vdso: Use 32-bit CHECKFLAGS for compat vDSO
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 On Fri, Jan 16, 2026, at 08:40, Thomas Wei=C3=9Fschuh wrote:
-> The value of __BITS_PER_LONG from architecture-specific logic should
-> always match the generic one if that is available. It should also match
-> the actual C type 'long'.
+> When building the compat vDSO the CHECKFLAGS from the 64-bit kernel
+> are used. These are combined with the 32-bit CFLAGS. This confuses
+> sparse, producing false-positive warnings or potentially missing
+> real issues.
 >
-> Mismatches can happen for example when building the compat vDSO. Either
-> during the compilation, see commit 9a6d3ff10f7f ("arm64: uapi: Provide
-> correct __BITS_PER_LONG for the compat vDSO"), or when running sparse
-> when mismatched CHECKFLAGS are inherited from the kernel build.
+> Manually override the CHECKFLAGS for the compat vDSO with the correct
+> 32-bit configuration.
 >
-> Add some consistency checks which detect such issues early and clearly.
-> The tests are added to the UAPI header to make sure it is also used wh=
-en
-> building the vDSO as that is not supposed to use regular kernel header=
-s.
->
-> The kernel-interal BITS_PER_LONG is not checked as it is derived from
-> CONFIG_64BIT and therefore breaks for the compat vDSO. See the similar,
-> deactivated check in include/asm-generic/bitsperlong.h.
->
+> Reported-by: Sun Jian <sun.jian.kdev@gmail.com>
+> Closes:=20
+> https://lore.kernel.org/lkml/20260114084529.1676356-1-sun.jian.kdev@gm=
+ail.com/
 > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 
 Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+> +CHECKFLAGS_32 :=3D $(CHECKFLAGS) -U__x86_64__ -D__i386__ -m32
+> +
+>  $(obj)/vdso32.so.dbg: KBUILD_CFLAGS =3D $(KBUILD_CFLAGS_32)
+> +$(obj)/vdso32.so.dbg: CHECKFLAGS =3D $(CHECKFLAGS_32)
+
+Have you checked if something like this is needed for x32 as well?
+
+     Arnd
 
