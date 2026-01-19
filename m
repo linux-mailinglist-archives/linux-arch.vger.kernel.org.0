@@ -1,101 +1,143 @@
-Return-Path: <linux-arch+bounces-15869-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15871-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72DD7D3AF31
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 16:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01C58D3AF51
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 16:40:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 974B83037522
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 15:34:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 02B7C30424B2
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 15:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD2B38A9B3;
-	Mon, 19 Jan 2026 15:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22FFF38A9B3;
+	Mon, 19 Jan 2026 15:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="VwZi4id+"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IxFzXmDT";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aLyl2rfo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9CC358D16;
-	Mon, 19 Jan 2026 15:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A0438B9AC;
+	Mon, 19 Jan 2026 15:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768836867; cv=none; b=jOLUKAqn2j2xQVkF2whaFJzvmF/cHE4eTV1K3z3F6r+bZjpeKwpar9LgoxL1IaUPPu3y2gh0aFUYELIJ/uxwofponPoqcdQchSc42vocA+ZVghceKxwTu0T0EEzKYCKx+kmP8FtgV5ZUGDN5762z+spV8YNRRV4Kbv/12HsbVWs=
+	t=1768837180; cv=none; b=oPImTpAEe4xBr81d+JKun8ereyHc8cU3ZfCmZBD5Rvfj6/zLCeLGyCn9LbfnbHVaYnYVVZjkHMYkf7vx8SyZ0U1iM6UCZmJza+jc5uU4gbbflHFx1hstNidLRxeKTeS0E/DDmMlWNkVfEoX0K0tZFc5O7hQFZeXc2zNjudLhoyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768836867; c=relaxed/simple;
-	bh=NcKInReWm5YQxR5FryyX76yerQYcqrt3nalDSXS7vBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MRJwhoSX3lTaJ/2ovVtppuNfsitMknigqMQtwQ0bQMQ/JdhTXNaZME7QZ01SY0I1fq4Z6MFFTLnrV784g9bVoa4qXVbpwmcSB4teW5tHYBFk5wFYdlK33nkJS0PaWNhzJLlLp2coGFg4LrkfvDuAsuYsskq2Mm36AD3jLKm15EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=VwZi4id+; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [IPV6:2601:646:8081:9483:13a:c452:d5de:4aa7] ([IPv6:2601:646:8081:9483:13a:c452:d5de:4aa7])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 60JFXJwl2977448
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 19 Jan 2026 07:33:46 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 60JFXJwl2977448
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025122301; t=1768836827;
-	bh=6Jcq5LWRqtEvNJV1i0+wD6XGL3eXImUE64L1x29/M2U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VwZi4id+fnAbs5zreO9+d/I5WlNsEfKdh+0/RnPRwMXBng52tcxyLeTf38eRFaQt8
-	 JDYkx6GywQc0Lb/b8iA2gfJDB0lczV+AESHoJcuD6yyx/CbAe+W+V/UsRm0fR0pg6m
-	 W0T31rKyJuiDU7iFIvQjMlwBMd3HXNK7vbS7NehIfpiDG3l8xFavNlrLdRqFsFC3qK
-	 CyBMNkbOUuU6MTc39nVdhCkyXQfrgCKboVhDUXMJ5zRvYYx35xXww7kRPjYp1+kcO6
-	 kHycRWQqsBvLXygO2I2A3XOR0nGFrjUgOKguNBMdwN0LLhL7d8Zj7FhJuTaYi8xEB2
-	 OgHtq0Flg2iCw==
-Message-ID: <8deae27e-1e9f-4bc0-8d60-0173cf92942f@zytor.com>
-Date: Mon, 19 Jan 2026 07:33:30 -0800
+	s=arc-20240116; t=1768837180; c=relaxed/simple;
+	bh=ZtTM7XywD17Kq9z/oenOTpYd/xCRaoEx2A7YFQ/Mseo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LpLz0Ad2qmrZI8WclFXSoklzvYip7ehJI+rLhUrctNGgVzZDnqaNjBPLill9nriRanjRmGJjPGgryCoLoyltM9ytE/WRVSWpCWti6SHmZX4veYAZK07bY8qxNQokRN3A7fE39VhdL0Pt6ZTCUio1c0y4ZGOq3rokbkS52cONGlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IxFzXmDT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aLyl2rfo; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 19 Jan 2026 16:39:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768837168;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lBvULJqnuv7uvt9fLS88PIQT8UUaxuVf0OpoQDeZ0Vw=;
+	b=IxFzXmDTuBIJRGCzNcRgN5bl4aOBI8HwUlPEQsyfJU8b8zcEq0t8cccubuAEPAf6bYsy9S
+	Nsjm3ibutfHtB+vEl/+V1pggRtGRWM/C0m1Bffa7TtPKCqCYnJoHg+TmpTSx3kJpl4lAnF
+	bKuxARYAESaFNVqqd95P1Em0sXPsREwTivB6A9s8PD71Rwurqqe3L1u6mzIlnf9j7GC1Gg
+	+PJQ3fNUPh26Hcd7o3lwgAYkteCWhUQwQ5U37Cibxq8+arupj6AFBzYaU47zdGzA1M++Ie
+	mktExse8AhG5yKwEUBSbwVnoQiQPi0uQt4wfDVa1HUWpCJ/UtPlGLZlU/FZEMQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768837168;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lBvULJqnuv7uvt9fLS88PIQT8UUaxuVf0OpoQDeZ0Vw=;
+	b=aLyl2rfoZy61c0skMmX873VleeF3BX55HG83wwoGxFslNP2FIw6YihHxHMLI0Lg8N1RgVh
+	pyPdFoRRMK0MwcBA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 4/4] asm-generic/bitsperlong.h: Add sanity checks for
+ __BITS_PER_LONG
+Message-ID: <20260119163559-b20b14d7-56ca-4f17-8800-83f618d778b8@linutronix.de>
+References: <20260116-vdso-compat-checkflags-v1-0-4a83b4fbb0d3@linutronix.de>
+ <20260116-vdso-compat-checkflags-v1-4-4a83b4fbb0d3@linutronix.de>
+ <1a77fda4-3cf6-4c19-aa36-b5f0e305b313@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] x86/vdso: Use 32-bit CHECKFLAGS for compat vDSO
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-        Thomas Gleixner <tglx@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev
- <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-s390@vger.kernel.org, Sun Jian <sun.jian.kdev@gmail.com>
-References: <20260116-vdso-compat-checkflags-v1-0-4a83b4fbb0d3@linutronix.de>
- <20260116-vdso-compat-checkflags-v1-2-4a83b4fbb0d3@linutronix.de>
- <87bjir3nfy.ffs@tglx>
- <20260119081917-f47ff5da-4465-4b3e-8c94-42b96c932583@linutronix.de>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20260119081917-f47ff5da-4465-4b3e-8c94-42b96c932583@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <1a77fda4-3cf6-4c19-aa36-b5f0e305b313@zytor.com>
 
-On 2026-01-18 23:20, Thomas Wei√üschuh wrote:
-> On Sat, Jan 17, 2026 at 11:05:05PM +0100, Thomas Gleixner wrote:
->> On Fri, Jan 16 2026 at 08:40, Thomas Wei√üschuh wrote:
->>> Manually override the CHECKFLAGS for the compat vDSO with the correct
->>> 32-bit configuration.
->>
->> Fun. I just fixed the same thing half an hour ago:
->>
->>    https://lore.kernel.org/lkml/20260117215542.342638347@kernel.org/
+On Mon, Jan 19, 2026 at 07:33:13AM -0800, H. Peter Anvin wrote:
+> On 2026-01-15 23:40, Thomas Weiﬂschuh wrote:
+> > The value of __BITS_PER_LONG from architecture-specific logic should
+> > always match the generic one if that is available. It should also match
+> > the actual C type 'long'.
+> > 
+> > Mismatches can happen for example when building the compat vDSO. Either
+> > during the compilation, see commit 9a6d3ff10f7f ("arm64: uapi: Provide
+> > correct __BITS_PER_LONG for the compat vDSO"), or when running sparse
+> > when mismatched CHECKFLAGS are inherited from the kernel build.
+> > 
+> > Add some consistency checks which detect such issues early and clearly.
+> > The tests are added to the UAPI header to make sure it is also used when
+> > building the vDSO as that is not supposed to use regular kernel headers.
+> > 
+> > The kernel-interal BITS_PER_LONG is not checked as it is derived from
+> > CONFIG_64BIT and therefore breaks for the compat vDSO. See the similar,
+> > deactivated check in include/asm-generic/bitsperlong.h.
+> > 
+> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> > ---
+> >  include/uapi/asm-generic/bitsperlong.h | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/include/uapi/asm-generic/bitsperlong.h b/include/uapi/asm-generic/bitsperlong.h
+> > index fadb3f857f28..9d762097ae0c 100644
+> > --- a/include/uapi/asm-generic/bitsperlong.h
+> > +++ b/include/uapi/asm-generic/bitsperlong.h
+> > @@ -28,4 +28,18 @@
+> >  #define __BITS_PER_LONG_LONG 64
+> >  #endif
+> >  
+> > +/* Consistency checks */
+> > +#ifdef __KERNEL__
+> > +#if defined(__CHAR_BIT__) && defined(__SIZEOF_LONG__)
+> > +#if __BITS_PER_LONG != (__CHAR_BIT__ * __SIZEOF_LONG__)
+> > +#error Inconsistent word size. Check uapi/asm/bitsperlong.h
+> > +#endif
+> > +#endif
+> > +
+> > +#ifndef __ASSEMBLER__
+> > +_Static_assert(sizeof(long) * 8 == __BITS_PER_LONG,
+> > +	       "Inconsistent word size. Check uapi/asm/bitsperlong.h");
+> > +#endif
+> > +#endif /* __KERNEL__ */
+> > +
+> >  #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
+> > 
 > 
-> Assuming you are going to apply your patches bevore, can I respin my
-> remaining patches on top of tip/x86/entry?
-> 
+> Do we actually support any compilers which *don't* define __SIZEOF_LONG__?
 
-Please do.
+When building the kernel not. I used this pattern because it is used
+further up in the file. There it makes sense as it is actually a userspace
+header which needs to support all kinds of compilers.
+But this new check is gated behind __KERNEL__ anyways...
+For the next revision I will move it into the regular kernel-internal
+bitsperlong.h. That will be less confusing and still handle the vDSO build,
+due to the way our header hierarchy works.
 
-	-hpa
 
+Thomas
 
