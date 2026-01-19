@@ -1,167 +1,132 @@
-Return-Path: <linux-arch+bounces-15862-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15863-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83C77D3A5F4
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 11:56:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7C88D3A615
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 12:03:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3121B300F70A
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 10:56:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E748C3003869
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Jan 2026 11:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149D7306486;
-	Mon, 19 Jan 2026 10:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86DD034B40A;
+	Mon, 19 Jan 2026 11:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nBtopyHM";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="u7K9TASj"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K8+lHblW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E501EE00A;
-	Mon, 19 Jan 2026 10:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09709500945;
+	Mon, 19 Jan 2026 11:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768820196; cv=none; b=Yrc2ZaboMfFlvWxPuvJIYBkYQdad0708mtl42kjv9ydZ1nY7th1fLjabKxg0UCUB2VT2l/Qz/8r7WgNdSX1tiuWGcLSDP3B5o5Co5NdOK35wmH1WfVhY8mKE7LAysKs937hbL4k7aoZApg1dfOLP2aPAyz1nYeO2PCJib+938Ng=
+	t=1768820597; cv=none; b=IrWWJPl4h2asl4XBgj3S+MpppKIxwgEt42k+bgG3fJ+WykGQECn7YBpVvjcS80g0O3VFLHJtYHOx0Vjf2sT01WshBiQYVp+3cBnceLgQ3OYwjIS1DdmZsqbdkEQacIghpFP71ePtMcVPAWQgxt6X2sAKd8lXxVkfooDwM8eBl48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768820196; c=relaxed/simple;
-	bh=Qe36xxsayxzili9KvOuan72oG60zGsm7wCxbTI+pONE=;
+	s=arc-20240116; t=1768820597; c=relaxed/simple;
+	bh=oHhAzJ9k2cnwf80n9xr3pxihMkMNz1m49Y/Haq4Kaao=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dCbIUKF+Thae1c8BLLGOucfyO1T+lTwJ2lknS2aO/BAscFY0kqiRswUkbESciGu9vAm7q9wiMguBCnDZpvTgc00wbbcr58sJBLEuCPSA5d4amhg3qx9EISFelduYpkG7F3p3uViVUHzjmEfC6B9P67dsAtFJGisNRw4b5H8wI8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nBtopyHM; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=u7K9TASj; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 19 Jan 2026 11:56:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768820193;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=US981aT1yOWgtxQBdKHnIdawJA/x+KBeaYSqijIuhE8=;
-	b=nBtopyHMca4CWnNPtxDaHWzRTIdVDSukcOGB7SmXaZmQjoPjBpxFiiGScGdP4oufflGS79
-	DXQ3alypPSNrp0K4OdjMOMyJLtDIt7pQj823TxvOt9KfIufPoYXmlIyPup8SQ2cymcIbp4
-	tajj/QKjzQ8YBJDk+JBojjF1JO3Z3aIKLArD9nQ/UN1SmC+TM30LeUCOBiYPsmk4UKZS+d
-	GWPatq1MOJJ4ZbFGUFpiV542DSUtxAmEMPJM7Swz+R5wUi/KGSggUCSsIF9xL0iJfYVww0
-	BeTlfZUmSVU6+XeGdO33litM4b299u8wItMpIhuVO0cIjkE9Mx+Wg0i7RE9lAA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768820193;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=US981aT1yOWgtxQBdKHnIdawJA/x+KBeaYSqijIuhE8=;
-	b=u7K9TASj3v7TkS74Pata02ESy9TL0w6e4KlWv/yylOtf0M7czd+Lv9bGa46LYNgzsvKLKz
-	jlEzqhxT6/Tny6Bw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, sparclinux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 4/4] asm-generic/bitsperlong.h: Add sanity checks for
- __BITS_PER_LONG
-Message-ID: <20260119114526-a15e7172-fc4c-40d0-a651-7c4a21acb1c8@linutronix.de>
-References: <20260116-vdso-compat-checkflags-v1-0-4a83b4fbb0d3@linutronix.de>
- <20260116-vdso-compat-checkflags-v1-4-4a83b4fbb0d3@linutronix.de>
- <20260119100619.479bcff3@pumpkin>
- <20260119111037-4decf57f-2094-4fac-bcf4-03506791b197@linutronix.de>
- <20260119103758.3afb5927@pumpkin>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mS0QpCUPssQEMpHa6uL4ZynuECZ1BnqqYSXEGh2K8FzvK6ojTkFnlUHBb32ayjgTobeMn0fvWLBxA5HbP8HCZypci3D6NeVuqnf70UXm6f39yEgAi/WvTJRlK1SryiTKNMyvF+ziNVVLAWy9s1jvLfk9bt8njJcfJneZA1XY+iE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=K8+lHblW; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=oeHBFU0GkIX6vG9jw2jkXaJrpWeVtW6WJz1I7haTmWw=; b=K8+lHblW7ZtRPazX/mJzFBpuqN
+	+GD8EuBwsbh7wCLLmBXt1Of99PjHertDhB/k1zDLxslf0g0WFf3sCUxD3CFPhTQ4oXrj/b7n3/AES
+	HmFD07Hx4MZBLH5Bx+1BQDdO2Dpn7ZDuENKGEbcdnO3plUlI7fWL6gKMbKtubAqs/Pz0ZsJGAw307
+	JT6NgKz2AvHDXaIfIQ6KijELpx+y58meeFnn1FjzeZYNAjufnNkcRea6KjfdSkp+6D82UgCaqggqX
+	6pQI1lmmAfn+KN0sWkB80SbFi4831W2yZ9w4Z1Jw8ghj1F9HNwjjIBlQUwQuW7AUpggiEDMSQSAsR
+	ZCG+QkIw==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vhn2E-0000000BvAH-1Sr3;
+	Mon, 19 Jan 2026 11:03:02 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 47D143006CD; Mon, 19 Jan 2026 12:03:00 +0100 (CET)
+Date: Mon, 19 Jan 2026 12:03:00 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Florian Weimer <fweimer@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+	Prakash Sangappa <prakash.sangappa@oracle.com>,
+	Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ron Geva <rongevarg@gmail.com>, Waiman Long <longman@redhat.com>,
+	"carlos@redhat.com" <carlos@redhat.com>,
+	Michael Jeanson <mjeanson@efficios.com>
+Subject: Re: [patch V6 01/11] rseq: Add fields and constants for time slice
+ extension
+Message-ID: <20260119110300.GR830755@noisy.programming.kicks-ass.net>
+References: <20251215155615.870031952@linutronix.de>
+ <20251215155708.669472597@linutronix.de>
+ <d97944e3-e5f3-4d7e-83ac-89ddd6a4cb64@efficios.com>
+ <87jyyjbclh.ffs@tglx>
+ <225b9868-4ab7-4a90-8acb-8d965626f6a7@efficios.com>
+ <87ldi4gjm3.ffs@tglx>
+ <lhua4yhcc0d.fsf@oldenburg.str.redhat.com>
+ <45fd706a-86be-42b8-879e-11bbe262e159@efficios.com>
+ <20260119102138.GQ830755@noisy.programming.kicks-ass.net>
+ <5d2f428d-4fdc-486d-90e1-474f3ee9f54f@efficios.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260119103758.3afb5927@pumpkin>
+In-Reply-To: <5d2f428d-4fdc-486d-90e1-474f3ee9f54f@efficios.com>
 
-On Mon, Jan 19, 2026 at 10:37:58AM +0000, David Laight wrote:
-> On Mon, 19 Jan 2026 11:13:08 +0100
-> Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de> wrote:
-> 
-> > On Mon, Jan 19, 2026 at 10:06:19AM +0000, David Laight wrote:
-> > > On Fri, 16 Jan 2026 08:40:27 +0100
-> > > Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de> wrote:
-> > >   
-> > > > The value of __BITS_PER_LONG from architecture-specific logic should
-> > > > always match the generic one if that is available. It should also match
-> > > > the actual C type 'long'.
-> > > > 
-> > > > Mismatches can happen for example when building the compat vDSO. Either
-> > > > during the compilation, see commit 9a6d3ff10f7f ("arm64: uapi: Provide
-> > > > correct __BITS_PER_LONG for the compat vDSO"), or when running sparse
-> > > > when mismatched CHECKFLAGS are inherited from the kernel build.
-> > > > 
-> > > > Add some consistency checks which detect such issues early and clearly.
-> > > > The tests are added to the UAPI header to make sure it is also used when
-> > > > building the vDSO as that is not supposed to use regular kernel headers.
-> > > > 
-> > > > The kernel-interal BITS_PER_LONG is not checked as it is derived from
-> > > > CONFIG_64BIT and therefore breaks for the compat vDSO. See the similar,
-> > > > deactivated check in include/asm-generic/bitsperlong.h.
-> > > > 
-> > > > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > > > ---
-> > > >  include/uapi/asm-generic/bitsperlong.h | 14 ++++++++++++++
-> > > >  1 file changed, 14 insertions(+)
-> > > > 
-> > > > diff --git a/include/uapi/asm-generic/bitsperlong.h b/include/uapi/asm-generic/bitsperlong.h
-> > > > index fadb3f857f28..9d762097ae0c 100644
-> > > > --- a/include/uapi/asm-generic/bitsperlong.h
-> > > > +++ b/include/uapi/asm-generic/bitsperlong.h
-> > > > @@ -28,4 +28,18 @@
-> > > >  #define __BITS_PER_LONG_LONG 64
-> > > >  #endif
-> > > >  
-> > > > +/* Consistency checks */
-> > > > +#ifdef __KERNEL__
-> > > > +#if defined(__CHAR_BIT__) && defined(__SIZEOF_LONG__)
-> > > > +#if __BITS_PER_LONG != (__CHAR_BIT__ * __SIZEOF_LONG__)
-> > > > +#error Inconsistent word size. Check uapi/asm/bitsperlong.h
-> > > > +#endif
-> > > > +#endif
-> > > > +
-> > > > +#ifndef __ASSEMBLER__
-> > > > +_Static_assert(sizeof(long) * 8 == __BITS_PER_LONG,
-> > > > +	       "Inconsistent word size. Check uapi/asm/bitsperlong.h");  
-> > > 
-> > > nak...
-> > > 
-> > > You can't assume the compiler has _Static_assert().
-> > > All the ones that do probably define __SIZEOF_LONG__.
-> > > You could use something 'old-school' like:
-> > > typedef char __inconsistent_long_size[1 - 2 * (sizeof(long) * 8 != __BITS_PER_LONG))];  
+On Mon, Jan 19, 2026 at 11:30:53AM +0100, Mathieu Desnoyers wrote:
+> On 2026-01-19 05:21, Peter Zijlstra wrote:
+> > On Sat, Jan 17, 2026 at 05:16:16PM +0100, Mathieu Desnoyers wrote:
 > > 
-> > This is only used when building the kernel, it never actually reaches
-> > userspace. And all supported compilers for the kernel do have _Static_assert().
-> > As indicated by other users of _Static_assert() we have elsewhere in the tree.
+> > > My main concern is about the overhead of added system calls at thread
+> > > creation. I recall that doing an additional rseq system call at thread
+> > > creation was analyzed thoroughly for performance regressions at the
+> > > libc level. I would not want to start requiring libc to issue a
+> > > handful of additional prctl system calls per thread creation for no good
+> > > reason.
+> > 
+> > A wee something like so?
+> > 
+> > That would allow registering rseq with RSEQ_FLAG_SLICE_EXT_DEFAULT_ON
+> > set and if all the stars align, it will then have it on at the end.
 > 
-> Don't you need a check that it isn't wrong on a user system?
-> Which is what I thought it was doing.
-
-Not really. The overrides defined by arch/*/include/uapi/asm/bitsperlong.h are
-being tested here. If they work in the kernel build I assume they also work
-in userspace.
-
-> The earlier check can also just be:
+> That's a very good step in the right direction. I just wonder how
+> userspace is expected to learn that it runs on a kernel which
+> accepts the RSEQ_FLAG_SLICE_EXT_DEFAULT_ON flag ?
 > 
-> #if defined(__SIZEOF_LONG__) && __BITS_PER_LONG != 8 * __SIZEOF_LONG__
-> #error Inconsistent word size. Check uapi/asm/bitsperlong.h
-> #endif
+> I think it could expect it when getauxval for AT_RSEQ_FEATURE_SIZE
+> includes the slice ext field. This gives us a cheap way to know
+> from userspace whether this new flag is supported or not.
 
-The if defined(__SIZEOF_LONG__) is also unnecessary as that is always present
-with the supported kernel compilers.  So we can drop one level of ifdeffery.
+struct rseq vs struct rseq_data. I don't think that slice field is
+exposed on the user side of things.
 
-Testing __CHAR_BIT__ == 8 would again test the compiler implementation and not
-the UAPI headers, so I'd rather not do it. Using __CHAR_BIT__ in the test is
-done for consistency with the generic implementation.
+I was thinking it could just try with the flag the firs time, and then
+record if that worked or not and use the 'correct' value for all future
+rseq calls.
 
+> One nit below:
+> 
+> [...]
+> > -	if (IS_ENABLED(CONFIG_RSEQ_SLICE_EXTENSION))
+> > +	if (IS_ENABLED(CONFIG_RSEQ_SLICE_EXTENSION)) {
+> >   		rseqfl |= RSEQ_CS_FLAG_SLICE_EXT_AVAILABLE;
+> > +		if (rseq_slice_extension_enabled() &&
+> > +		    flags & RSEQ_FLAG_SLICE_EXT_DEFAULT_ON)
+> 
+> I think you want to surround flags & RSEQ_FLAG_SLICE_EXT_DEFAULT_ON with
+> parentheses () to have the expected operator priority.
 
-Thomas
+Moo, done (I added that rseq_slice_extension_enabled() test later).
 
