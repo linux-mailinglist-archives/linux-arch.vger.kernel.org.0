@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-15879-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15878-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FE38D3BF99
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 07:50:20 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 011BAD3BF97
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 07:50:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2DB24384FC2
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 06:46:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D493D34AD35
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 06:46:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 222BD393DFD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD84396B8C;
 	Tue, 20 Jan 2026 06:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="OyE5IrEX"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="AFMIPpY6"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76760366552;
-	Tue, 20 Jan 2026 06:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D3438B7DE;
+	Tue, 20 Jan 2026 06:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768891426; cv=none; b=AXRLWIwTEP+yC8T5KkbYQR9/H70ZC7GKUhy+rnF17rv0WrlrzYddUSUgCDaHccD4/6ZzYwcT32H/8IAFVfO4Ss1H+roLw8KPmZXbgmOpc/OzgQAiYQlCK3e5Y9UOt0rf91Vy+y9Q/FcXYdB24VNgI6ZDe55O+ffYWOztLSoi4lg=
+	t=1768891426; cv=none; b=S9QDc6ra/L/gWhEqGG2qVbK8L9Mnwwxi4E++f25nYJYRsURAx/pSQl3jf6s8w+wzbfOMC2zhYch6uSrFW2d9Ak28ownOjafzpoo6m8K2OJ5F6pjt2tTUaDmp32tG3cnlG/6Q/T1wPi1wfvU/So8skSeZTstWvsG376Iiy0P+oTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768891426; c=relaxed/simple;
-	bh=GqMdKi5YZBvXDKmd2dv+DNeAkosf/TJZ+8e9nFDVzXw=;
+	bh=JMe5l6JLGKke32CXM+7TnJxiKSkmgTGBXD5PSTwA/SE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GTMLC4/csLH7rfaDrRCIZ1kVSd9YS6Ues22AOE/IyqmX7ptcddjehRBhMskw3+Bwyping2eCXF09HMvoRCK5V3ZL5S0mNZPIbgKZgy6OOzklsUs5wCCwn5hxXe9pQTjgr7gn2tSluN6EcIYxfYi0/mKMqBLQkmMZPMEP2t9Kcek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=OyE5IrEX; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=BYKO/rDDHaQOCOiR3sXKSott1cwYHCKyVOsb5GDoxV5WRDNmdg8K/7Jl9+8Dn/hwYLMeXQi2p1E+6wIzsRyHzxeRaPoa0KsRooBU7wGb/aL/hgOWkr5ko1M1ZTRW7CQ+4ObWUVqM51lgD3ScBxFRh+oJcxa7hBULk5NSW7naCm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=AFMIPpY6; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from mrdev.corp.microsoft.com (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 0AF6020B716C;
-	Mon, 19 Jan 2026 22:43:30 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0AF6020B716C
+	by linux.microsoft.com (Postfix) with ESMTPSA id 305DB20B716D;
+	Mon, 19 Jan 2026 22:43:31 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 305DB20B716D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1768891410;
-	bh=GY/3BAplObLOWLiMmMhdzuiyonlo2hPySFg8J0DmMRg=;
+	s=default; t=1768891411;
+	bh=usRPxgl1amP/v9n1SLf7SAiI18LuyGFVnItwiHNDJxo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OyE5IrEXEydCDRpaah6ewzB23X17QX/RjBGB29tQkSo3l2hB8CFiO6YmqRj0708qp
-	 EfkZmdhRxrU1OIR3rZ4960CcronEfP/kE700rK8djoXhNeQhKHhgnxNT6HJRWUZ94I
-	 Oo0gffN1n2BT7OZCtpE2b2IsuJYEKTvJMyFBk6po=
+	b=AFMIPpY6TAiuIZv+8jTFocdvb6bDbOjidIdTfShgZ/xxmsSw89ShdkgVGXcpmIi0a
+	 uqU3YdVEEs1oymmxBJNjCltMFdDLzFigaa4fuIlemUvg+4jc3mQbADgxz0xjUC5u9B
+	 GG7ZGEq4SoiolDL1XVlZ5e9MX+LXwD8K65AF0h+A=
 From: Mukesh R <mrathor@linux.microsoft.com>
 To: linux-kernel@vger.kernel.org,
 	linux-hyperv@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc: kys@microsoft.com,
 	nunodasneves@linux.microsoft.com,
 	mhklinux@outlook.com,
 	romank@linux.microsoft.com
-Subject: [PATCH v0 03/15] x86/hyperv: add insufficient memory support in irqdomain.c
-Date: Mon, 19 Jan 2026 22:42:18 -0800
-Message-ID: <20260120064230.3602565-4-mrathor@linux.microsoft.com>
+Subject: [PATCH v0 04/15] mshv: Provide a way to get partition id if running in a VMM process
+Date: Mon, 19 Jan 2026 22:42:19 -0800
+Message-ID: <20260120064230.3602565-5-mrathor@linux.microsoft.com>
 X-Mailer: git-send-email 2.51.2.vfs.0.1
 In-Reply-To: <20260120064230.3602565-1-mrathor@linux.microsoft.com>
 References: <20260120064230.3602565-1-mrathor@linux.microsoft.com>
@@ -85,93 +85,96 @@ Content-Transfer-Encoding: 8bit
 
 From: Mukesh Rathor <mrathor@linux.microsoft.com>
 
-Passthru exposes insufficient memory hypercall failure in the current map
-device interrupt hypercall. In case of such a failure, we must deposit
-more memory and redo the hypercall. Add support for that. Deposit memory
-needs partition id, make that a parameter to the map interrupt function.
+Many PCI passthru related hypercalls require partition id of the target
+guest. Guests are actually managed by MSHV driver and the partition id
+is only maintained there. Add a field in the partition struct in MSHV
+driver to save the tgid of the VMM process creating the partition,
+and add a function there to retrieve partition id if valid VMM tgid.
 
 Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
 ---
- arch/x86/hyperv/irqdomain.c | 38 +++++++++++++++++++++++++++++++------
- 1 file changed, 32 insertions(+), 6 deletions(-)
+ drivers/hv/mshv_root.h         |  1 +
+ drivers/hv/mshv_root_main.c    | 35 +++++++++++++++++++++++++++-------
+ include/asm-generic/mshyperv.h |  1 +
+ 3 files changed, 30 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/hyperv/irqdomain.c b/arch/x86/hyperv/irqdomain.c
-index f6b61483b3b8..ccbe5848a28f 100644
---- a/arch/x86/hyperv/irqdomain.c
-+++ b/arch/x86/hyperv/irqdomain.c
-@@ -13,8 +13,9 @@
- #include <linux/irqchip/irq-msi-lib.h>
- #include <asm/mshyperv.h>
+diff --git a/drivers/hv/mshv_root.h b/drivers/hv/mshv_root.h
+index 3c1d88b36741..c3753b009fd8 100644
+--- a/drivers/hv/mshv_root.h
++++ b/drivers/hv/mshv_root.h
+@@ -134,6 +134,7 @@ struct mshv_partition {
  
--static int hv_map_interrupt(union hv_device_id hv_devid, bool level,
--		int cpu, int vector, struct hv_interrupt_entry *ret_entry)
-+static u64 hv_map_interrupt_hcall(u64 ptid, union hv_device_id hv_devid,
-+				  bool level, int cpu, int vector,
-+				  struct hv_interrupt_entry *ret_entry)
- {
- 	struct hv_input_map_device_interrupt *input;
- 	struct hv_output_map_device_interrupt *output;
-@@ -30,8 +31,10 @@ static int hv_map_interrupt(union hv_device_id hv_devid, bool level,
+ 	struct mshv_girq_routing_table __rcu *pt_girq_tbl;
+ 	u64 isolation_type;
++	pid_t pt_vmm_tgid;
+ 	bool import_completed;
+ 	bool pt_initialized;
+ };
+diff --git a/drivers/hv/mshv_root_main.c b/drivers/hv/mshv_root_main.c
+index 1134a82c7881..83c7bad269a0 100644
+--- a/drivers/hv/mshv_root_main.c
++++ b/drivers/hv/mshv_root_main.c
+@@ -1823,6 +1823,20 @@ mshv_partition_release(struct inode *inode, struct file *filp)
+ 	return 0;
+ }
  
- 	intr_desc = &input->interrupt_descriptor;
- 	memset(input, 0, sizeof(*input));
--	input->partition_id = hv_current_partition_id;
-+
-+	input->partition_id = ptid;
- 	input->device_id = hv_devid.as_uint64;
-+
- 	intr_desc->interrupt_type = HV_X64_INTERRUPT_TYPE_FIXED;
- 	intr_desc->vector_count = 1;
- 	intr_desc->target.vector = vector;
-@@ -64,6 +67,28 @@ static int hv_map_interrupt(union hv_device_id hv_devid, bool level,
- 
- 	local_irq_restore(flags);
- 
-+	return status;
-+}
-+
-+static int hv_map_interrupt(u64 ptid, union hv_device_id device_id, bool level,
-+			    int cpu, int vector,
-+			    struct hv_interrupt_entry *ret_entry)
++/* Given a process tgid, return partition id if it is a VMM process */
++u64 mshv_pid_to_partid(pid_t tgid)
 +{
-+	u64 status;
-+	int rc, deposit_pgs = 16;		/* don't loop forever */
++	struct mshv_partition *pt;
++	int i;
 +
-+	while (deposit_pgs--) {
-+		status = hv_map_interrupt_hcall(ptid, device_id, level, cpu,
-+						vector, ret_entry);
++	hash_for_each_rcu(mshv_root.pt_htable, i, pt, pt_hnode)
++		if (pt->pt_vmm_tgid == tgid)
++			return pt->pt_id;
 +
-+		if (hv_result(status) != HV_STATUS_INSUFFICIENT_MEMORY)
-+			break;
++	return HV_PARTITION_ID_INVALID;
++}
++EXPORT_SYMBOL_GPL(mshv_pid_to_partid);
 +
-+		rc = hv_call_deposit_pages(NUMA_NO_NODE, ptid, 1);
-+		if (rc)
-+			break;
-+	};
+ static int
+ add_partition(struct mshv_partition *partition)
+ {
+@@ -1987,13 +2001,20 @@ mshv_ioctl_create_partition(void __user *user_arg, struct device *module_dev)
+ 		goto delete_partition;
+ 
+ 	ret = mshv_init_async_handler(partition);
+-	if (!ret) {
+-		ret = FD_ADD(O_CLOEXEC, anon_inode_getfile("mshv_partition",
+-							   &mshv_partition_fops,
+-							   partition, O_RDWR));
+-		if (ret >= 0)
+-			return ret;
+-	}
++	if (ret)
++		goto rem_partition;
 +
- 	if (!hv_result_success(status))
- 		hv_status_err(status, "\n");
++	ret = FD_ADD(O_CLOEXEC, anon_inode_getfile("mshv_partition",
++						   &mshv_partition_fops,
++						   partition, O_RDWR));
++	if (ret < 0)
++		goto rem_partition;
++
++	partition->pt_vmm_tgid = current->tgid;
++
++	return ret;
++
++rem_partition:
+ 	remove_partition(partition);
+ delete_partition:
+ 	hv_call_delete_partition(partition->pt_id);
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index ecedab554c80..e46a38916e76 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -211,6 +211,7 @@ void __init ms_hyperv_late_init(void);
+ int hv_common_cpu_init(unsigned int cpu);
+ int hv_common_cpu_die(unsigned int cpu);
+ void hv_identify_partition_type(void);
++u64 mshv_pid_to_partid(pid_t tgid);
  
-@@ -199,8 +224,8 @@ int hv_map_msi_interrupt(struct irq_data *data,
- 	hv_devid = hv_build_devid_type_pci(pdev);
- 	cpu = cpumask_first(irq_data_get_effective_affinity_mask(data));
- 
--	return hv_map_interrupt(hv_devid, false, cpu, cfg->vector,
--				out_entry ? out_entry : &dummy);
-+	return hv_map_interrupt(hv_current_partition_id, hv_devid, false, cpu,
-+				cfg->vector, out_entry ? out_entry : &dummy);
- }
- EXPORT_SYMBOL_GPL(hv_map_msi_interrupt);
- 
-@@ -422,6 +447,7 @@ int hv_map_ioapic_interrupt(int ioapic_id, bool level, int cpu, int vector,
- 	hv_devid.device_type = HV_DEVICE_TYPE_IOAPIC;
- 	hv_devid.ioapic.ioapic_id = (u8)ioapic_id;
- 
--	return hv_map_interrupt(hv_devid, level, cpu, vector, entry);
-+	return hv_map_interrupt(hv_current_partition_id, hv_devid, level, cpu,
-+				vector, entry);
- }
- EXPORT_SYMBOL_GPL(hv_map_ioapic_interrupt);
+ /**
+  * hv_cpu_number_to_vp_number() - Map CPU to VP.
 -- 
 2.51.2.vfs.0.1
 
