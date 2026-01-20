@@ -1,170 +1,168 @@
-Return-Path: <linux-arch+bounces-15891-lists+linux-arch=lfdr.de@vger.kernel.org>
-X-Original-To: lists+linux-arch@lfdr.de
+Return-Path: <linux-arch+bounces-15894-lists+linux-arch=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88C3CD3C075
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 08:31:26 +0100 (CET)
+Received: from mail.lfdr.de
+	by lfdr with LMTP
+	id EDDoIo2tb2nxEwAAu9opvQ
+	(envelope-from <linux-arch+bounces-15894-lists+linux-arch=lfdr.de@vger.kernel.org>)
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 17:30:05 +0100
+X-Original-To: lists+linux-arch@lfdr.de
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11DD1478BB
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 17:30:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E8BC13E6B9C
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 07:23:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9F3E692A84C
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Jan 2026 14:02:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFA9331A4A;
-	Tue, 20 Jan 2026 07:23:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E9D42980D;
+	Tue, 20 Jan 2026 13:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qRtM2/LI";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ux0BDTS3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZoV+ZHYi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E9039E6D5;
-	Tue, 20 Jan 2026 07:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9601A41B340;
+	Tue, 20 Jan 2026 13:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768893832; cv=none; b=Q6ane6yQjP+7g54svv9Vys0ZtgVKkJdo9lIKC1I3rMbxCnf1P4VAgQoktfNy8BickPTrrDeE0yG3lE7/ioasl02j09P1ZFqqQylcOVZvwB3zQG6UKeaztdzV7SCBrni1lh6Dk/PyPIwbCEKV7lpEQBtbUyzFrO+mmyYCKocoDqE=
+	t=1768917545; cv=none; b=IIPWsF3B4V/QZuQTTR7LRh+x0thtlGcToHEhu0utvtaQawA4FhF9wj9fulAN3B5j9tc2p6xohF9L3ZpxqR/pCmQ2djXhJ4wIIB1EZFqpoiGYSolucmEqmh8XWjMwUusUWj/oMhVLmqaHpohICAbGnkyw/iu/CuQf9hEldC7pq0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768893832; c=relaxed/simple;
-	bh=Ljz+Gi83a+JjPR+sLBysbfNI9oaAQkIfbhdX/r1AD/U=;
+	s=arc-20240116; t=1768917545; c=relaxed/simple;
+	bh=9051yFq57Xie5pjtJjoBq/HvBu5GE3EcHvOKur+xijo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SnJxQLDfc6K9nQp+UxRv8IXY0EIXIyp6XLiGbg9QXxBqAhVM7V/FmidHFDuV2rESvR3BuyQ/HC9+BB53j+BlqNvAfTuBe98/pb7JlKQ0LnTG71qu6UIL1EMch2q3L8puY7+PmD5GxHPRXG37HR1QEqJ6zv5MILtDrwdM35XCypU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qRtM2/LI; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ux0BDTS3; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 20 Jan 2026 08:23:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768893820;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jdrEJPqx1MFOvrLI5OPYmPHWL96zfvhnQqnu+2d5v4w=;
-	b=qRtM2/LICWrYpv7CqHVGjW3oNUf5zeSQFvVn7pxVIbqfRjNlWsKtowiCAuo7wPw4bTMhZF
-	vZ7kyPZkvRrJ6SFbDfsGauMu/yAWoXgh0+otpAtdHkwjXeaXrDj/ddU+0M796ldT3py2FA
-	H/J7J6LCXcTjNsypVemOAhQjSwu2xYplIpe6Lc3xHt+S8d6b/6GQKP4HK12fl9yyDBYG6e
-	iXHhGl4u+cbf0LkeSEz1Ot2nLWG1O1Kprw+SAXFWTU2YORD/K1EdiTmK96nQ5VbnNr6FGb
-	9OBJg+7ZhGSfG8bRIjWQ7Wn9oLuHZOTx6IEK0JDbJ3KblXlfJH61VFq0pkxfIw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768893820;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jdrEJPqx1MFOvrLI5OPYmPHWL96zfvhnQqnu+2d5v4w=;
-	b=ux0BDTS3LJjapFbL4YTAJJf8nKUPpr8oWdyJfad7Z3Tu4BKdj46czIj7hpk/EJnJHSsTDa
-	K9T/V5n3wFQW6oAA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, 
-	"David S . Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Linux-Arch <linux-arch@vger.kernel.org>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 4/4] asm-generic/bitsperlong.h: Add sanity checks for
- __BITS_PER_LONG
-Message-ID: <20260120081136-f413a6d5-05a5-4adc-a687-474ae349e771@linutronix.de>
-References: <20260116-vdso-compat-checkflags-v1-0-4a83b4fbb0d3@linutronix.de>
- <20260116-vdso-compat-checkflags-v1-4-4a83b4fbb0d3@linutronix.de>
- <20260119100619.479bcff3@pumpkin>
- <20260119111037-4decf57f-2094-4fac-bcf4-03506791b197@linutronix.de>
- <20260119103758.3afb5927@pumpkin>
- <20260119114526-a15e7172-fc4c-40d0-a651-7c4a21acb1c8@linutronix.de>
- <72a2744a-debc-4d8f-b418-5d6a595c2578@app.fastmail.com>
- <20260119143735-ca5b7901-b501-4cb8-8e5d-10f4e2f8b650@linutronix.de>
- <4e4b1b5b-5f7d-4604-b5ef-0d0726263843@app.fastmail.com>
- <20260119174730.5a20169d@pumpkin>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DbGntuKQErpvrUFU+TpOPZguGi3fdG3pqKWRPNWsJWb7DpSSASvu8pcQrK69kf/jAlu+4r8Q1SfHkZkaMR9IGX9txsAKpf6mV76UHS1OuAsfwxBLEZLKMY3rVH9Tz3FxvXd0VKxt5gkb83M1+dOq+zQYr3L/e1LfsRu2XYow1ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZoV+ZHYi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B34C16AAE;
+	Tue, 20 Jan 2026 13:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768917545;
+	bh=9051yFq57Xie5pjtJjoBq/HvBu5GE3EcHvOKur+xijo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZoV+ZHYiLGqOe4NWfwMjBJu+d8Nl30ZgHgckXnZ5+4Dix/UB0LdlIn6fjHwSKWM1K
+	 dwvGdy3JXj2FQ6/DunG343ZTszE2CKh5rBIljRUWiLjM0GYEGr5lXnTc5tk+tt2llS
+	 T5uH1cP9oJulukrS8qlW8HNvtGYoJQ0w00MNZ/HhcfRL5Nlru7mbGOkQj7T7JBOa+J
+	 j+FVJiWMl4bHHjEP4BCb9zpI4p5eovVAH+n3nga0pcPEdMpaypnwHbU0TD31BOvLTf
+	 cDZgR62kgZFwdz4V2ZjMgRdc8TNRWFMUylQwBV2z69vLTCgBS5H/xBtUVPX6aNePpp
+	 x2YFoC1FeMHkg==
+Date: Tue, 20 Jan 2026 13:58:57 +0000
+From: Will Deacon <will@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+	peterz@infradead.org, akpm@linux-foundation.org,
+	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
+	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 04/12] arm64: support WFET in
+ smp_cond_relaxed_timeout()
+Message-ID: <aW-KIVQ_H1mVpGHx@willie-the-truck>
+References: <20251215044919.460086-1-ankur.a.arora@oracle.com>
+ <20251215044919.460086-5-ankur.a.arora@oracle.com>
+ <aWEOALG07jHC_oHC@willie-the-truck>
+ <87wm1qmx90.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260119174730.5a20169d@pumpkin>
+In-Reply-To: <87wm1qmx90.fsf@oracle.com>
+X-Spamd-Result: default: False [-1.46 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-15894-lists,linux-arch=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,arndb.de,arm.com,infradead.org,linux-foundation.org,amazon.com,gentwo.org,kernel.org,linaro.org,gmail.com,huawei.com,linux.alibaba.com,oracle.com];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[will@kernel.org,linux-arch@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-arch];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,arndb.de:email,arm.com:email]
+X-Rspamd-Queue-Id: 11DD1478BB
+X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
 
-On Mon, Jan 19, 2026 at 05:47:30PM +0000, David Laight wrote:
-> On Mon, 19 Jan 2026 15:57:49 +0100
-> "Arnd Bergmann" <arnd@arndb.de> wrote:
+On Fri, Jan 09, 2026 at 11:05:06AM -0800, Ankur Arora wrote:
 > 
-> > On Mon, Jan 19, 2026, at 14:41, Thomas Weißschuh wrote:
-> > > On Mon, Jan 19, 2026 at 01:45:04PM +0100, Arnd Bergmann wrote:  
-> > >> On Mon, Jan 19, 2026, at 11:56, Thomas Weißschuh wrote:  
-> > >> > On Mon, Jan 19, 2026 at 10:37:58AM +0000, David Laight wrote:  
-> > >> >> 
-> > >> >> Don't you need a check that it isn't wrong on a user system?
-> > >> >> Which is what I thought it was doing.  
-> > >> >
-> > >> > Not really. The overrides defined by arch/*/include/uapi/asm/bitsperlong.h are
-> > >> > being tested here. If they work in the kernel build I assume they also work
-> > >> > in userspace.  
-> > >> 
-> > >> I think You could just move check into include/asm-generic/bitsperlong.h
-> > >> to make this more obvious with the #ifdef __KERNEL__, and remove the
-> > >> disabled check from my original version there.  
-> > >
-> > > Ok. I'd like to keep your existing test though, as it tests something different
-> > > and it would be nice to have that too at some point.  
-> > 
-> > Sure, that works too. I wonder if one of the recent vdso cleanups
-> > also happened to address the problem with the incorrect BITS_PER_LONG
-> > being visible in the vdso code. Maybe we can already turn that on again.
+> Will Deacon <will@kernel.org> writes:
 > 
-> There is vdso/bits.h, but everything actually includes linux/bits.h first.
+> > On Sun, Dec 14, 2025 at 08:49:11PM -0800, Ankur Arora wrote:
+> >> Extend __cmpwait_relaxed() to __cmpwait_relaxed_timeout() which takes
+> >> an additional timeout value in ns.
+> >>
+> >> Lacking WFET, or with zero or negative value of timeout we fallback
+> >> to WFE.
+> >>
+> >> Cc: Arnd Bergmann <arnd@arndb.de>
+> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> >> Cc: Will Deacon <will@kernel.org>
+> >> Cc: linux-arm-kernel@lists.infradead.org
+> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> >> ---
+> >>  arch/arm64/include/asm/barrier.h |  8 ++--
+> >>  arch/arm64/include/asm/cmpxchg.h | 72 ++++++++++++++++++++++----------
+> >>  2 files changed, 55 insertions(+), 25 deletions(-)
+> >
+> > Sorry, just spotted something else on this...
+> >
+> >> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+> >> index 6190e178db51..fbd71cd4ef4e 100644
+> >> --- a/arch/arm64/include/asm/barrier.h
+> >> +++ b/arch/arm64/include/asm/barrier.h
+> >> @@ -224,8 +224,8 @@ do {									\
+> >>  extern bool arch_timer_evtstrm_available(void);
+> >>
+> >>  /*
+> >> - * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()
+> >> - * for the ptr value to change.
+> >> + * In the common case, cpu_poll_relax() sits waiting in __cmpwait_relaxed()/
+> >> + * __cmpwait_relaxed_timeout() for the ptr value to change.
+> >>   *
+> >>   * Since this period is reasonably long, choose SMP_TIMEOUT_POLL_COUNT
+> >>   * to be 1, so smp_cond_load_{relaxed,acquire}_timeout() does a
+> >> @@ -234,7 +234,9 @@ extern bool arch_timer_evtstrm_available(void);
+> >>  #define SMP_TIMEOUT_POLL_COUNT	1
+> >>
+> >>  #define cpu_poll_relax(ptr, val, timeout_ns) do {			\
+> >> -	if (arch_timer_evtstrm_available())				\
+> >> +	if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))		\
+> >> +		__cmpwait_relaxed_timeout(ptr, val, timeout_ns);	\
+> >> +	else if (arch_timer_evtstrm_available())			\
+> >>  		__cmpwait_relaxed(ptr, val);				\
+> >
+> > Don't you want to make sure that we have the event stream available for
+> > __cmpwait_relaxed_timeout() too? Otherwise, a large timeout is going to
+> > cause problems.
+> 
+> Would that help though? If called from smp_cond_load_relaxed_timeout()
+> then we would wake up and just call __cmpwait_relaxed_timeout() again.
 
-These cleanups do not help unfortunately. We can skip the check for BUILD_VDSO,
-but there are still plenty other places where it will break.
+Fair enough, I can see that. Is it worth capping the maximum timeout
+like we do for udelay()?
 
-> I was wondering what happens if you are actually using the 'uapi' headers
-> to build programs (may nolibc ones).
-> On x86-64, 'gcc foo.c' might work, but 'gcc -m32 foo.c' will find exactly
-> the same headers and go badly wrong unless everything is based on
-> compiler defines.
-
-I can't follow. __BITS_PER_LONG automatically adapts.
-
-From arch/x86/include/uapi/asm/bitsperlong.h:
-
-#if defined(__x86_64__) && !defined(__ILP32__)
-# define __BITS_PER_LONG 64
-#else
-# define __BITS_PER_LONG 32
-#endif
-
-
-BITS_PER_LONG on the other hand is never exposed in the uapi headers.
-
-> An assert (of some kind) that checks the pre-processor BITS_PER_LONG
-> constant actually matches sizof (long) seems reasonable for all build.
-> The alternative is to (somehow) manage to avoid needing a pre-processor
-> constant at all, moving everything to 'integer constant expressions'
-> instead (good luck with that...).
-
-We do have exactly that assertion in include/asm-generic/bitsperlong.h.
-(As mentioned in the patch description we are discussing)
-The assertion is disabled because it fails. There are multiple places where
-we build 32-bit code with a 64-bit kernel configuration.
-The compat vDSO, early boot code and probably more I don't know about.
-Is it ugly? Yes. Should we '#define BITS_PER_LONG __BITS_PER_LONG' at some
-point? Yes. But we first need to audit all the users to check if it is safe
-to do so. At some point in the future in another series.
-
-> I'm most of the way through a 'de-bloat' patchset for bits.h.
-> I'm sure there is a good reason why GENMASK(hi, lo) isn't defined
-> as '((type)2 << hi) - ((type)1 << lo)'.
-> Since that definition doesn't need the bit-width in any form.
-> (Just beat up any static checker that objects to '2 << hi' being zero.)
-> I've only made that change for ASM files - IIRC the assembler only
-> supports one size of signed integer.
-
-No idea, and I don't see the relation to the patches under discussion.
-
-
-Thomas
+Will
 
